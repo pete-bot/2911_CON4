@@ -83,7 +83,7 @@ public class GUIsandbox {
 	      */
 
 	      
-	      JButton okButton = new JButton("AYY");
+	      JButton okButton = new JButton("");
 	      okButton.addActionListener(new ActionListener() {
 	         public void actionPerformed(ActionEvent e) {
 	        	 System.out.println("LMAO");
