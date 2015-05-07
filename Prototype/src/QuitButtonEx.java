@@ -32,7 +32,6 @@ public class QuitButtonEx extends JFrame {
         setSize(1024, 768);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        
     }
 
     private void createLayout(JComponent... arg) {
