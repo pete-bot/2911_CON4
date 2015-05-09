@@ -25,7 +25,7 @@ public class GridBoard extends JPanel{
 		 for (int x = 0; x < rows; x++) {
 		  JLabel b1 = new JLabel();
 		     try {
-		   	  Image img = ImageIO.read(getClass().getResource("circle50.png"));
+		   	  Image img = ImageIO.read(getClass().getResource("circle100.png"));
 		   	  Color c = new Color(255, 0, 0);
 		   	  b1.setBackground(c);
 		   	  b1.setIcon(new ImageIcon(img));
