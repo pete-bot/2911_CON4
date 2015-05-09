@@ -80,17 +80,11 @@ public class Game {
 					System.out.println("PLAYER_2, please enter your move:");
 				}
 				
-				turnCount++;
-				
+				turnCount++;	
 			}
 	 
 		}catch(IOException io){
 			io.printStackTrace();
-		} 
-		
+		} 	
 	}
-	
-	
-	
-	
 }
