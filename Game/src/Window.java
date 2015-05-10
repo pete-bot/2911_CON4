@@ -27,7 +27,11 @@ public class Window extends JFrame{
 	private ButtonPanel buttonPanel;
     private TextPanel textPanel;
     private GridBoard gridBoard;
-    private Board game;
+
+    
+    
+    // stuff I do not like about this design
+    private int turnCount;
 
     
     /**
@@ -40,19 +44,25 @@ public class Window extends JFrame{
         this.setSize(700, 690);
         this.setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        game = newGame;
         
         // set our button interface
         buttonPanel = new ButtonPanel();
         buttonPanel.setTextPanel(textPanel);
+
         
-        // create new gruidBoard
-        gridBoard = new GridBoard();
-        
-		add(buttonPanel, BorderLayout.SOUTH);
+        // create new gridBoard
+        gridBoard = new GridBoard(newGame);
+        add(buttonPanel, BorderLayout.SOUTH);
 		add(gridBoard, BorderLayout.NORTH);
 		this.setVisible(true);
 		
+		
+		// this is only here temporarily
+		// this is a bad design
+		System.out.println("Welcome to WOBCON4. Enjoy the game.");
+		System.out.println("Initial Game State:");
+		newGame.showBoard();
+		System.out.println("PLAYER_1, please enter your column choice:");
 		
     }  
 }

@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -22,10 +23,16 @@ public class GridBoard extends JPanel implements MouseListener{
 	
 	private JPanel gridBoard;
     public JButton[] buttons;
+    private Board board;
     
     
-    
-	public GridBoard() {
+	public GridBoard(Board newGameBoard) {
+		
+		// I DO NOT LIKE HAVING THIS HERE - FIX AFTER SPRINT
+		// DESIGN IS FUCKED GAAAAHHHH
+		board = newGameBoard;
+		
+		
 		buttons =  new JButton[42];
 		
 		int rows = 6;
@@ -105,10 +112,56 @@ public class GridBoard extends JPanel implements MouseListener{
     public void mouseReleased(MouseEvent e) { }
 
     
-    public int getColumnInput(AdvancedButton b){
-    	  //System.out.println("Hi sanjay - this is a mouseclick :)");
-    	  b.getValue();
-    	  return b.getXPos();
+    
+    
+    
+    // this is way too much for this function to be doing
+    // we need to redesign the interface with buttons that are useful
+    // so we dont have to do this
+    public void getColumnInput(AdvancedButton b){
+    	Action newAction;
+		if(board.getTurn()%2==0 ){
+			// PLAYER1 input
+			newAction = new Action(1, b.getXPos());
+		}else{
+			newAction = new Action(2, b.getXPos());
+		}
+		
+		if(!board.isLegal(newAction)){
+			// need some error indicator
+			System.out.println("You have entered an invalid move, please try again.");
+			return;
+		}
+		
+		
+		board.makeMove(newAction);
+		
+		board.showBoard();
+		
+		if(board.checkWinState()){
+			if(board.getTurn()%2==0 ){
+				System.out.println("PLAYER_1, you WIN!");
+			}else{
+				System.out.println("PLAYER_2, you WIN!");
+			}
+			
+			// need some win state indicator
+			return;
+		}
+		
+		if(board.getTurn()%2==1 ){
+			System.out.println("PLAYER_1, please enter your move:");
+		}else{
+			System.out.println("PLAYER_2, please enter your move:");
+		}
+		
+		board.IncrementTurn();		
+    	
+    	
+    	
+    	
+    	
+    	
     }
     
     

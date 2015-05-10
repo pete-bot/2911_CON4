@@ -4,6 +4,7 @@ public class Board {
 	// this is the board representation - very simple and light
 	// we store the position of player_1 as 1, player_2 as 2 
 	private int[][] board;
+	private int turnNumber;
 	
 	// need to make these ENUMS
 	private int ROWMAX;
@@ -11,12 +12,25 @@ public class Board {
 	
 	public Board(){
 		board = new int[6][7];
-		// row is the vertical axis
 		ROWMAX = 6;
-		// col is the horizontal axis
-		COLMAX = 7; 
+		COLMAX = 7;
+		turnNumber = 0;
 	}
 	
+	// set the turn number
+	public void IncrementTurn(){
+		turnNumber++;	
+	}
+	
+	
+	// return teh turn number
+	public int getTurn(){
+		return turnNumber;	
+	}
+	
+
+	
+
 	public int getPosition(int row, int col){
 		return board[row][col];
 	}
@@ -34,10 +48,6 @@ public class Board {
 	}
 	
 	public boolean isLegal(Action newAction){
-		// check that player value is correct (this should never fail)
-//		if( (newAction.getPlayer() != 1) || (newAction.getPlayer() != 2) ){
-//			return false;
-//		}
 		
 		// check if tile is out of bounds (pos < 0, pos > 6)
 		if( (newAction.getColumn() < 0) || (newAction.getColumn()> 6)){
