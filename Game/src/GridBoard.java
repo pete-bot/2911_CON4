@@ -4,6 +4,8 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -44,10 +46,16 @@ public class GridBoard extends JPanel implements MouseListener{
 		
 		  // create our button array
     	this.setLayout(new GridLayout(6, 7));
-        for (int i = 0; i < 42; i++) {
-        	Icon coinSlot = new ImageIcon("circle101.png");
-        	JButton b = new JButton(coinSlot);
+        for (int i = 0; i <  42; i++) {
         	
+        	AdvancedButton b = new AdvancedButton((i%7),(Math.ceil(i/7)));
+        	
+        	b.addActionListener(new ActionListener(){
+	                public void actionPerformed(ActionEvent e){
+	                    b.getValue();
+	                }
+                });
+        	b.setIcon(new ImageIcon("circle101.png"));
         	b.setBorderPainted(false);
         	b.setMargin(margin);
         	setBorder(BorderFactory.createEmptyBorder());
@@ -76,7 +84,6 @@ public class GridBoard extends JPanel implements MouseListener{
     }
 
 
-	
 	// this is where the mouse position is determined and kept track of
     @Override
     public void mouseEntered(MouseEvent event) {
@@ -88,7 +95,8 @@ public class GridBoard extends JPanel implements MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-    	System.out.println("pointCursor: "+e.getLocationOnScreen());
+    	//System.out.println("pointCursor: "+e.getLocationOnScreen());
+    	
     }
 
     
@@ -98,4 +106,9 @@ public class GridBoard extends JPanel implements MouseListener{
 
     @Override
     public void mouseReleased(MouseEvent e) { }
+
+    
+
 }
+
+
