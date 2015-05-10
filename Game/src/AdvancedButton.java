@@ -1,25 +1,7 @@
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 
-public class AdvancedButton extends JButton {
+public class AdvancedButton extends JButton{
 	
 	private int xPos;
 	private int yPos;
@@ -48,6 +30,8 @@ public class AdvancedButton extends JButton {
 		player = newPlayer;
 	}
 	
+	
+	// this is for the listener
 	public void getValue(){
     	System.out.println("mouseclick");
     	System.out.println("Xpos: "+this.getXPos());

@@ -1,21 +1,14 @@
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /*
@@ -42,19 +35,23 @@ public class GridBoard extends JPanel implements MouseListener{
 		setSize(500,500);
 		
 		// this is to 'squash' the columns together - need to find better way
+		// to do this
 		Insets margin = new Insets(-3,0,-3,0);
 		
-		  // create our button array
+		// create our button array
     	this.setLayout(new GridLayout(6, 7));
         for (int i = 0; i <  42; i++) {
         	
-        	AdvancedButton b = new AdvancedButton((i%7),(Math.ceil(i/7)));
+        	// this is dodgy - please change
+        	final AdvancedButton b = new AdvancedButton((i%7),5-(Math.ceil(i/7)));
         	
         	b.addActionListener(new ActionListener(){
-	                public void actionPerformed(ActionEvent e){
-	                    localGetValue(b);
-	                }
-                });
+	        		  @Override
+					public void actionPerformed(ActionEvent e){
+	        			  getColumnInput(b);
+	        		  }
+        		  });
+        	
         	b.setIcon(new ImageIcon("circle101.png"));
         	b.setBorderPainted(false);
         	b.setMargin(margin);
@@ -95,7 +92,7 @@ public class GridBoard extends JPanel implements MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-    	System.out.println("pointCursor: " + e.getLocationOnScreen());
+    	//System.out.println("pointCursor: "+e.getLocationOnScreen());
     	
     }
 
@@ -108,10 +105,13 @@ public class GridBoard extends JPanel implements MouseListener{
     public void mouseReleased(MouseEvent e) { }
 
     
-	public void localGetValue(AdvancedButton b){
-    	System.out.println("Hi sanjay - this is a mouseclick :)");
-    	b.getValue();
-	}
+    public int getColumnInput(AdvancedButton b){
+    	  //System.out.println("Hi sanjay - this is a mouseclick :)");
+    	  b.getValue();
+    	  return b.getXPos();
+    }
+    
+    
     
 
 }

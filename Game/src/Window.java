@@ -27,23 +27,20 @@ public class Window extends JFrame{
 	private ButtonPanel buttonPanel;
     private TextPanel textPanel;
     private GridBoard gridBoard;
-    
-    public static void main(String[] args) {
-        new Window();
-    }
-    
+    private Board game;
+
     
     /**
      * Class constructor
      */
-    public Window() {
+    public Window(Board newGame) {
     	super("Connect Java: Advanced Wobfighter");
 		this.setLayout(new BorderLayout());
 		///getContentPane().setBackground(Color.DARK_GRAY);
         this.setSize(700, 690);
         this.setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        game = newGame;
         
         // set our button interface
         buttonPanel = new ButtonPanel();
@@ -55,12 +52,7 @@ public class Window extends JFrame{
 		add(buttonPanel, BorderLayout.SOUTH);
 		add(gridBoard, BorderLayout.NORTH);
 		this.setVisible(true);
-    }
-
-    public void winState(){
-    	// TODO
-    	// this should present some winstate representation to the user
-    }
-
-    
+		
+		
+    }  
 }
