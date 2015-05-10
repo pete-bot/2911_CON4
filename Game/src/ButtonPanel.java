@@ -38,7 +38,6 @@ public class ButtonPanel extends JPanel implements ActionListener {
         if (buttonPressed.equals(restartButton)) {
         	System.out.println("Restart Requested..");
         	// TODO:
-        		
         } else {
             System.exit(0);
         }

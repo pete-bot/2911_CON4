@@ -50,6 +50,7 @@ public class GridBoard extends JPanel implements MouseListener{
 		
 		// create our button array
     	this.setLayout(new GridLayout(6, 7));
+    	this.setBackground(new Color(0x212121));
         for (int i = 0; i <  42; i++) {
         	
         	// this is dodgy - please change
@@ -86,15 +87,20 @@ public class GridBoard extends JPanel implements MouseListener{
             double west = buttonLocation.getX();
             double east = buttonLocation.getX() + button.getWidth();
             boolean inRow = cursor.getX() > west && cursor.getX() < east;
-            button.setBackground(inRow ? new Color(0x6bb4e5) : null);
+            button.setRolloverIcon(inRow ? new ImageIcon("glow.png") : button.getIcon());
+            //button.setBackground(bg);
+            button.setBackground(inRow ? new Color(0xd9d9d9) : null);
         }
     }
+	
+
 
 
 	// this is where the mouse position is determined and kept track of
     @Override
     public void mouseEntered(MouseEvent event) {
         highlightColumn(event.getLocationOnScreen());
+
     }
 
     
@@ -161,7 +167,7 @@ public class GridBoard extends JPanel implements MouseListener{
     		if(buttons[count].getPlayer()==0){
     			if(board.getTurn()%2==0 ){
     				buttons[count].setPlayer(1);
-    				buttons[count].setIcon(new ImageIcon("circle101_RED_mkII.png"));
+    				buttons[count].setIcon(new ImageIcon("circle101_RED.png"));
     			}else{
     				buttons[count].setPlayer(1);
     				buttons[count].setIcon(new ImageIcon("circle101_YELLOW.png"));
@@ -173,7 +179,8 @@ public class GridBoard extends JPanel implements MouseListener{
     
     
     @Override
-    public void mouseExited(MouseEvent e) { }
+    public void mouseExited(MouseEvent e) { 
+    }
 
     @Override
     public void mouseClicked(MouseEvent e) {

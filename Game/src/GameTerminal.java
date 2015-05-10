@@ -68,6 +68,7 @@ public class GameTerminal {
 				if(newBoard.checkWinState()){
 					if(turnCount%2==0 ){
 						System.out.println("PLAYER_1, you WIN!");
+						
 					}else{
 						System.out.println("PLAYER_2, you WIN!");
 					}

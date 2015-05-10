@@ -43,6 +43,7 @@ public class Window extends JFrame{
 		///getContentPane().setBackground(Color.DARK_GRAY);
         this.setSize(700, 690);
         this.setLocationRelativeTo(null);
+        
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         // set our button interface
