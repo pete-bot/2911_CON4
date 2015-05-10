@@ -52,7 +52,7 @@ public class GridBoard extends JPanel implements MouseListener{
         	
         	b.addActionListener(new ActionListener(){
 	                public void actionPerformed(ActionEvent e){
-	                    getValue();
+	                    localGetValue(b);
 	                }
                 });
         	b.setIcon(new ImageIcon("circle101.png"));
@@ -95,7 +95,7 @@ public class GridBoard extends JPanel implements MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-    	//System.out.println("pointCursor: "+e.getLocationOnScreen());
+    	System.out.println("pointCursor: " + e.getLocationOnScreen());
     	
     }
 
@@ -108,11 +108,10 @@ public class GridBoard extends JPanel implements MouseListener{
     public void mouseReleased(MouseEvent e) { }
 
     
-	public void getValue(){
+	public void localGetValue(AdvancedButton b){
     	System.out.println("Hi sanjay - this is a mouseclick :)");
-    	
-
-    }
+    	b.getValue();
+	}
     
 
 }

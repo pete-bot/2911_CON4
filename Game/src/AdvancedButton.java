@@ -19,7 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 
-public class AdvancedButton extends JButton{
+public class AdvancedButton extends JButton {
 	
 	private int xPos;
 	private int yPos;
