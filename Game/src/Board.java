@@ -22,15 +22,11 @@ public class Board {
 		turnNumber++;	
 	}
 	
-	
 	// return teh turn number
 	public int getTurn(){
 		return turnNumber;	
 	}
 	
-
-	
-
 	public int getPosition(int row, int col){
 		return board[row][col];
 	}
@@ -43,8 +39,7 @@ public class Board {
 				break;
 			}
 		}
-		board[col][newAction.getColumn()] = newAction.getPlayer(); 
-	
+		board[col][newAction.getColumn()] = newAction.getPlayer(); 	
 	}
 	
 	public boolean isLegal(Action newAction){
@@ -55,7 +50,7 @@ public class Board {
 		}
 		
 		// check if the tile will 'overflow' the board
-		if(!(board[5][newAction.getColumn()] == 0)){
+		if((board[5][newAction.getColumn()] != 0)){
 			return false;
 		}
 		
@@ -75,6 +70,7 @@ public class Board {
 	
 	
 	// terrible implementation - this works for now but is vastly inefficient.
+	// need to fix
 	public boolean checkWinState(){
 		
 		// find four horizontal pieces.

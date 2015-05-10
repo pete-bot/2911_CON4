@@ -1,4 +1,6 @@
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Point;
@@ -8,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -22,7 +25,7 @@ public class GridBoard extends JPanel implements MouseListener{
     private Color pressedBackgroundColor;
 	
 	private JPanel gridBoard;
-    public JButton[] buttons;
+    public AdvancedButton[] buttons;
     private Board board;
     
     
@@ -33,7 +36,7 @@ public class GridBoard extends JPanel implements MouseListener{
 		board = newGameBoard;
 		
 		
-		buttons =  new JButton[42];
+		buttons =  new AdvancedButton[42];
 		
 		int rows = 6;
 		int cols = 7;
@@ -94,26 +97,6 @@ public class GridBoard extends JPanel implements MouseListener{
         highlightColumn(event.getLocationOnScreen());
     }
 
-    @Override
-    public void mouseExited(MouseEvent e) { }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-    	//System.out.println("pointCursor: "+e.getLocationOnScreen());
-    	
-    }
-
-    
-    // use these for click and dragging
-    @Override
-    public void mousePressed(MouseEvent e) { }
-
-    @Override
-    public void mouseReleased(MouseEvent e) { }
-
-    
-    
-    
     
     // this is way too much for this function to be doing
     // we need to redesign the interface with buttons that are useful
@@ -133,11 +116,21 @@ public class GridBoard extends JPanel implements MouseListener{
 			return;
 		}
 		
-		
+		// update terminal rep
 		board.makeMove(newAction);
-		
 		board.showBoard();
 		
+		// update SWING
+		// need to have anotehr method to colour correct button.
+		updateBoard(b);
+//		if(board.getTurn()%2==0 ){
+//			b.setIcon(new ImageIcon("circle101_RED_mkII.png"));
+//		}else{
+//			b.setIcon(new ImageIcon("circle101_YELLOW.png"));
+//		}
+		
+		
+		// EXCEPTION HERE AT CHECK GOAL STATE. NEED TO CHECK!
 		if(board.checkWinState()){
 			if(board.getTurn()%2==0 ){
 				System.out.println("PLAYER_1, you WIN!");
@@ -145,7 +138,9 @@ public class GridBoard extends JPanel implements MouseListener{
 				System.out.println("PLAYER_2, you WIN!");
 			}
 			
-			// need some win state indicator
+			// need some win state indicator for front end
+			// another method would fix this, but for now, we must fix the basic design
+			
 			return;
 		}
 		
@@ -157,14 +152,42 @@ public class GridBoard extends JPanel implements MouseListener{
 		
 		board.IncrementTurn();		
     	
-    	
-    	
-    	
-    	
-    	
+    }
+
+    
+    // this will update the JButton board with teh appropriate tile
+    public void updateBoard(AdvancedButton b){
+    	for (int count = 42-(7-b.getXPos()); count < 42; count-=7){
+    		if(buttons[count].getPlayer()==0){
+    			if(board.getTurn()%2==0 ){
+    				buttons[count].setPlayer(1);
+    				buttons[count].setIcon(new ImageIcon("circle101_RED_mkII.png"));
+    			}else{
+    				buttons[count].setPlayer(1);
+    				buttons[count].setIcon(new ImageIcon("circle101_YELLOW.png"));
+    			}
+    			break;
+    		}
+    	}
     }
     
     
+    @Override
+    public void mouseExited(MouseEvent e) { }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+    	//System.out.println("pointCursor: "+e.getLocationOnScreen());
+    	
+    }
+
+    
+    // use these for click and dragging
+    @Override
+    public void mousePressed(MouseEvent e) { }
+
+    @Override
+    public void mouseReleased(MouseEvent e) { }
     
 
 }
