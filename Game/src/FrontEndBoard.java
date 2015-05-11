@@ -156,16 +156,18 @@ public class FrontEndBoard extends JPanel implements MouseListener{
     }
 
     
-    // this will update the JButton board with the appropriate tile
+    // Updates the board with the next _legal_ move
     public void updateBoardWithMove(GameButton b){
-    	for (int count = 42-(7-b.getXPos()); count < 42; count -= 7){
-    		if(buttons[count].getPlayer()==0){
-    			if(backendBoard.getTurn()%2==0 ){
-    				buttons[count].setPlayer(1);
-    				buttons[count].setIcon(new ImageIcon("circle101_RED.png"));
-    			}else{
-    				buttons[count].setPlayer(1);
-    				buttons[count].setIcon(new ImageIcon("circle101_YELLOW.png"));
+    	int tilesOnBoard = 42;
+    	for (int count = tilesOnBoard - (cols - b.getXPos()); count > 0; count -= 7){
+    		GameButton currentButton = buttons[count];
+    		if (currentButton.getPlayer() == 0){
+    			if ( backendBoard.getTurn() % 2==0 ){
+    				currentButton.setPlayer(1);
+    				currentButton.setIcon(new ImageIcon("circle101_RED.png"));
+    			} else{
+    				currentButton.setPlayer(1);
+    				currentButton.setIcon(new ImageIcon("circle101_YELLOW.png"));
     			}
     			break;
     		}
@@ -175,15 +177,14 @@ public class FrontEndBoard extends JPanel implements MouseListener{
     //This does not redisplay properly
     public void resetBoard() {
         backendBoard.resetBoard();
-		//setLayout(new GridLayout(rows, cols));
-		setSize(700,680);
 		
 		// create our button array
 		// this needs to simply repaint
 		
         for (GameButton gameButton : buttons) {
         	gameButton.setIcon(new ImageIcon("circle101.png"));
-            gameButton.repaint();
+        	gameButton.setPlayer(0);
+            //gameButton.repaint();
         }
         
 
