@@ -22,7 +22,7 @@ public class Board {
 		turnNumber++;	
 	}
 	
-	// return teh turn number
+	// return the turn number
 	public int getTurn(){
 		return turnNumber;	
 	}

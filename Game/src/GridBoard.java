@@ -27,9 +27,12 @@ public class GridBoard extends JPanel implements MouseListener{
 	private JPanel gridBoard;
     public AdvancedButton[] buttons;
     private Board board;
+    private AIInterface ai;
     
     
 	public GridBoard(Board newGameBoard) {
+		
+		ai = new MechanicalTurk();
 		
 		// I DO NOT LIKE HAVING THIS HERE - FIX AFTER SPRINT
 		board = newGameBoard;
@@ -100,7 +103,7 @@ public class GridBoard extends JPanel implements MouseListener{
 
     }
 
-    
+    //CONSIDER THIS TO BE THE MAIN//
     // this is way too much for this function to be doing
     // we need to redesign the interface with buttons that are useful
     // so we dont have to do this
@@ -109,9 +112,12 @@ public class GridBoard extends JPanel implements MouseListener{
 	       	Action newAction;
 			if(board.getTurn()%2==0 ){
 				// PLAYER1 input
+				// HUMAN WAHTEVER
 				newAction = new Action(1, b.getXPos());
 			}else{
-				newAction = new Action(2, b.getXPos());
+				newAction = ai.getMove(board);
+				b = new AdvancedButton(newAction.getColumn(), 0);
+				
 			}
 			
 			if(!board.isLegal(newAction)){
@@ -124,14 +130,7 @@ public class GridBoard extends JPanel implements MouseListener{
 			board.makeMove(newAction);
 			board.showBoard();
 			
-			// update SWING
-			// need to have another method to colour correct button.
 			updateBoard(b);
-//		if(board.getTurn()%2==0 ){
-//			b.setIcon(new ImageIcon("circle101_RED_mkII.png"));
-//		}else{
-//			b.setIcon(new ImageIcon("circle101_YELLOW.png"));
-//		}
 		
 		
 		// EXCEPTION HERE AT CHECK GOAL STATE. NEED TO CHECK!
