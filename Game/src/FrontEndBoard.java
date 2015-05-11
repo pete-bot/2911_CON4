@@ -31,14 +31,21 @@ public class FrontEndBoard extends JPanel implements MouseListener{
     private int cols = 7;
     private final int tilesOnBoard = 42;
     private Window mainWindow;
+    private MechanicalTurk newTurk;
     
     
 	public FrontEndBoard(BackendBoard newGameBoard, Window mainWindow) {
 		
-		// I DO NOT LIKE HAVING THIS HERE - FIX AFTER SPRINT
+		// temporary 
+		// this is a work around, we will need to collect this data from the 
+		// menu option when it is implemented
+		int AIclass = 0;
+		newTurk = new MechanicalTurk(AIclass);
+		
 		//XXX
 		backendBoard = newGameBoard;
 		this.mainWindow = mainWindow; 
+		
 		
 		
 		buttons =  new GameButton[42];
@@ -53,7 +60,6 @@ public class FrontEndBoard extends JPanel implements MouseListener{
 		// create our button array
         for (int i = 0; i <  42; i++) {
         	
-        	// this is dodgy - please change
             //XXX
         	int currX = i%7;
         	int currY = 5-((int) Math.ceil(i/7));
@@ -80,6 +86,7 @@ public class FrontEndBoard extends JPanel implements MouseListener{
 		setVisible(true);
 	}
 
+	
 	// this highlights the column
 	public void highlightColumn(Point cursor) {
         for (int i = 0; i < buttons.length; i++) {
@@ -95,20 +102,19 @@ public class FrontEndBoard extends JPanel implements MouseListener{
             }
     }
 	
-
-
-
+	
 	// this is where the mouse position is determined and kept track of
     @Override
     public void mouseEntered(MouseEvent event) {
         highlightColumn(event.getLocationOnScreen());
 
     }
-
     
-    // this is way too much for this function to be doing
-    // we need to redesign the interface with buttons that are useful
-    // so we dont have to do this
+    
+    // TODO
+    // implement player choice (go first or second)
+    // this will be pulled from the intro menu
+    // this is essentially the 'primary function through which the game is played'
     public void getColumnInput(GameButton b){
   
        	Action newAction;
@@ -118,7 +124,7 @@ public class FrontEndBoard extends JPanel implements MouseListener{
 		}else{
 			newAction = new Action(2, b.getXPos());
 		}
-		
+	
 		if(!backendBoard.isLegal(newAction)){
 			// need some error indicator
 			System.out.println("You have entered an invalid move, please try again.");
@@ -131,10 +137,9 @@ public class FrontEndBoard extends JPanel implements MouseListener{
 		
 		// update SWING
 		// need to have another method to colour correct button.
-		updateBoardWithMove(b);
+		updateBoardWithMove(b.getXPos());
 	
 	
-		// EXCEPTION HERE AT CHECK GOAL STATE. NEED TO CHECK!
 		//TODO IMPLEMENT ACTUAL WIN STATE: AT THE MOMENT IT SIMPLY RESETS THE WINDOW.
 		//XXX BEWARE, THERE BE WOBCKES HERE.
 		if (backendBoard.checkWinState()){
@@ -157,13 +162,40 @@ public class FrontEndBoard extends JPanel implements MouseListener{
 		
 		backendBoard.IncrementTurn();		
     	
+		// call AI here.
+		turkMove(backendBoard);
+		
+		
     }
 
+    // 
+    public void turkMove(BackendBoard backendBoard){
+
+		Action turkMove = newTurk.getTurkMove(backendBoard);
+		
+		backendBoard.makeMove(turkMove);
+		backendBoard.showTerminalBoard();
+		updateBoardWithMove(turkMove.getColumn());
+		
+		if (backendBoard.checkWinState()){
+			if(backendBoard.getTurn()%2==0 ){
+				System.out.println("PLAYER_1, you WIN!");
+				mainWindow.resetWindow(); // at the moment, window resets at win
+			}else{
+				System.out.println("PLAYER_2, you WIN!");
+				mainWindow.resetWindow();
+			}
+			return;
+		}
+		
+		backendBoard.IncrementTurn();
+    }
+    
     
     // Updates the board with the next _legal_ move
-    public void updateBoardWithMove(GameButton b){
+    public void updateBoardWithMove(int xPos){
     	int tilesOnBoard = 42;
-    	for (int count = tilesOnBoard - (cols - b.getXPos()); count >= 0; count -= 7){
+    	for (int count = tilesOnBoard - (cols - xPos); count >= 0; count -= 7){
     		GameButton currentButton = buttons[count];
     		if (currentButton.getPlayer() == 0){
     			if ( backendBoard.getTurn() % 2==0 ){
@@ -194,23 +226,17 @@ public class FrontEndBoard extends JPanel implements MouseListener{
     }
     
     //XXX BEWARE, THESE GUYS DON'T DO ANYTHING BUT ARE NEEDED APPARENTLY
-    
     @Override
     public void mouseExited(MouseEvent e) { 
     	doNothing();
     }
-
-    @Override
     public void mouseClicked(MouseEvent e) { 
     	doNothing();
     }
-    
-    // use these for click and dragging
     @Override
     public void mousePressed(MouseEvent e) { 
     	doNothing();
     }
-
     @Override
     public void mouseReleased(MouseEvent e) { 
     	doNothing();
@@ -220,8 +246,6 @@ public class FrontEndBoard extends JPanel implements MouseListener{
     private void doNothing() {
     	return;
     }
-    
-
 }
 
 
