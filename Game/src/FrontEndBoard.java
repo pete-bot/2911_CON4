@@ -29,13 +29,16 @@ public class FrontEndBoard extends JPanel implements MouseListener{
     private BackendBoard backendBoard; //Should be 'backendBoard'
     private int rows = 6;
     private int cols = 7;
+    private final int tilesOnBoard = 42;
+    private Window mainWindow;
     
     
-	public FrontEndBoard(BackendBoard newGameBoard) {
+	public FrontEndBoard(BackendBoard newGameBoard, Window mainWindow) {
 		
 		// I DO NOT LIKE HAVING THIS HERE - FIX AFTER SPRINT
 		//XXX
 		backendBoard = newGameBoard;
+		this.mainWindow = mainWindow; 
 		
 		
 		buttons =  new GameButton[42];
@@ -57,8 +60,8 @@ public class FrontEndBoard extends JPanel implements MouseListener{
         	final GameButton b = new GameButton(currX, currY); // why final?
         	
         	b.addActionListener(new ActionListener(){
-	        		  @Override
-					public void actionPerformed(ActionEvent e){
+        			@Override
+        			public void actionPerformed(ActionEvent e){
 	        			  getColumnInput(b);
 	        		  }
         		  });
@@ -69,7 +72,7 @@ public class FrontEndBoard extends JPanel implements MouseListener{
         	setBorder(BorderFactory.createEmptyBorder());
             b.setRolloverEnabled(true);
             b.addMouseListener(this);
-            this.add(b);
+            add(b);
             buttons[i] = b;
         }
 
@@ -108,39 +111,40 @@ public class FrontEndBoard extends JPanel implements MouseListener{
     // so we dont have to do this
     public void getColumnInput(GameButton b){
   
-	       	Action newAction;
-			if(backendBoard.getTurn()%2==0 ){
-				// PLAYER1 input
-				newAction = new Action(1, b.getXPos());
-			}else{
-				newAction = new Action(2, b.getXPos());
-			}
-			
-			if(!backendBoard.isLegal(newAction)){
-				// need some error indicator
-				System.out.println("You have entered an invalid move, please try again.");
-				return;
-			}
-			
-			// update terminal rep
-			backendBoard.makeMove(newAction);
-			backendBoard.showTerminalBoard();
-			
-			// update SWING
-			// need to have another method to colour correct button.
-			updateBoardWithMove(b);
+       	Action newAction;
+		if(backendBoard.getTurn()%2==0 ){
+			// PLAYER1 input
+			newAction = new Action(1, b.getXPos());
+		}else{
+			newAction = new Action(2, b.getXPos());
+		}
 		
+		if(!backendBoard.isLegal(newAction)){
+			// need some error indicator
+			System.out.println("You have entered an invalid move, please try again.");
+			return;
+		}
 		
+		// update terminal rep
+		backendBoard.makeMove(newAction);
+		backendBoard.showTerminalBoard();
+		
+		// update SWING
+		// need to have another method to colour correct button.
+		updateBoardWithMove(b);
+	
+	
 		// EXCEPTION HERE AT CHECK GOAL STATE. NEED TO CHECK!
-		if(backendBoard.checkWinState()){
+		//TODO IMPLEMENT ACTUAL WIN STATE: AT THE MOMENT IT SIMPLY RESETS THE WINDOW.
+		//XXX BEWARE, THERE BE WOBCKES HERE.
+		if (backendBoard.checkWinState()){
 			if(backendBoard.getTurn()%2==0 ){
 				System.out.println("PLAYER_1, you WIN!");
+				mainWindow.resetWindow(); // at the moment, window resets at win
 			}else{
 				System.out.println("PLAYER_2, you WIN!");
+				mainWindow.resetWindow();
 			}
-			
-			// need some win state indicator for front end
-			// another method would fix this, but for now, we must fix the basic design
 			
 			return;
 		}
@@ -159,7 +163,7 @@ public class FrontEndBoard extends JPanel implements MouseListener{
     // Updates the board with the next _legal_ move
     public void updateBoardWithMove(GameButton b){
     	int tilesOnBoard = 42;
-    	for (int count = tilesOnBoard - (cols - b.getXPos()); count > 0; count -= 7){
+    	for (int count = tilesOnBoard - (cols - b.getXPos()); count >= 0; count -= 7){
     		GameButton currentButton = buttons[count];
     		if (currentButton.getPlayer() == 0){
     			if ( backendBoard.getTurn() % 2==0 ){
@@ -184,9 +188,7 @@ public class FrontEndBoard extends JPanel implements MouseListener{
         for (GameButton gameButton : buttons) {
         	gameButton.setIcon(new ImageIcon("circle101.png"));
         	gameButton.setPlayer(0);
-            //gameButton.repaint();
         }
-        
 
 		setVisible(true);
     }
@@ -195,19 +197,29 @@ public class FrontEndBoard extends JPanel implements MouseListener{
     
     @Override
     public void mouseExited(MouseEvent e) { 
+    	doNothing();
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
-    	//System.out.println("pointCursor: "+e.getLocationOnScreen());	
+    public void mouseClicked(MouseEvent e) { 
+    	doNothing();
     }
     
     // use these for click and dragging
     @Override
-    public void mousePressed(MouseEvent e) { }
+    public void mousePressed(MouseEvent e) { 
+    	doNothing();
+    }
 
     @Override
-    public void mouseReleased(MouseEvent e) { }
+    public void mouseReleased(MouseEvent e) { 
+    	doNothing();
+    }
+    
+    //Legibility function
+    private void doNothing() {
+    	return;
+    }
     
 
 }

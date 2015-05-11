@@ -14,7 +14,6 @@ public class GameButton extends JButton{
 	private int player;
 	
 	//TODO
-	//XXX
 	public GameButton(int x, int y) { 
 		//setBackground(new Color(0x212121));
 		xPos = x;

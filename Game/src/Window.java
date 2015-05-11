@@ -55,7 +55,7 @@ public class Window extends JFrame{
 
         // create new gridBoard
         backendBoard = newBoard;
-        frontEndBoard = new FrontEndBoard(backendBoard);
+        frontEndBoard = new FrontEndBoard(backendBoard, this);
         add(buttonPanel, BorderLayout.SOUTH);
 		add(frontEndBoard, BorderLayout.NORTH);
 		setVisible(true);

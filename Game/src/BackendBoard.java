@@ -72,8 +72,8 @@ public class BackendBoard {
 	public boolean checkWinState(){
 		
 		// find four horizontal pieces.
-		for(int row = 0; row<ROWMAX; row++){
-			for(int col = 0; col<4; col++){
+		for(int row = 0; row < ROWMAX; row++){
+			for(int col = 0; col < 4; col++){
 				if( (board[row][col] != 0) && (board[row][col]==board[row][col+1]) 
 						&& (board[row][col]==board[row][col+2]) 
 						&& (board[row][col]==board[row][col+3])){
@@ -84,8 +84,8 @@ public class BackendBoard {
 		}
 		
 		// find four Vertical pieces.
-		for(int row = 0; row<3; row++){
-			for(int col = 0; col<COLMAX; col++){
+		for(int row = 0; row < 3; row++){
+			for(int col = 0; col < COLMAX; col++){
 				if((board[row][col] != 0) && (board[row][col]==board[row+1][col]) 
 						&& (board[row][col]==board[row+2][col]) 
 						&& (board[row][col]==board[row+3][col])){
@@ -96,8 +96,8 @@ public class BackendBoard {
 		}
 		// diagonal right
 		// find four Vertical pieces.
-		for(int row = 0; row<3; row++){
-			for(int col = 0; col<4; col++){
+		for(int row = 0; row < 3; row++){
+			for(int col = 0; col < 4; col++){
 				if((board[row][col] != 0) && (board[row][col]==board[row+1][col+1]) 
 						&& (board[row][col]==board[row+2][col+2]) 
 						&& (board[row][col]==board[row+3][col+3])){
@@ -109,7 +109,7 @@ public class BackendBoard {
 		
 		// diagonal left
 		// find four Vertical pieces.
-		for(int row = 0; row<ROWMAX; row++){
+		for(int row = 0; row<3; row++){
 			for(int col = 3; col<COLMAX; col++){
 				if((board[row][col] != 0) && (board[row][col]==board[row+1][col-1]) 
 						&& (board[row][col]==board[row+2][col-2]) 
