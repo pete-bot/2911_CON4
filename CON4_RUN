@@ -1,0 +1,6 @@
+#! /bin/sh
+
+cd Game/src/
+rm *.class
+javac *.java
+java Game
