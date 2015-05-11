@@ -12,11 +12,8 @@ public class TextPanel extends JPanel {
 	
 	public TextPanel() {
 		setLayout(new BorderLayout());
-		
 		textArea = new JTextArea();
-		
 		scrollPane = new JScrollPane();
-		
 		add(scrollPane, BorderLayout.CENTER);
 		
 	}

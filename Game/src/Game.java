@@ -9,8 +9,8 @@ import java.io.InputStreamReader;
 
 public class Game {
 	
-	private Board newBoard;
-	// 
+	private BackendBoard newBoard;
+
 	public static void main(String args[]){
 		Game newGame = new Game();
 		newGame.playGame();
@@ -19,10 +19,10 @@ public class Game {
 	
 	// game constructor
 	public Game(){
-		newBoard = new Board();
+		newBoard = new BackendBoard();
 	}
 	
-	public Board getBoard(){
+	public BackendBoard getBoard(){
 		return newBoard; 
 	}
 	
@@ -37,6 +37,5 @@ public class Game {
 		// this is mostly because I could not get the button stuff to do what i needed it 
 		//to do. we can fic this though
 		Window gameWindow = new Window(newBoard);
-        
 	}
 }
