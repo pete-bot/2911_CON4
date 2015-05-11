@@ -44,6 +44,7 @@ public class Window extends JFrame{
 		///getContentPane().setBackground(Color.DARK_GRAY);
         setSize(700, 690);
         setLocationRelativeTo(null);
+        setResizable(false);
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
