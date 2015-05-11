@@ -26,6 +26,9 @@ public class ButtonPanel extends JPanel implements ActionListener {
 		// add buttons to the whole panel class
 		add(restartButton);
 		add(exitButton);
+
+        this.backendBoard = backendBoard;
+        this.visualBoard = visualBoard;
 	}
 	
 	// made a new function to set text panel's text.
@@ -33,10 +36,7 @@ public class ButtonPanel extends JPanel implements ActionListener {
 		this.textPanel = textPanel;
 	}
 
-    public void addBoards(Board backendBoard, GridBoard visualBoard) {
-        this.backendBoard = backendBoard;
-        this.visualBoard = visualBoard;
-    }
+    public void addBoards(Board backendBoard, GridBoard visualBoard)
 	
 	public void actionPerformed(ActionEvent e) {
 

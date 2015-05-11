@@ -37,6 +37,6 @@ public class Game {
 		// this is mostly because I could not get the button stuff to do what i needed it 
 		//to do. we can fic this though
 		Window gameWindow = new Window(newBoard);
-		
+        
 	}
 }

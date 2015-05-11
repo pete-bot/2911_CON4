@@ -117,5 +117,14 @@ public class Board {
 		return false;
 		
 	}
+
+    public void resetBoard() {
+		board = new int[6][7];
+		ROWMAX = 6;
+		COLMAX = 7;
+		turnNumber = 0;
+
+        showBoard();
+    }
 	
 }

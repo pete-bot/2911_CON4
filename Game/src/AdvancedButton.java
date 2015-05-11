@@ -10,7 +10,7 @@ public class AdvancedButton extends JButton{
 	private int player;
 	
 	public AdvancedButton(int i, double d) {
-		setBackground(new Color(0x212121));
+		//setBackground(new Color(0x212121));
 		xPos = i;
 		yPos = (int)d;
 		player = 0;

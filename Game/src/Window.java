@@ -45,17 +45,23 @@ public class Window extends JFrame{
         this.setLocationRelativeTo(null);
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
+
+        // Button must be made before gridBoard is made
+
         // set our button interface
         buttonPanel = new ButtonPanel();
         buttonPanel.setTextPanel(textPanel);
 
-        
         // create new gridBoard
         gridBoard = new GridBoard(newGame);
         add(buttonPanel, BorderLayout.SOUTH);
 		add(gridBoard, BorderLayout.NORTH);
 		this.setVisible(true);
+
+        //Add boards
+        Board backendBoard = newGame;
+        GridBoard visualBoard = gridBoard;
+        buttonPanel.addBoards(backendBoard, visualBoard);
 		
 		
 		// this is only here temporarily
@@ -64,6 +70,5 @@ public class Window extends JFrame{
 		System.out.println("Initial Game State:");
 		newGame.showBoard();
 		System.out.println("PLAYER_1, please enter your column choice:");
-		
     }  
 }

@@ -32,7 +32,6 @@ public class GridBoard extends JPanel implements MouseListener{
 	public GridBoard(Board newGameBoard) {
 		
 		// I DO NOT LIKE HAVING THIS HERE - FIX AFTER SPRINT
-		// DESIGN IS FUCKED GAAAAHHHH
 		board = newGameBoard;
 		
 		
@@ -50,7 +49,6 @@ public class GridBoard extends JPanel implements MouseListener{
 		
 		// create our button array
     	this.setLayout(new GridLayout(6, 7));
-    	this.setBackground(new Color(0x212121));
         for (int i = 0; i <  42; i++) {
         	
         	// this is dodgy - please change
@@ -87,10 +85,9 @@ public class GridBoard extends JPanel implements MouseListener{
             double west = buttonLocation.getX();
             double east = buttonLocation.getX() + button.getWidth();
             boolean inRow = cursor.getX() > west && cursor.getX() < east;
-            button.setRolloverIcon(inRow ? new ImageIcon("glow.png") : button.getIcon());
-            //button.setBackground(bg);
-            button.setBackground(inRow ? new Color(0xd9d9d9) : null);
-        }
+            button.setBackground(inRow ? new Color(0x6bb4e5) : null );
+
+            }
     }
 	
 
@@ -176,6 +173,47 @@ public class GridBoard extends JPanel implements MouseListener{
     			break;
     		}
     	}
+    }
+
+    //This does not redisplay properly
+    public void resetBoard(Board newBoard) {
+		buttons =  new AdvancedButton[42];
+		
+		int rows = 6;
+		int cols = 7;
+		
+		setLayout(new GridLayout(rows, cols));
+		setSize(500,500);
+		
+		// this is to 'squash' the columns together - need to find better way
+		// to do this
+		Insets margin = new Insets(-3,0,-3,0);
+		
+		// create our button array
+    	this.setLayout(new GridLayout(6, 7));
+        for (int i = 0; i <  42; i++) {
+        	
+        	// this is dodgy - please change
+        	final AdvancedButton b = new AdvancedButton((i%7),5-(Math.ceil(i/7)));
+        	
+        	b.addActionListener(new ActionListener(){
+	        		  @Override
+					public void actionPerformed(ActionEvent e){
+	        			  getColumnInput(b);
+	        		  }
+        		  });
+        	
+        	b.setIcon(new ImageIcon("circle101.png"));
+        	b.setBorderPainted(false);
+        	b.setMargin(margin);
+        	setBorder(BorderFactory.createEmptyBorder());
+            b.setRolloverEnabled(true);
+            b.addMouseListener(this);
+            this.add(b);
+            buttons[i] = b;
+        }
+
+		setVisible(true);
     }
     
     
