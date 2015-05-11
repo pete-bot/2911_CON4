@@ -108,27 +108,29 @@ public class GridBoard extends JPanel implements MouseListener{
     // we need to redesign the interface with buttons that are useful
     // so we dont have to do this
     public void getColumnInput(AdvancedButton b){
-    	Action newAction;
-		if(board.getTurn()%2==0 ){
-			// PLAYER1 input
-			newAction = new Action(1, b.getXPos());
-		}else{
-			newAction = new Action(2, b.getXPos());
-		}
-		
-		if(!board.isLegal(newAction)){
-			// need some error indicator
-			System.out.println("You have entered an invalid move, please try again.");
-			return;
-		}
-		
-		// update terminal rep
-		board.makeMove(newAction);
-		board.showBoard();
-		
-		// update SWING
-		// need to have anotehr method to colour correct button.
-		updateBoard(b);
+    	if(!board.checkWinState()) { //simple check to determine if a player has won, cease input
+	       	Action newAction;
+			if(board.getTurn()%2==0 ){
+				// PLAYER1 input
+				newAction = new Action(1, b.getXPos());
+			}else{
+				newAction = new Action(2, b.getXPos());
+			}
+			
+			if(!board.isLegal(newAction)){
+				// need some error indicator
+				System.out.println("You have entered an invalid move, please try again.");
+				return;
+			}
+			
+			// update terminal rep
+			board.makeMove(newAction);
+			board.showBoard();
+			
+			// update SWING
+			// need to have another method to colour correct button.
+			updateBoard(b);
+    	}
 //		if(board.getTurn()%2==0 ){
 //			b.setIcon(new ImageIcon("circle101_RED_mkII.png"));
 //		}else{
@@ -161,7 +163,7 @@ public class GridBoard extends JPanel implements MouseListener{
     }
 
     
-    // this will update the JButton board with teh appropriate tile
+    // this will update the JButton board with the appropriate tile
     public void updateBoard(AdvancedButton b){
     	for (int count = 42-(7-b.getXPos()); count < 42; count-=7){
     		if(buttons[count].getPlayer()==0){
