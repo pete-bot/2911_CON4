@@ -108,9 +108,7 @@ public class GridBoard extends JPanel implements MouseListener{
     // we need to redesign the interface with buttons that are useful
     // so we dont have to do this
     public void getColumnInput(AdvancedButton b){
-    	if(board.checkWinState()) { //simple check to determine if a player has won, cease input
-    		return;
-    	}
+  
 	       	Action newAction;
 			if(board.getTurn()%2==0 ){
 				// PLAYER1 input
