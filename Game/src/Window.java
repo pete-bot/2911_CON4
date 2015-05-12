@@ -22,53 +22,75 @@ import javax.swing.JPanel;
 
 public class Window extends JFrame{
 
-	// no idea what this is. Sanjay, help!??!?!
+    //This is for serialization; don't worry about it.
 	private static final long serialVersionUID = 1L;
 	private ButtonPanel buttonPanel;
     private TextPanel textPanel;
-    private GridBoard gridBoard;
-
-    
-    
-    // stuff I do not like about this design
-    private int turnCount;
+    private FrontEndBoard frontEndBoard;
+    private BackendBoard backendBoard;
+    private int turnCount; // Peter does not like this.
 
     
     /**
      * Class constructor
      */
-    public Window(Board newGame) {
+    public Window(BackendBoard newBoard) {
     	super("Connect Java: Advanced Wobfighter");
-		this.setLayout(new BorderLayout());
+        initWindow(newBoard);
+    }  
+
+    private void initWindow(BackendBoard newBoard) {
+		setLayout(new BorderLayout());
 		///getContentPane().setBackground(Color.DARK_GRAY);
-        this.setSize(700, 690);
-        this.setLocationRelativeTo(null);
+        setSize(700, 690);
+        setLocationRelativeTo(null);
+        setResizable(false);
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Button must be made before gridBoard is made
 
         // set our button interface
-        buttonPanel = new ButtonPanel();
+        buttonPanel = new ButtonPanel(this);
         buttonPanel.setTextPanel(textPanel);
 
         // create new gridBoard
-        gridBoard = new GridBoard(newGame);
+        backendBoard = newBoard;
+        frontEndBoard = new FrontEndBoard(backendBoard, this);
         add(buttonPanel, BorderLayout.SOUTH);
-		add(gridBoard, BorderLayout.NORTH);
-		this.setVisible(true);
-
-        //Add boards
-        Board backendBoard = newGame;
-        GridBoard visualBoard = gridBoard;
-        buttonPanel.addBoards(backendBoard, visualBoard);
-		
+		add(frontEndBoard, BorderLayout.NORTH);
+		setVisible(true);
 		
 		// this is only here temporarily
 		// this is a bad design
 		System.out.println("Welcome to WOBCON4. Enjoy the game.");
 		System.out.println("Initial Game State:");
-		newGame.showBoard();
+		backendBoard.showTerminalBoard();
 		System.out.println("PLAYER_1, please enter your column choice:");
-    }  
+    }
+
+    // Modified initialization for window.
+    // Resets the game and redisplays the new variant.
+    public void resetWindow() {
+        // THIS HAS ALL BEEN PREVIOUSLY SET UP
+    	/*
+    	setSize(700, 690);
+        setLocationRelativeTo(null);
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        add(buttonPanel, BorderLayout.SOUTH);
+		add(gridBoard, BorderLayout.NORTH);
+		setVisible(true);
+		 */
+		
+		frontEndBoard.resetBoard();
+		
+
+		//XXX
+		System.out.println("Welcome to WOBCON4. Enjoy the game.");
+		System.out.println("Initial Game State:");
+		backendBoard.showTerminalBoard();
+		System.out.println("PLAYER_1, please enter your column choice:");
+    }
 }

@@ -1,4 +1,4 @@
-/AI.class
-/AIInterface.class
-/MechanicalTurk.class
-/Alpha_Beta.class
+/BackendBoard.class
+/FrontEndBoard.class
+/GameButton.class
+/FrontEndBoard$1.class

@@ -10,11 +10,10 @@ public class ButtonPanel extends JPanel implements ActionListener {
 	private JButton restartButton;
 	private JButton exitButton;
 	private TextPanel textPanel;
-    private Board backendBoard;
-    private GridBoard visualBoard;
+    private Window gameWindow; //Needed to refresh for restarts
 	
 	// constructor
-	public ButtonPanel() {
+	public ButtonPanel(Window gameWindow) {
 		setLayout(new FlowLayout());
 		
 		restartButton = new JButton("Restart");
@@ -26,6 +25,8 @@ public class ButtonPanel extends JPanel implements ActionListener {
 		// add buttons to the whole panel class
 		add(restartButton);
 		add(exitButton);
+
+        this.gameWindow = gameWindow;
 	}
 	
 	// made a new function to set text panel's text.
@@ -33,20 +34,14 @@ public class ButtonPanel extends JPanel implements ActionListener {
 		this.textPanel = textPanel;
 	}
 
-    public void addBoards(Board backendBoard, GridBoard visualBoard) {
-        this.backendBoard = backendBoard;
-        this.visualBoard = visualBoard;
-    }
-	
 	public void actionPerformed(ActionEvent e) {
 
         JButton buttonPressed = (JButton) e.getSource();
 
         // Reset game
         if (buttonPressed.equals(restartButton)) {
-        	System.out.println("Restart Requested..");
-            backendBoard.resetBoard();
-            visualBoard.resetBoard(backendBoard);
+        	System.out.println("Restart Requested...");
+            gameWindow.resetWindow();
         } else {
             System.exit(0);
         }

@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 
 public class GameTerminal {
 	
-	private Board newBoard;
+	private BackendBoard newBoard;
 	// 
 	public static void main(String args[]){
 		GameTerminal newGame = new GameTerminal();
@@ -20,10 +20,10 @@ public class GameTerminal {
 	
 	// game constructor
 	public GameTerminal(){
-		newBoard = new Board();
+		newBoard = new BackendBoard();
 	}
 	
-	public Board getBoard(){
+	public BackendBoard getBoard(){
 		return newBoard; 
 	}
 	
@@ -36,7 +36,7 @@ public class GameTerminal {
 		// temporary set up for testing/debugging
 		System.out.println("Welcome to WOBCON4. Enjoy the game.");
 		System.out.println("Initial Game State:");
-		newBoard.showBoard();
+		newBoard.showTerminalBoard();
 		System.out.println("PLAYER_1, please enter your column choice:");
 		
 		int turnCount = 0;
@@ -63,7 +63,7 @@ public class GameTerminal {
 				
 				newBoard.makeMove(newAction);
 				
-				newBoard.showBoard();
+				newBoard.showTerminalBoard();
 				
 				if(newBoard.checkWinState()){
 					if(turnCount%2==0 ){

@@ -3,7 +3,7 @@ public class Alpha_Beta implements AIInterface {
 
 	@Override
 	
-	public Action getMove(Board board) {
+	public Action getMove(BackendBoard backendBoard) {
 		
 //		01 function alphabeta(node, depth, α, β, maximizingPlayer)
 //		02      if depth = 0 or node is a terminal node

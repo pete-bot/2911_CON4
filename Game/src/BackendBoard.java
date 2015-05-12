@@ -1,20 +1,17 @@
 
-public class Board {
+public class BackendBoard {
 
 	// this is the board representation - very simple and light
 	// we store the position of player_1 as 1, player_2 as 2 
 	private int[][] board;
-	private int turnNumber;
+	private int turnNumber = 0;
 	
 	// need to make these ENUMS
-	private int ROWMAX;
-	private int COLMAX;
+	private int ROWMAX = 6;
+	private int COLMAX = 7;
 	
-	public Board(){
-		board = new int[6][7];
-		ROWMAX = 6;
-		COLMAX = 7;
-		turnNumber = 0;
+	public BackendBoard(){
+		board = new int[ROWMAX][COLMAX];
 	}
 	
 	// set the turn number
@@ -22,7 +19,7 @@ public class Board {
 		turnNumber++;	
 	}
 	
-	// return teh turn number
+	// Return the turn number
 	public int getTurn(){
 		return turnNumber;	
 	}
@@ -59,7 +56,8 @@ public class Board {
 	
 	
 	// render the current board in terminal
-	public void showBoard(){
+    // Maybe 'showTerminalBoard' is better...
+	public void showTerminalBoard(){
 		for(int row = ROWMAX-1; row >= 0; row--){
 			for(int col = 0; col < COLMAX; col++){
 				System.out.print("["+this.getPosition(row, col)+"]");
@@ -74,9 +72,11 @@ public class Board {
 	public boolean checkWinState(){
 		
 		// find four horizontal pieces.
-		for(int row = 0; row<ROWMAX; row++){
-			for(int col = 0; col<4; col++){
-				if( (board[row][col] != 0) && (board[row][col]==board[row][col+1]) && (board[row][col]==board[row][col+2]) && (board[row][col]==board[row][col+3])){
+		for(int row = 0; row < ROWMAX; row++){
+			for(int col = 0; col < 4; col++){
+				if( (board[row][col] != 0) && (board[row][col]==board[row][col+1]) 
+						&& (board[row][col]==board[row][col+2]) 
+						&& (board[row][col]==board[row][col+3])){
 					System.out.println("winState: hor");
 					return true;
 				}
@@ -84,9 +84,11 @@ public class Board {
 		}
 		
 		// find four Vertical pieces.
-		for(int row = 0; row<3; row++){
-			for(int col = 0; col<COLMAX; col++){
-				if((board[row][col] != 0) && (board[row][col]==board[row+1][col]) && (board[row][col]==board[row+2][col]) && (board[row][col]==board[row+3][col])){
+		for(int row = 0; row < 3; row++){
+			for(int col = 0; col < COLMAX; col++){
+				if((board[row][col] != 0) && (board[row][col]==board[row+1][col]) 
+						&& (board[row][col]==board[row+2][col]) 
+						&& (board[row][col]==board[row+3][col])){
 					System.out.println("winState: vert");
 					return true;
 				}
@@ -94,9 +96,11 @@ public class Board {
 		}
 		// diagonal right
 		// find four Vertical pieces.
-		for(int row = 0; row<3; row++){
-			for(int col = 0; col<4; col++){
-				if((board[row][col] != 0) && (board[row][col]==board[row+1][col+1]) && (board[row][col]==board[row+2][col+2]) && (board[row][col]==board[row+3][col+3])){
+		for(int row = 0; row < 3; row++){
+			for(int col = 0; col < 4; col++){
+				if((board[row][col] != 0) && (board[row][col]==board[row+1][col+1]) 
+						&& (board[row][col]==board[row+2][col+2]) 
+						&& (board[row][col]==board[row+3][col+3])){
 					System.out.println("winState: diag_right");
 					return true;
 				}
@@ -105,26 +109,28 @@ public class Board {
 		
 		// diagonal left
 		// find four Vertical pieces.
-		for(int row = 0; row<ROWMAX; row++){
+		for(int row = 0; row<3; row++){
 			for(int col = 3; col<COLMAX; col++){
-				if((board[row][col] != 0) && (board[row][col]==board[row+1][col-1]) && (board[row][col]==board[row+2][col-2]) && (board[row][col]==board[row+3][col-3]) ){
+				if((board[row][col] != 0) && (board[row][col]==board[row+1][col-1]) 
+						&& (board[row][col]==board[row+2][col-2]) 
+						&& (board[row][col]==board[row+3][col-3]) ){
 					System.out.println("winState: diag_left");
 					return true;
 				}
 			}
 		}
-		
-		return false;
-		
+		return false;	
 	}
 
     public void resetBoard() {
-		board = new int[6][7];
-		ROWMAX = 6;
-		COLMAX = 7;
+    	int empty = 0;
+		for (int i = 0; i < ROWMAX; i++) {
+			for (int j = 0; j < COLMAX; j++) {
+				board[i][j] = empty;
+			}
+		}
 		turnNumber = 0;
-
-        showBoard();
+        showTerminalBoard(); 
     }
 	
 }

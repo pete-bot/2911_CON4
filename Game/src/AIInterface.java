@@ -1,7 +1,7 @@
 
 public interface AIInterface {
 	
-	public Action getMove(Board b);
+	public Action getMove(BackendBoard backendBoard);
 	
 
 }

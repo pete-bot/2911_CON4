@@ -1,21 +1,28 @@
-import java.util.Random;
-
 
 public class MechanicalTurk implements AIInterface{
+	
+	private int AIclass;
+	
+	// mechanical turk constructor
+	public MechanicalTurk(int AIclass){
+		this.AIclass = AIclass;
+	}
 
-	public Action getMove(Board b) {
-		int AI = 2;
-		Random rand = new Random();
-		int move = (int) ((rand.nextInt())%7);
-		Action dumb = new Action(AI, move);
+	// if AIclass is class 0 (ie, training mode)
+	@Override
+	public Action getMove(BackendBoard backendBoard) {
+		// need a clever way of determining this once we have starting turn choice
+		int playerNumber = 2; 
 		
-		System.out.println("HERE");
+		// Math.random() returns a number between 0 and 1, mult by 10 and mod by 7
+		int turkColumn = (int)((10*Math.random())%7);
+		Action turkMove = new Action(playerNumber, turkColumn);
 		
-		if (b.isLegal(dumb)){
-			move = (int) (rand.nextInt()%7);
-			dumb = new Action(AI, move);
+		while(!backendBoard.isLegal(turkMove)){
+			turkColumn = (int)((10*Math.random())%7);
+			turkMove = new Action(playerNumber, turkColumn);
 		}
 		
-		return dumb;
+		return turkMove;
 	}
 }
