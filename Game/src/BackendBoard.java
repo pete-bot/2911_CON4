@@ -77,7 +77,8 @@ public class BackendBoard {
 				if( (board[row][col] != 0) && (board[row][col]==board[row][col+1]) 
 						&& (board[row][col]==board[row][col+2]) 
 						&& (board[row][col]==board[row][col+3])){
-					System.out.println("winState: hor");
+					System.out.println("row = " + row);
+					System.out.println("col = " + col);
 					return true;
 				}
 			}
@@ -90,6 +91,8 @@ public class BackendBoard {
 						&& (board[row][col]==board[row+2][col]) 
 						&& (board[row][col]==board[row+3][col])){
 					System.out.println("winState: vert");
+					System.out.println("row = " + row);
+					System.out.println("col = " + col);
 					return true;
 				}
 			}
@@ -102,6 +105,8 @@ public class BackendBoard {
 						&& (board[row][col]==board[row+2][col+2]) 
 						&& (board[row][col]==board[row+3][col+3])){
 					System.out.println("winState: diag_right");
+					System.out.println("row = " + row);
+					System.out.println("col = " + col);
 					return true;
 				}
 			}
@@ -115,6 +120,8 @@ public class BackendBoard {
 						&& (board[row][col]==board[row+2][col-2]) 
 						&& (board[row][col]==board[row+3][col-3]) ){
 					System.out.println("winState: diag_left");
+					System.out.println("row = " + row);
+					System.out.println("col = " + col);
 					return true;
 				}
 			}

@@ -36,6 +36,7 @@ public class Game {
 		// most of gameplay happens here - this is not how i want the design to be
 		// this is mostly because I could not get the button stuff to do what i needed it 
 		//to do. we can fic this though
+		System.out.println("passed 0");
 		Window gameWindow = new Window(newBoard);
 	}
 }

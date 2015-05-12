@@ -36,6 +36,29 @@ public class FrontEndBoard extends JPanel implements MouseListener{
     private MechanicalTurk newTurk;
     
     
+    
+    
+    
+    /*
+     *                               GRAPHIC IMAGE FILES
+     *  Uncomment:
+     *      (1) if you're sanjay and windows is a piece of shit
+     *      (2) everybody else
+     */
+    
+    
+//     (1) SANJAY: WINDOWS ECLIPSE
+//    private static final String assLoc = "assets/";
+    
+//     (2) EVERYONE ELSE: 
+    private static final String assLoc = "../assets/"; 
+    
+    private static final String emptyButton = assLoc + "sketch_circle_empty.png";
+    private static final String redToken = assLoc + "sketch_circle_red.jpg";
+    private static final String yellowToken = assLoc + "sketch_circle_yellow.jpg";
+    
+    
+    
 	public FrontEndBoard(BackendBoard newGameBoard, Window mainWindow) {
 		
 		// temporary 
@@ -63,6 +86,7 @@ public class FrontEndBoard extends JPanel implements MouseListener{
 //        this.add(inputButton);
 //		
 		
+		
 		// create our button array
         for (int i = 0; i <  42; i++) {
             //XXX
@@ -76,8 +100,8 @@ public class FrontEndBoard extends JPanel implements MouseListener{
 	        			  getColumnInput(b);
 	        		  }
         		  });
-        	
-        	b.setIcon(new ImageIcon("../assets/circle101.png"));
+        	setVisible(true);
+        	b.setIcon(new ImageIcon(assLoc + "sketch_circle_empty.png"));
         	b.setBorderPainted(false);
         	b.setMargin(margin);
         	setBorder(BorderFactory.createEmptyBorder());
@@ -87,7 +111,6 @@ public class FrontEndBoard extends JPanel implements MouseListener{
             buttonIcons[i] = b;
         }
 
-		
 		setVisible(true);
 	}
 
@@ -210,10 +233,10 @@ public class FrontEndBoard extends JPanel implements MouseListener{
     		if (currentButton.getPlayer() == 0){
     			if ( backendBoard.getTurn() % 2==0 ){
     				currentButton.setPlayer(1);
-    				currentButton.setIcon(new ImageIcon("../assets/circle101_RED.png"));
+    				currentButton.setIcon(new ImageIcon(assLoc +  "sketch_circle_red.jpg"));
     			} else{
     				currentButton.setPlayer(1);
-    				currentButton.setIcon(new ImageIcon("../assets/circle101_YELLOW.png"));
+    				currentButton.setIcon(new ImageIcon(assLoc + "sketch_circle_yellow.jpg"));
     			}
     			break;
     		}
@@ -228,7 +251,7 @@ public class FrontEndBoard extends JPanel implements MouseListener{
 		// this needs to simply repaint
 		
         for (GameButton gameButton : buttonIcons) {
-        	gameButton.setIcon(new ImageIcon("../assets/circle101.png"));
+        	gameButton.setIcon(new ImageIcon(assLoc + "sketch_circle_empty.jpg"));
         	gameButton.setPlayer(0);
         }
 

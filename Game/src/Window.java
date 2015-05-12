@@ -55,11 +55,13 @@ public class Window extends JFrame{
         buttonPanel.setTextPanel(textPanel);
 
         // create new gridBoard
+        
         backendBoard = newBoard;
         frontEndBoard = new FrontEndBoard(backendBoard, this);
         add(buttonPanel, BorderLayout.SOUTH);
 		add(frontEndBoard, BorderLayout.NORTH);
-		setVisible(true);
+		
+		
 		
 		// this is only here temporarily
 		// this is a bad design
@@ -67,6 +69,8 @@ public class Window extends JFrame{
 		System.out.println("Initial Game State:");
 		backendBoard.showTerminalBoard();
 		System.out.println("PLAYER_1, please enter your column choice:");
+		
+		setVisible(true);
     }
 
     // Modified initialization for window.

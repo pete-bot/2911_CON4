@@ -30,7 +30,6 @@ public class GridBoard extends JPanel implements MouseListener{
     
     
 	public GridBoard(Board newGameBoard) {
-		
 		// I DO NOT LIKE HAVING THIS HERE - FIX AFTER SPRINT
 		board = newGameBoard;
 		
@@ -204,6 +203,7 @@ public class GridBoard extends JPanel implements MouseListener{
         		  });
         	
         	b.setIcon(new ImageIcon("circle101.png"));
+        	System.out.println("1 passed point");
         	b.setBorderPainted(false);
         	b.setMargin(margin);
         	setBorder(BorderFactory.createEmptyBorder());
