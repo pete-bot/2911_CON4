@@ -77,7 +77,7 @@ public class FrontEndBoard extends JPanel implements MouseListener{
 	        		  }
         		  });
         	
-        	b.setIcon(new ImageIcon("circle101.png"));
+        	b.setIcon(new ImageIcon("../assets/circle101.png"));
         	b.setBorderPainted(false);
         	b.setMargin(margin);
         	setBorder(BorderFactory.createEmptyBorder());
@@ -210,10 +210,10 @@ public class FrontEndBoard extends JPanel implements MouseListener{
     		if (currentButton.getPlayer() == 0){
     			if ( backendBoard.getTurn() % 2==0 ){
     				currentButton.setPlayer(1);
-    				currentButton.setIcon(new ImageIcon("circle101_RED.png"));
+    				currentButton.setIcon(new ImageIcon("../assets/circle101_RED.png"));
     			} else{
     				currentButton.setPlayer(1);
-    				currentButton.setIcon(new ImageIcon("circle101_YELLOW.png"));
+    				currentButton.setIcon(new ImageIcon("../assets/circle101_YELLOW.png"));
     			}
     			break;
     		}
@@ -228,7 +228,7 @@ public class FrontEndBoard extends JPanel implements MouseListener{
 		// this needs to simply repaint
 		
         for (GameButton gameButton : buttonIcons) {
-        	gameButton.setIcon(new ImageIcon("circle101.png"));
+        	gameButton.setIcon(new ImageIcon("../assets/circle101.png"));
         	gameButton.setPlayer(0);
         }
 
