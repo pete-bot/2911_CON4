@@ -13,6 +13,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /*
@@ -25,7 +26,8 @@ public class FrontEndBoard extends JPanel implements MouseListener{
     private Color pressedBackgroundColor;
 	
 	private JPanel gridBoard;
-    public GameButton[] buttons;
+    public GameButton[] buttonIcons;
+    private GameButton inputButton;
     private BackendBoard backendBoard; //Should be 'backendBoard'
     private int rows = 6;
     private int cols = 7;
@@ -46,10 +48,7 @@ public class FrontEndBoard extends JPanel implements MouseListener{
 		backendBoard = newGameBoard;
 		this.mainWindow = mainWindow; 
 		
-		
-		
-		buttons =  new GameButton[42];
-		
+		buttonIcons =  new GameButton[42];
 		setLayout(new GridLayout(rows, cols));
 		setSize(500,500);
 		
@@ -57,9 +56,15 @@ public class FrontEndBoard extends JPanel implements MouseListener{
 		// to do this
 		Insets margin = new Insets(-3,0,-3,0);
 		
+		
+		
+//		this.inputButton = new GameButton(0, 0);
+//        this.inputButton.addActionListener(this);
+//        this.add(inputButton);
+//		
+		
 		// create our button array
         for (int i = 0; i <  42; i++) {
-        	
             //XXX
         	int currX = i%7;
         	int currY = 5-((int) Math.ceil(i/7));
@@ -79,7 +84,7 @@ public class FrontEndBoard extends JPanel implements MouseListener{
             b.setRolloverEnabled(true);
             b.addMouseListener(this);
             add(b);
-            buttons[i] = b;
+            buttonIcons[i] = b;
         }
 
 		
@@ -89,8 +94,8 @@ public class FrontEndBoard extends JPanel implements MouseListener{
 	
 	// this highlights the column
 	public void highlightColumn(Point cursor) {
-        for (int i = 0; i < buttons.length; i++) {
-            JButton button = buttons[i];
+        for (int i = 0; i < buttonIcons.length; i++) {
+            JButton button = buttonIcons[i];
             
             // this uses the mouse location to determine which column to highlight
             Point buttonLocation = button.getLocationOnScreen();
@@ -171,7 +176,8 @@ public class FrontEndBoard extends JPanel implements MouseListener{
     // 
     public void turkMove(BackendBoard backendBoard){
 
-		Action turkMove = newTurk.getTurkMove(backendBoard);
+		System.out.println("The Turk makes its move...");
+    	Action turkMove = newTurk.getTurkMove(backendBoard);
 		
 		backendBoard.makeMove(turkMove);
 		backendBoard.showTerminalBoard();
@@ -180,15 +186,19 @@ public class FrontEndBoard extends JPanel implements MouseListener{
 		if (backendBoard.checkWinState()){
 			if(backendBoard.getTurn()%2==0 ){
 				System.out.println("PLAYER_1, you WIN!");
+				JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
 				mainWindow.resetWindow(); // at the moment, window resets at win
 			}else{
 				System.out.println("PLAYER_2, you WIN!");
+				JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
 				mainWindow.resetWindow();
 			}
 			return;
 		}
 		
 		backendBoard.IncrementTurn();
+		
+		System.out.println("Control has returned to the player.");
     }
     
     
@@ -196,7 +206,7 @@ public class FrontEndBoard extends JPanel implements MouseListener{
     public void updateBoardWithMove(int xPos){
     	int tilesOnBoard = 42;
     	for (int count = tilesOnBoard - (cols - xPos); count >= 0; count -= 7){
-    		GameButton currentButton = buttons[count];
+    		GameButton currentButton = buttonIcons[count];
     		if (currentButton.getPlayer() == 0){
     			if ( backendBoard.getTurn() % 2==0 ){
     				currentButton.setPlayer(1);
@@ -217,7 +227,7 @@ public class FrontEndBoard extends JPanel implements MouseListener{
 		// create our button array
 		// this needs to simply repaint
 		
-        for (GameButton gameButton : buttons) {
+        for (GameButton gameButton : buttonIcons) {
         	gameButton.setIcon(new ImageIcon("circle101.png"));
         	gameButton.setPlayer(0);
         }
