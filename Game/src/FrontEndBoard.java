@@ -144,15 +144,15 @@ public class FrontEndBoard extends JPanel implements MouseListener{
 		// need to have another method to colour correct button.
 		updateBoardWithMove(b.getXPos());
 	
-	
-		//TODO IMPLEMENT ACTUAL WIN STATE: AT THE MOMENT IT SIMPLY RESETS THE WINDOW.
 		//XXX BEWARE, THERE BE WOBCKES HERE.
 		if (backendBoard.checkWinState()){
 			if(backendBoard.getTurn()%2==0 ){
 				System.out.println("PLAYER_1, you WIN!");
+				JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
 				mainWindow.resetWindow(); // at the moment, window resets at win
 			}else{
 				System.out.println("PLAYER_2, you WIN!");
+				JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
 				mainWindow.resetWindow();
 			}
 			
