@@ -287,7 +287,7 @@ public class FrontEndBoard extends JPanel implements MouseListener{
     public void enable() {
     	setVisible(true);
     	for (GameButton b : buttonIcons) {
-    		b.setEnabled(false);
+    		b.setEnabled(true);
     	}
     }
 }
