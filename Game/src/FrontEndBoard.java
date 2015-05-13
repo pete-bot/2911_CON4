@@ -77,9 +77,7 @@ public class FrontEndBoard extends JPanel implements MouseListener{
 		
 		// this is to 'squash' the columns together - need to find better way
 		// to do this
-		Insets margin = new Insets(-3,0,-3,0);
-		
-		
+		Insets margin = new Insets(-3,-3,-3,-3);
 		
 //		this.inputButton = new GameButton(0, 0);
 //        this.inputButton.addActionListener(this);
@@ -95,11 +93,11 @@ public class FrontEndBoard extends JPanel implements MouseListener{
         	final GameButton b = new GameButton(currX, currY); // why final?
         	
         	b.addActionListener(new ActionListener(){
-        			@Override
-        			public void actionPerformed(ActionEvent e){
-	        			  getColumnInput(b);
-	        		  }
-        		  });
+				@Override
+				public void actionPerformed(ActionEvent e){
+	    			  getColumnInput(b);
+	    		}
+        	});
         	setVisible(true);
         	b.setIcon(new ImageIcon(assLoc + "sketch_circle_empty.png"));
         	b.setBorderPainted(false);
@@ -193,7 +191,9 @@ public class FrontEndBoard extends JPanel implements MouseListener{
 		
     }
 
-    // 
+    // TODO XXX
+    // AI code should not persist in this class. 
+    // Theoretically this should be a 'secondPlayer' or 'competitor' method.
     public void turkMove(BackendBoard backendBoard){
 
 		System.out.println("The Turk makes its move...");
@@ -207,12 +207,11 @@ public class FrontEndBoard extends JPanel implements MouseListener{
 			if(backendBoard.getTurn()%2==0 ){
 				System.out.println("PLAYER_1, you WIN!");
 				JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
-				mainWindow.resetWindow(); // at the moment, window resets at win
 			}else{
 				System.out.println("PLAYER_2, you WIN!");
 				JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
-				mainWindow.resetWindow();
 			}
+			mainWindow.resetWindow();
 			return;
 		}
 		
@@ -244,24 +243,23 @@ public class FrontEndBoard extends JPanel implements MouseListener{
     public void resetBoard() {
         backendBoard.resetBoard();
 		
-		// create our button array
-		// this needs to simply repaint
-		
         for (GameButton gameButton : buttonIcons) {
-        	gameButton.setIcon(new ImageIcon(assLoc + "sketch_circle_empty.jpg"));
+        	gameButton.setIcon(new ImageIcon(assLoc + "sketch_circle_empty.png"));
         	gameButton.setPlayer(0);
         }
-
-		setVisible(true);
     }
     
-    //XXX BEWARE, THESE GUYS DON'T DO ANYTHING BUT ARE NEEDED APPARENTLY
     @Override
     public void mouseExited(MouseEvent e) { 
     	doNothing();
     }
     public void mouseClicked(MouseEvent e) { 
-    	doNothing();
+    	//XXX Testing
+    	int x=e.getX();
+        int y=e.getY();
+        Point point = e.getPoint();
+        System.out.println(point);
+        System.out.println("x:" + x + ", y:" + y);//these co-ords are relative to the component
     }
     @Override
     public void mousePressed(MouseEvent e) { 
@@ -287,7 +285,7 @@ public class FrontEndBoard extends JPanel implements MouseListener{
     public void enable() {
     	setVisible(true);
     	for (GameButton b : buttonIcons) {
-    		b.setEnabled(false);
+    		b.setEnabled(true);
     	}
     }
 }

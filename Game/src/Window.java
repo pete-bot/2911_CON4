@@ -72,22 +72,10 @@ public class Window extends JFrame{
 		
 		setVisible(true);
     }
-
+    
     // Modified initialization for window.
     // Resets the game and redisplays the new variant.
-    public void resetWindow() {
-        // THIS HAS ALL BEEN PREVIOUSLY SET UP
-    	/*
-    	setSize(700, 690);
-        setLocationRelativeTo(null);
-
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        add(buttonPanel, BorderLayout.SOUTH);
-		add(gridBoard, BorderLayout.NORTH);
-		setVisible(true);
-		 */
-		
+    public void resetWindow() {	
     	frontEndBoard.enable();
 		frontEndBoard.resetBoard();
 
