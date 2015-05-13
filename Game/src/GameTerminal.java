@@ -65,7 +65,7 @@ public class GameTerminal {
 				
 				newBoard.showTerminalBoard();
 				
-				if(newBoard.checkWinState()){
+				if(newBoard.checkWinState(newAction)){
 					if(turnCount%2==0 ){
 						System.out.println("PLAYER_1, you WIN!");
 						
