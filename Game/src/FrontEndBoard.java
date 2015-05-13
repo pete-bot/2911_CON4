@@ -48,10 +48,10 @@ public class FrontEndBoard extends JPanel implements MouseListener{
     
     
 //     (1) SANJAY: WINDOWS ECLIPSE
-//    private static final String assLoc = "assets/";
+    private static final String assLoc = "assets/";
     
 //     (2) EVERYONE ELSE: 
-    private static final String assLoc = "../assets/"; 
+//    private static final String assLoc = "../assets/"; 
     
     private static final String emptyButton = assLoc + "sketch_circle_empty.png";
     private static final String redToken = assLoc + "sketch_circle_red.jpg";
@@ -166,7 +166,7 @@ public class FrontEndBoard extends JPanel implements MouseListener{
 		updateBoardWithMove(b.getXPos());
 	
 		//XXX BEWARE, THERE BE WOBCKES HERE.
-		if (backendBoard.checkWinState()){
+		if (backendBoard.checkWinState(newAction)){
 			mainWindow.displayMenu();
 			if(backendBoard.getTurn()%2==0 ){
 				System.out.println("PLAYER_1, you WIN!");
@@ -203,7 +203,7 @@ public class FrontEndBoard extends JPanel implements MouseListener{
 		backendBoard.showTerminalBoard();
 		updateBoardWithMove(turkMove.getColumn());
 		
-		if (backendBoard.checkWinState()){
+		if (backendBoard.checkWinState(turkMove)){
 			if(backendBoard.getTurn()%2==0 ){
 				System.out.println("PLAYER_1, you WIN!");
 				JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");

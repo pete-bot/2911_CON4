@@ -66,69 +66,195 @@ public class BackendBoard {
 		}
 	}
 	
+	/*
+	 * Added by Sketch in "Updated Win Row Addition"
+	 * Returns the win state using sweet Al Gore rhythms.
+	 * 
+	 *  @return 				Game win condition
+	 *  @param lastColumn 		The column of the last player move
+	 *  @param lastRow			Returns the last Row of the player action.
+	 */
+	public boolean checkWinState(Action lastTurn){
+		boolean win = false;
+		
+		int lastPlayer = lastTurn.getPlayer();
+		int lastColumn = lastTurn.getColumn();
+		int lastRow = getLastRow(lastColumn);	//Calculate the last row
+		
+		//Check vertical wins
+		win = checkVertical(lastPlayer, lastColumn, lastRow);
+		
+		//Check horizontal wins
+		if (win != true) {
+			win = checkHorizontal(lastPlayer, lastColumn, lastRow);
+		}
+		
+		//Check ascending diagonal wins
+		if (win != true) {
+			win = checkAscDiagonal(lastPlayer, lastColumn, lastRow);
+		}
+		
+		//check descending diagonal wins
+		if (win != true) {
+			win = checkDescDiagonal(lastPlayer, lastColumn, lastRow);
+		}
+		
+		return win;
+		
+	}
 	
-	// terrible implementation - this works for now but is vastly inefficient.
-	// need to fix
-	public boolean checkWinState(){
+	/*
+	 * Check vertical wins
+	 * Added by Sketch in "Updated Win Row Addition"
+	 */
+	private boolean checkVertical(int lastPlayer, int lastColumn, int lastRow) {
+		boolean win = false;
 		
-		// find four horizontal pieces.
-		for(int row = 0; row < ROWMAX; row++){
-			for(int col = 0; col < 4; col++){
-				if( (board[row][col] != 0) && (board[row][col]==board[row][col+1]) 
-						&& (board[row][col]==board[row][col+2]) 
-						&& (board[row][col]==board[row][col+3])){
-					System.out.println("row = " + row);
-					System.out.println("col = " + col);
-					return true;
-				}
-			}
-		}
-		
-		// find four Vertical pieces.
-		for(int row = 0; row < 3; row++){
-			for(int col = 0; col < COLMAX; col++){
-				if((board[row][col] != 0) && (board[row][col]==board[row+1][col]) 
-						&& (board[row][col]==board[row+2][col]) 
-						&& (board[row][col]==board[row+3][col])){
-					System.out.println("winState: vert");
-					System.out.println("row = " + row);
-					System.out.println("col = " + col);
-					return true;
-				}
-			}
-		}
-		// diagonal right
-		// find four Vertical pieces.
-		for(int row = 0; row < 3; row++){
-			for(int col = 0; col < 4; col++){
-				if((board[row][col] != 0) && (board[row][col]==board[row+1][col+1]) 
-						&& (board[row][col]==board[row+2][col+2]) 
-						&& (board[row][col]==board[row+3][col+3])){
-					System.out.println("winState: diag_right");
-					System.out.println("row = " + row);
-					System.out.println("col = " + col);
-					return true;
+		//Don't bother if not enough tokens
+		if (lastRow >= 3 ){
+			win = true;
+			lastRow--;
+					
+			//Iterate down rows until adjTiles = 4 or win = false
+			for(int adjTiles = 1; adjTiles < 4  && win == true; adjTiles++, lastRow--) {
+				if(board[lastRow][lastColumn] != lastPlayer){	//If the checked tile is not last player
+					win = false;
 				}
 			}
 		}
 		
-		// diagonal left
-		// find four Vertical pieces.
-		for(int row = 0; row<3; row++){
-			for(int col = 3; col<COLMAX; col++){
-				if((board[row][col] != 0) && (board[row][col]==board[row+1][col-1]) 
-						&& (board[row][col]==board[row+2][col-2]) 
-						&& (board[row][col]==board[row+3][col-3]) ){
-					System.out.println("winState: diag_left");
-					System.out.println("row = " + row);
-					System.out.println("col = " + col);
-					return true;
+		return win;
+	}
+	
+	/*
+	 * Check horizontal wins 
+	 * Added by Sketch in "Updated win condition patch"
+	 */
+	private boolean checkHorizontal(int lastPlayer, int lastColumn, int lastRow) {
+		boolean win = false;
+		int adjacentTiles = 1;
+		int leftColIndex = lastColumn - 1;
+		int rightColIndex = lastColumn + 1;
+		
+		//Iterate left if there are lefts to iterate to
+		if( lastColumn >= 0 ){
+			
+			//Left iteration from last placed node, checking if tile is owned by player
+			while( leftColIndex >= 0 && board[lastRow][leftColIndex] == lastPlayer ){
+				adjacentTiles++;
+				leftColIndex--;
+			}
+		
+			//If we haven't won already
+			if(adjacentTiles < 4){
+				//Right iteration
+				while( rightColIndex < COLMAX && board[lastRow][rightColIndex] == lastPlayer ){
+					adjacentTiles++;
+					rightColIndex++;
 				}
+
+			}
+			
+			if(adjacentTiles >= 4){
+				win = true;
 			}
 		}
-		return false;	
+		return win;
+	}
+	
+	/*
+	 * Check ascending diagonal wins
+	 * Added by Sketch in "Updated win condition patch"
+	 */
+	private boolean checkAscDiagonal(int lastPlayer, int lastColumn, int lastRow){
+		boolean win = false;
+
+		int adjacentTiles = 1;
+		int leftColIndex = lastColumn - 1;
+		int leftRowIndex = lastRow - 1;
+		
+		int rightColIndex = lastColumn + 1;
+		int rightRowIndex = lastRow + 1;
+		
+		//Left iteration from last node, checking if tile is owned by player
+		while( leftColIndex >= 0 && leftRowIndex >= 0  &&
+				board[leftRowIndex][leftColIndex] == lastPlayer){
+			adjacentTiles++;
+			leftColIndex--;
+			leftRowIndex--;
+		}
+
+		//If we haven't won already
+		if(adjacentTiles < 4){
+			//Right iteration
+			while( rightColIndex < COLMAX && rightRowIndex < ROWMAX &&
+					board[rightRowIndex][rightColIndex] == lastPlayer ){
+				adjacentTiles++;
+				rightColIndex++;
+				rightRowIndex++;
+			}
+		}
+		
+		if(adjacentTiles >= 4){
+			win = true;
+		}
+
+		return win;
 	}
 
+	/*
+	 * Check descending diagonal wins
+	 * Added by Sketch in "Updated win condition patch"
+	 */
+	private boolean checkDescDiagonal(int lastPlayer, int lastColumn, int lastRow){
+		boolean win = false;
+		int adjacentTiles = 1;
+		int leftColIndex = lastColumn - 1;
+		int leftRowIndex = lastRow + 1;
+		
+		int rightColIndex = lastColumn + 1;
+		int rightRowIndex = lastRow - 1;
+		
+		//Left iteration from last node, checking if tile is owned by player
+		while( leftColIndex >= 0 && leftRowIndex < ROWMAX &&
+				board[leftRowIndex][leftColIndex] == lastPlayer){
+			adjacentTiles++;
+			leftColIndex--;
+			leftRowIndex++;
+		}
+
+		//If we haven't won already
+		if(adjacentTiles < 4){
+			//Right iteration
+			while( rightColIndex < COLMAX && rightRowIndex >= 0 &&
+					board[rightRowIndex][rightColIndex] == lastPlayer ){
+				adjacentTiles++;
+				rightColIndex++;
+				rightRowIndex--;
+			}
+		}
+		
+		// adjacentTiles will never be > 4 if run every turn.
+		if(adjacentTiles >= 4){
+			win = true;
+		}
+		return win;
+	}
+	
+	/*
+	 * Added by Sketch in "Updated win condition patch"
+	 * Change to public if required outside the scope, however I would advise creating
+	 * another an interface function unique to the caller to preserve abstraction.
+	 * 
+	 * 	@return 		Row of the top token of any column within the bounds of the game
+	 *  @precondition 	0 <= column <= 6
+	 */
+	private int getLastRow(int column){
+		int i;
+		for( i = ROWMAX - 1; board[i][column] == 0; i--);		//Iterates through i until value returns a player
+		return i;	
+	}
+	
     public void resetBoard() {
     	int empty = 0;
 		for (int i = 0; i < ROWMAX; i++) {
