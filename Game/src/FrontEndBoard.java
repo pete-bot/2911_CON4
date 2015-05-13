@@ -110,8 +110,6 @@ public class FrontEndBoard extends JPanel implements MouseListener{
             add(b);
             buttonIcons[i] = b;
         }
-
-		setVisible(true);
 	}
 
 	
@@ -169,14 +167,13 @@ public class FrontEndBoard extends JPanel implements MouseListener{
 	
 		//XXX BEWARE, THERE BE WOBCKES HERE.
 		if (backendBoard.checkWinState()){
+			mainWindow.displayMenu();
 			if(backendBoard.getTurn()%2==0 ){
 				System.out.println("PLAYER_1, you WIN!");
 				JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
-				mainWindow.resetWindow(); // at the moment, window resets at win
 			}else{
 				System.out.println("PLAYER_2, you WIN!");
 				JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
-				mainWindow.resetWindow();
 			}
 			
 			return;
@@ -278,6 +275,20 @@ public class FrontEndBoard extends JPanel implements MouseListener{
     //Legibility function
     private void doNothing() {
     	return;
+    }
+    
+    public void disable() {
+    	setVisible(false);
+    	for (GameButton b : buttonIcons) {
+            b.setEnabled(false);    		
+    	}
+    }
+    
+    public void enable() {
+    	setVisible(true);
+    	for (GameButton b : buttonIcons) {
+    		b.setEnabled(false);
+    	}
     }
 }
 

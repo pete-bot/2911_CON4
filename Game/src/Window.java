@@ -88,13 +88,17 @@ public class Window extends JFrame{
 		setVisible(true);
 		 */
 		
+    	frontEndBoard.enable();
 		frontEndBoard.resetBoard();
-		
 
 		//XXX
 		System.out.println("Welcome to WOBCON4. Enjoy the game.");
 		System.out.println("Initial Game State:");
 		backendBoard.showTerminalBoard();
 		System.out.println("PLAYER_1, please enter your column choice:");
+    }
+    
+    public void displayMenu() {
+    	frontEndBoard.disable();
     }
 }
