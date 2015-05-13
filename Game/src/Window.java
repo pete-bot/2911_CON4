@@ -1,6 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -11,6 +12,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 /*
@@ -56,13 +58,10 @@ public class Window extends JFrame{
         buttonPanel.setTextPanel(textPanel);
 
         // create new gridBoard
-        
         backendBoard = newBoard;
         frontEndBoard = new FrontEndBoard(backendBoard, this);
         add(buttonPanel, BorderLayout.SOUTH);
 		add(frontEndBoard, BorderLayout.NORTH);
-		
-		
 		
 		// this is only here temporarily
 		// this is a bad design

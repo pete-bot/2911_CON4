@@ -18,6 +18,7 @@ import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -29,16 +30,14 @@ import javax.swing.SwingConstants;
 public class FrontEndBoard extends JPanel 
 	implements MouseListener, MouseMotionListener {
 	
-	// our colours 
+	// our colours, should be updated to match the palette 
 	private Color hoverBackgroundColor;
     private Color pressedBackgroundColor;
 	
-	private JPanel gridBoard;
-    private GameButton[] buttonIcons; // XXX Why was this public??
-    private GameButton inputButton;
+    private Token[] gameTokens = new Token[42]; 
     private BackendBoard backendBoard; //Should be 'backendBoard'
-    private int rows = 6;
-    private int cols = 7;
+    private final int rows = 6;
+    private final int cols = 7;
     private final int tilesOnBoard = 42;
     private Window mainWindow;
     private MechanicalTurk newTurk;
@@ -66,6 +65,7 @@ public class FrontEndBoard extends JPanel
     
     
 	public FrontEndBoard(BackendBoard newGameBoard, Window mainWindow) {
+		super();
 		
 		// temporary 
 		// this is a work around, we will need to collect this data from the 
@@ -73,71 +73,52 @@ public class FrontEndBoard extends JPanel
 		int AIclass = 0; //What does AIclass do?
 		newTurk = new MechanicalTurk(AIclass);
 		
+		
+		Dimension size = new Dimension(500,500);
 		backendBoard = newGameBoard;
 		this.mainWindow = mainWindow; 
+		setLayout(new GridLayout(rows, cols));
+		setSize(size);
 		
 		assetsPath = FileSystems.getDefault().getPath("assets");
 		System.out.println(assetsPath.toString());
 		
-		Dimension size = new Dimension(500,500);
-		JLayeredPane layeredPane = new JLayeredPane();
-		layeredPane.setPreferredSize(size);
-		layeredPane.setOpaque(true);
-		layeredPane.setVisible(true);
-		layeredPane.setEnabled(true);
-		this.add(layeredPane);
-		
-		//buttonIcons =  new GameButton[42];
-		//setLayout(new GridLayout(rows, cols));
-		//setSize(size);
-		
-		// this is to 'squash' the columns together - need to find better way
-		// to do this
 		//Setup the clickable play area.
-		/*
-		playArea = new PlayArea(new Color(60, 58, 232, 255), size); //Transparent play area
+		GridLayout frontEndBoardLayout = new GridLayout(rows, cols);
+		frontEndBoardLayout.setHgap(new Integer(5));
+		frontEndBoardLayout.setVgap(new Integer(5));
+		playArea = new PlayArea(new Color(60, 58, 232, 255), size); 
 		playArea.addMouseListener(this);
 		playArea.addMouseMotionListener(this);
-		playArea.setLayout(new BoxLayout(playArea, BoxLayout.X_AXIS));
+		playArea.setLayout(frontEndBoardLayout);
 		add(playArea);
-		*/
-		JPanel playArea = new JPanel();
-		playArea.setBackground(Color.YELLOW);
-		layeredPane.add(playArea, JLayeredPane.DRAG_LAYER);
 		
-		// create our button array
-		/*
-		Insets margin = new Insets(-3,-3,-3,-3);
-        for (int i = 0; i <  42; i++) {
-            //XXX
+		//ImageIcon blankToken = new ImageIcon(assLoc + "sketch_circle_empty.png");
+		ImageIcon blankTokenIcon = new ImageIcon(assLoc + "circle100.png");
+		for (int i = 0; i < 42; i++) {
         	int currX = i % 7;
         	int currY = 5 - ((int) Math.ceil( i/7 ));
-        	final GameButton b = new GameButton(currX, currY); // why final?
-        	
-        	b.setIcon(new ImageIcon(assLoc + "sketch_circle_empty.png"));
-        	b.setBorderPainted(false);
-        	b.setMargin(margin);
-        	setBorder(BorderFactory.createEmptyBorder());
-            b.setRolloverEnabled(true);
-        	b.setVisible(true);
-        	playArea.add(b);
-            buttonIcons[i] = b;
-        }
-		*/
+		    Token token = new Token(currX, currY);
+		    Dimension tokenSize = new Dimension(blankTokenIcon.getIconHeight(), blankTokenIcon.getIconWidth());
+		    token.setIcon(blankTokenIcon);
+		    token.setSize(tokenSize);
+		    playArea.add(token);
+		    gameTokens[i] = token;
+		}
 	}
 
 	
 	// this highlights the column
 	public void highlightColumn(Point cursor) {
-        for (int i = 0; i < buttonIcons.length; i++) {
-            JButton button = buttonIcons[i];
+        for (int i = 0; i < gameTokens.length; i++) {
+            Token token = gameTokens[i];
             
             // this uses the mouse location to determine which column to highlight
-            Point buttonLocation = button.getLocationOnScreen();
+            Point buttonLocation = token.getLocationOnScreen();
             double west = buttonLocation.getX();
-            double east = buttonLocation.getX() + button.getWidth();
+            double east = buttonLocation.getX() + token.getWidth();
             boolean inRow = cursor.getX() > west && cursor.getX() < east;
-            button.setBackground(inRow ? new Color(0x6bb4e5) : null );
+            token.setBackground(inRow ? new Color(0x6bb4e5) : null );
 
             }
     }
@@ -150,7 +131,7 @@ public class FrontEndBoard extends JPanel
     // implement player choice (go first or second)
     // this will be pulled from the intro menu
     // this is essentially the 'primary function through which the game is played'
-    public void getColumnInput(GameButton b){
+    public void getColumnInput(Token b){
   
        	Action newAction;
 		if(backendBoard.getTurn()%2==0 ){
@@ -235,7 +216,7 @@ public class FrontEndBoard extends JPanel
     public void updateBoardWithMove(int xPos){
     	int tilesOnBoard = 42;
     	for (int count = tilesOnBoard - (cols - xPos); count >= 0; count -= 7){
-    		GameButton currentButton = buttonIcons[count];
+    		Token currentButton = gameTokens[count];
     		if (currentButton.getPlayer() == 0){
     			if ( backendBoard.getTurn() % 2==0 ){
     				currentButton.setPlayer(1);
@@ -252,9 +233,9 @@ public class FrontEndBoard extends JPanel
     public void resetBoard() {
         backendBoard.resetBoard();
 		
-        for (GameButton gameButton : buttonIcons) {
-        	gameButton.setIcon(new ImageIcon(assLoc + "sketch_circle_empty.png"));
-        	gameButton.setPlayer(0);
+        for (Token gameToken : gameTokens) {
+        	gameToken.setIcon(new ImageIcon(assLoc + "sketch_circle_empty.png"));
+        	gameToken.setPlayer(0);
         }
     }
 
@@ -308,14 +289,14 @@ public class FrontEndBoard extends JPanel
     
     public void disable() {
     	setVisible(false);
-    	for (GameButton b : buttonIcons) {
+    	for (Token b : gameTokens) {
             b.setEnabled(false);    		
     	}
     }
     
     public void enable() {
     	setVisible(true);
-    	for (GameButton b : buttonIcons) {
+    	for (Token b : gameTokens) {
     		b.setEnabled(true);
     	}
     }
