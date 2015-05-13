@@ -37,6 +37,7 @@ public class Window extends JFrame{
     public Window(BackendBoard newBoard) {
     	super("Connect Java: Advanced Wobfighter");
         initWindow(newBoard);
+        setVisible(true);
     }  
 
     private void initWindow(BackendBoard newBoard) {
@@ -71,6 +72,7 @@ public class Window extends JFrame{
 		System.out.println("PLAYER_1, please enter your column choice:");
 		
 		setVisible(true);
+		//pack(); //Autosizes to match components
     }
     
     // Modified initialization for window.

@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Insets;
@@ -8,25 +9,32 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 /*
  * This is the main grid of tokens
  */
-public class FrontEndBoard extends JPanel implements MouseListener{
+public class FrontEndBoard extends JPanel 
+	implements MouseListener, MouseMotionListener {
 	
 	// our colours 
 	private Color hoverBackgroundColor;
     private Color pressedBackgroundColor;
 	
 	private JPanel gridBoard;
-    public GameButton[] buttonIcons;
+    private GameButton[] buttonIcons; // XXX Why was this public??
     private GameButton inputButton;
     private BackendBoard backendBoard; //Should be 'backendBoard'
     private int rows = 6;
@@ -34,10 +42,8 @@ public class FrontEndBoard extends JPanel implements MouseListener{
     private final int tilesOnBoard = 42;
     private Window mainWindow;
     private MechanicalTurk newTurk;
-    
-    
-    
-    
+    private PlayArea playArea;
+    private Path assetsPath; //Does this need to be a member? or can it just be computed at runtime?
     
     /*
      *                               GRAPHIC IMAGE FILES
@@ -47,10 +53,10 @@ public class FrontEndBoard extends JPanel implements MouseListener{
      */
     
     
-//     (1) SANJAY: WINDOWS ECLIPSE
-//    private static final String assLoc = "assets/";
-    
-//     (2) EVERYONE ELSE: 
+    //     (1) SANJAY: WINDOWS ECLIPSE
+    //     private static final String assLoc = "assets/";
+            
+    //     (2) EVERYONE ELSE: 
     private static final String assLoc = "../assets/"; 
     
     private static final String emptyButton = assLoc + "sketch_circle_empty.png";
@@ -64,50 +70,60 @@ public class FrontEndBoard extends JPanel implements MouseListener{
 		// temporary 
 		// this is a work around, we will need to collect this data from the 
 		// menu option when it is implemented
-		int AIclass = 0;
+		int AIclass = 0; //What does AIclass do?
 		newTurk = new MechanicalTurk(AIclass);
 		
-		//XXX
 		backendBoard = newGameBoard;
 		this.mainWindow = mainWindow; 
 		
-		buttonIcons =  new GameButton[42];
-		setLayout(new GridLayout(rows, cols));
-		setSize(500,500);
+		assetsPath = FileSystems.getDefault().getPath("assets");
+		System.out.println(assetsPath.toString());
+		
+		Dimension size = new Dimension(500,500);
+		JLayeredPane layeredPane = new JLayeredPane();
+		layeredPane.setPreferredSize(size);
+		layeredPane.setOpaque(true);
+		layeredPane.setVisible(true);
+		layeredPane.setEnabled(true);
+		this.add(layeredPane);
+		
+		//buttonIcons =  new GameButton[42];
+		//setLayout(new GridLayout(rows, cols));
+		//setSize(size);
 		
 		// this is to 'squash' the columns together - need to find better way
 		// to do this
-		Insets margin = new Insets(-3,-3,-3,-3);
-		
-//		this.inputButton = new GameButton(0, 0);
-//        this.inputButton.addActionListener(this);
-//        this.add(inputButton);
-//		
-		
+		//Setup the clickable play area.
+		/*
+		playArea = new PlayArea(new Color(60, 58, 232, 255), size); //Transparent play area
+		playArea.addMouseListener(this);
+		playArea.addMouseMotionListener(this);
+		playArea.setLayout(new BoxLayout(playArea, BoxLayout.X_AXIS));
+		add(playArea);
+		*/
+		JPanel playArea = new JPanel();
+		playArea.setBackground(Color.YELLOW);
+		layeredPane.add(playArea, JLayeredPane.DRAG_LAYER);
 		
 		// create our button array
+		/*
+		Insets margin = new Insets(-3,-3,-3,-3);
         for (int i = 0; i <  42; i++) {
             //XXX
-        	int currX = i%7;
-        	int currY = 5-((int) Math.ceil(i/7));
+        	int currX = i % 7;
+        	int currY = 5 - ((int) Math.ceil( i/7 ));
         	final GameButton b = new GameButton(currX, currY); // why final?
         	
-        	b.addActionListener(new ActionListener(){
-				@Override
-				public void actionPerformed(ActionEvent e){
-	    			  getColumnInput(b);
-	    		}
-        	});
-        	setVisible(true);
         	b.setIcon(new ImageIcon(assLoc + "sketch_circle_empty.png"));
         	b.setBorderPainted(false);
         	b.setMargin(margin);
         	setBorder(BorderFactory.createEmptyBorder());
             b.setRolloverEnabled(true);
-            b.addMouseListener(this);
-            add(b);
+        	b.setVisible(true);
+        	playArea.add(b);
             buttonIcons[i] = b;
         }
+		*/
 	}
 
 	
@@ -127,12 +143,7 @@ public class FrontEndBoard extends JPanel implements MouseListener{
     }
 	
 	
-	// this is where the mouse position is determined and kept track of
-    @Override
-    public void mouseEntered(MouseEvent event) {
-        highlightColumn(event.getLocationOnScreen());
 
-    }
     
     
     // TODO
@@ -220,7 +231,6 @@ public class FrontEndBoard extends JPanel implements MouseListener{
 		System.out.println("Control has returned to the player.");
     }
     
-    
     // Updates the board with the next _legal_ move
     public void updateBoardWithMove(int xPos){
     	int tilesOnBoard = 42;
@@ -239,7 +249,6 @@ public class FrontEndBoard extends JPanel implements MouseListener{
     	}
     }
 
-    //This does not redisplay properly
     public void resetBoard() {
         backendBoard.resetBoard();
 		
@@ -248,27 +257,49 @@ public class FrontEndBoard extends JPanel implements MouseListener{
         	gameButton.setPlayer(0);
         }
     }
+
+    //MouseListener and MouseMotionListener overrides
+    @Override
+    public void mouseEntered(MouseEvent event) {
+        //highlightColumn(event.getLocationOnScreen());
+    }
     
     @Override
     public void mouseExited(MouseEvent e) { 
     	doNothing();
     }
+    
+    @Override
     public void mouseClicked(MouseEvent e) { 
     	//XXX Testing
     	int x=e.getX();
         int y=e.getY();
         Point point = e.getPoint();
         System.out.println(point);
-        System.out.println("x:" + x + ", y:" + y);//these co-ords are relative to the component
+        System.out.println("x:" + x + ", y:" + y); //these co-ords are relative to the component
     }
+    
     @Override
     public void mousePressed(MouseEvent e) { 
     	doNothing();
     }
+    
     @Override
     public void mouseReleased(MouseEvent e) { 
+    	//System.out.println(e.getLocationOnScreen());
     	doNothing();
     }
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+    	System.out.println(e.getLocationOnScreen());
+		// TODO Auto-generated method stub
+	}
     
     //Legibility function
     private void doNothing() {
@@ -288,6 +319,8 @@ public class FrontEndBoard extends JPanel implements MouseListener{
     		b.setEnabled(true);
     	}
     }
+
+
 }
 
 
