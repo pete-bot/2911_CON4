@@ -1,8 +1,5 @@
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -11,7 +8,8 @@ import javax.swing.SwingConstants;
 
 public class PlayArea extends JLabel {
  
-	Dimension minSize;
+    private static final long serialVersionUID = 1L;
+    Dimension minSize;
 
     public PlayArea(Color color, Dimension dimension) {
         setBackground(color);

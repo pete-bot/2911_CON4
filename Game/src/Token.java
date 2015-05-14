@@ -1,10 +1,9 @@
-import java.awt.Dimension;
-
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 
 public class Token extends JLabel {
+    private static final long serialVersionUID = 1L;
     private int xPos;
     private int yPos;
     private int player = 0; //Default player is no player

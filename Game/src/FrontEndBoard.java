@@ -1,32 +1,17 @@
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Iterator;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
 /*
  * This is the main grid of tokens
@@ -34,10 +19,11 @@ import javax.swing.SwingConstants;
 public class FrontEndBoard extends JPanel 
 	implements MouseListener, MouseMotionListener {
 	
-	// our colours, should be updated to match the palette 
+    private static final long serialVersionUID = 1L;
+    // our colours, should be updated to match the palette 
     private Color gridColor = new Color(60, 58, 232, 255);
 	
-    Dimension gridSize = new Dimension(800,800);
+    Dimension gridSize = new Dimension(700,700);
     private Token[] gameTokens = new Token[42]; 
     private BackendBoard backendBoard; //Should be 'backendBoard'
     private final int rows = 6;
@@ -47,8 +33,6 @@ public class FrontEndBoard extends JPanel
     private MechanicalTurk newTurk;
     private PlayArea playArea;
     private GridLayout frontEndBoardLayout = new GridLayout(rows, cols);
-    private Path assetsPath; //Does this need to be a member? or can it just be computed at runtime?
-    private Player typeOfPlayer;
     
     //private static final String assLoc = "../assets/"; 
     //Paths accepts windows or *nix filepath structures for its argument and converts accordingly
@@ -77,10 +61,9 @@ public class FrontEndBoard extends JPanel
 		this.mainWindow = mainWindow; 
 
 		FlowLayout panelLayout = new FlowLayout(FlowLayout.CENTER);
-		panelLayout.setVgap(20);
+		panelLayout.setVgap(20); //FIXME This needs to be replaced with empty objects above and below.
 		setLayout(panelLayout);
 		setSize(gridSize);
-		//setSize(size);
 		
 		//Setup the clickable play area.
 		frontEndBoardLayout.setHgap(new Integer(2));
@@ -89,7 +72,6 @@ public class FrontEndBoard extends JPanel
 		playArea.addMouseListener(this);
 		playArea.addMouseMotionListener(this);
 		playArea.setLayout(frontEndBoardLayout);
-		playArea.setPreferredSize(gridSize);
 		add(playArea);
 		
 		for (int i = 0; i < 42; i++) {
@@ -129,60 +111,43 @@ public class FrontEndBoard extends JPanel
     // this will be pulled from the intro menu
     // this is essentially the 'primary function through which the game is played'
     public void getUserMove(Action newAction){
-  
-        /*
-       	Action newAction;
-		if(backendBoard.getTurn()%2==0 ){
-			// PLAYER1 input
-			newAction = new Action(1, b.getXPos());
-		}else{
-			newAction = new Action(2, b.getXPos());
+		if( backendBoard.isLegal(newAction) ){
+
+		    updateBoardWithMove(newAction.getColumn());
+		    // Update terminal
+		    backendBoard.makeMove(newAction);
+		    backendBoard.showTerminalBoard();
+
+		    // Game win found?
+		    if (backendBoard.checkWinState()){
+		        mainWindow.displayMenu();
+		        if(backendBoard.getTurn()%2==0 ){
+		            System.out.println("PLAYER_1, you WIN!");
+		            JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
+		        }else{
+		            System.out.println("PLAYER_2, you WIN!");
+		            JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
+		        }
+		        return;
+		    }
+
+		    //Otherwise game continues
+		    if (backendBoard.getTurn() % 2==1 ){
+		        System.out.println("PLAYER_1, please enter your move:");
+		    }else{
+		        System.out.println("PLAYER_2, please enter your move:");
+		    }
+
+		    backendBoard.IncrementTurn();		
+
+		    // call AI here.
+		    turkMove(backendBoard);
+		} else{
+		    System.out.println("You have entered an invalid move, please try again.");
 		}
-		*/
-	
-		if( !backendBoard.isLegal(newAction) ){
-			// need some error indicator
-			System.out.println("You have entered an invalid move, please try again.");
-			return;
-		}
-		
-		// update terminal rep
-		backendBoard.makeMove(newAction);
-		backendBoard.showTerminalBoard();
-		
-		// update SWING
-		// need to have another method to colour correct button.
-		updateBoardWithMove(newAction.getColumn());
-	
-		//XXX BEWARE, THERE BE WOBCKES HERE.
-		if (backendBoard.checkWinState()){
-			mainWindow.displayMenu();
-			if(backendBoard.getTurn()%2==0 ){
-				System.out.println("PLAYER_1, you WIN!");
-				JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
-			}else{
-				System.out.println("PLAYER_2, you WIN!");
-				JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
-			}
-			
-			return;
-		}
-		
-		if(backendBoard.getTurn() % 2==1 ){
-			System.out.println("PLAYER_1, please enter your move:");
-		}else{
-			System.out.println("PLAYER_2, please enter your move:");
-		}
-		
-		backendBoard.IncrementTurn();		
-    	
-		// call AI here.
-		turkMove(backendBoard);
-		
-		
     }
 
-    // TODO XXX
+    // FIXME
     // AI code should not persist in this class. 
     // Theoretically this should be a 'secondPlayer' or 'competitor' method.
     public void turkMove(BackendBoard backendBoard){
@@ -240,20 +205,27 @@ public class FrontEndBoard extends JPanel
 
     //MOUSELISTENER AND MOUSEMOTIONLISTENER OVERRIDES
     @Override
-    public void mouseEntered(MouseEvent event) { }
-    
-    @Override
-    public void mouseExited(MouseEvent e) { }
-    
-    @Override
     public void mouseClicked(MouseEvent e) { 
-    	//XXX Testing
+    	//FIXME Testing
         //Package the appropriate column the mouse is on into an Action
     	int col = getColumn(e.getX());
         Action newMove = new Action(1, col);
         System.out.println(col);
         getUserMove(newMove);
     }
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+    	//int col = getColumn(e.getX());
+        //Action newMove = new Action(1, col);
+        highlightColumn(e);
+	}
+
+    @Override
+    public void mouseEntered(MouseEvent event) { }
+    
+    @Override
+    public void mouseExited(MouseEvent e) { }
     
     @Override
     public void mousePressed(MouseEvent e) { }
@@ -263,13 +235,6 @@ public class FrontEndBoard extends JPanel
 
 	@Override
 	public void mouseDragged(MouseEvent e) { }
-
-	@Override
-	public void mouseMoved(MouseEvent e) {
-    	int col = getColumn(e.getX());
-        Action newMove = new Action(1, col);
-        highlightColumn(e);
-	}
     
     // Get a column from a given x coordinate
     private int getColumn(int x) {
@@ -288,14 +253,14 @@ public class FrontEndBoard extends JPanel
         return -1; // No column found.
     }
     
-    public void disable() {
+    public void turnOff() {
     	setVisible(false);
     	for (Token b : gameTokens) {
             b.setEnabled(false);    		
     	}
     }
     
-    public void enable() {
+    public void turnOn() {
     	setVisible(true);
     	for (Token b : gameTokens) {
     		b.setEnabled(true);

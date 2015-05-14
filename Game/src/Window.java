@@ -1,41 +1,16 @@
 import java.awt.BorderLayout;
-import java.awt.Button;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.Point;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
-import javax.swing.BoxLayout;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
-
-/*
- * TODO
- * - fix button scaling
- * - fill in buttons/borders properly
- * - generally improve visuals
- */
 
 public class Window extends JFrame{
 
     //This is for serialization; don't worry about it.
 	private static final long serialVersionUID = 1L;
 	private ButtonPanel buttonPanel;
-    private TextPanel textPanel;
     private FrontEndBoard frontEndBoard;
     private BackendBoard backendBoard;
-    private int turnCount; // Peter does not like this.
 
     
-    /**
-     * Class constructor
-     */
     public Window(BackendBoard newBoard) {
     	super("Connect Java: Advanced Wobfighter");
         initWindow(newBoard);
@@ -44,52 +19,39 @@ public class Window extends JFrame{
 
     private void initWindow(BackendBoard newBoard) {
 		setLayout(new BorderLayout());
-		///getContentPane().setBackground(Color.DARK_GRAY);
-        setSize(900, 900);
-        setLocationRelativeTo(null);
-        setResizable(false);
-        
+        setSize(900, 900); //This guy will have an initial size, but we can 
+        //setLocationRelativeTo(null); //What's this for?
+        setResizable(false); //Do not allow the screen to be resized.
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Button must be made before gridBoard is made
-
-        // set our button interface
+        // BUTTON MUST BE MADE BEFORE GRIDBOARD IS MADE
         buttonPanel = new ButtonPanel(this);
-        buttonPanel.setTextPanel(textPanel);
-
-        // create new gridBoard
         backendBoard = newBoard;
         frontEndBoard = new FrontEndBoard(backendBoard, this);
         add(buttonPanel, BorderLayout.SOUTH);
 		add(frontEndBoard, BorderLayout.NORTH);
-		
-		// this is only here temporarily
-		// this is a bad design
-		System.out.println("Welcome to WOBCON4. Enjoy the game.");
-		System.out.println("Initial Game State:");
-		backendBoard.showTerminalBoard();
-		System.out.println("PLAYER_1, please enter your column choice:");
-		
 		setVisible(true);
+		initTerminal();
 		//pack(); //Autosizes to match components
     }
     
-    // Modified initialization for window.
-    // Resets the game and redisplays the new variant.
-    public void resetWindow() {	
-    	frontEndBoard.enable();
-		frontEndBoard.resetBoard();
-
-		//XXX
+    //Initialize the backend terminal board
+    private void initTerminal() {
 		System.out.println("Welcome to WOBCON4. Enjoy the game.");
 		System.out.println("Initial Game State:");
 		backendBoard.showTerminalBoard();
-		System.out.println("PLAYER_1, please enter your column choice:");
+		System.out.println("User, please enter your column choice:");
+    }
+    
+    public void resetWindow() {	
+    	frontEndBoard.turnOn();
+		frontEndBoard.resetBoard();
+		initTerminal();
     }
     
     public void displayMenu() {
-    	//frontEndBoard.disable();
+    	//frontEndBoard.turnOff();
         frontEndBoard.resetBoard();
-        //Use a 'glassPane'
+        //Use a 'glassPane'? XXX
     }
 }
