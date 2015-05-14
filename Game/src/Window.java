@@ -12,19 +12,19 @@ public class Window extends JFrame{
 	private ButtonPanel buttonPanel;
     private FrontEndBoard frontEndBoard;
     private BackendBoard backendBoard;
-    private Dimension defaultSize = new Dimension(50,50);
+    private Dimension defaultSize = new Dimension(1024,768);
 
-    
+
     public Window(BackendBoard newBoard) {
     	super("Connect Java: Advanced Wobfighter");
         initWindow(newBoard);
         setVisible(true);
-    }  
+    }
 
     //TODO Perhaps the initial window should display a resolution that gets saved as a pref.
     private void initWindow(BackendBoard newBoard) {
 		setLayout(new BorderLayout());
-        setSize(defaultSize); 
+        setSize(defaultSize);
         //setLocationRelativeTo(null); //What's this for?
         setResizable(false); //Do not allow the screen to be resized.
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,7 +40,7 @@ public class Window extends JFrame{
 		initTerminal();
 		//pack(); //Autosizes to match components
     }
-    
+
     //Initialize the backend terminal board
     private void initTerminal() {
 		System.out.println("Welcome to WOBCON4. Enjoy the game.");
@@ -48,13 +48,13 @@ public class Window extends JFrame{
 		backendBoard.showTerminalBoard();
 		System.out.println("User, please enter your column choice:");
     }
-    
-    public void resetWindow() {	
+
+    public void resetWindow() {
     	frontEndBoard.turnOn();
 		frontEndBoard.resetBoard();
 		initTerminal();
     }
-    
+
     public void displayMenu() {
     	//frontEndBoard.turnOff();
         frontEndBoard.resetBoard();
