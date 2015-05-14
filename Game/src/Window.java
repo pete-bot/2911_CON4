@@ -12,8 +12,7 @@ public class Window extends JFrame{
 	private ButtonPanel buttonPanel;
     private FrontEndBoard frontEndBoard;
     private BackendBoard backendBoard;
-    private Dimension screenSize; 
-    private Dimension defaultSize;
+    private Dimension defaultSize = new Dimension(50,50);
 
     
     public Window(BackendBoard newBoard) {
@@ -25,12 +24,11 @@ public class Window extends JFrame{
     //TODO Perhaps the initial window should display a resolution that gets saved as a pref.
     private void initWindow(BackendBoard newBoard) {
 		setLayout(new BorderLayout());
-		determineScreenSize();
-		defaultSize = screenSize;
         setSize(defaultSize); 
         //setLocationRelativeTo(null); //What's this for?
         setResizable(false); //Do not allow the screen to be resized.
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         // BUTTON MUST BE MADE BEFORE GRIDBOARD IS MADE
         buttonPanel = new ButtonPanel(this);
@@ -41,14 +39,6 @@ public class Window extends JFrame{
 		setVisible(true);
 		initTerminal();
 		//pack(); //Autosizes to match components
-    }
-    
-    private void determineScreenSize() {
-        //We go with GraphicsDevice to make sure there aren't multi-head setups.
-        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        int width = gd.getDisplayMode().getWidth();
-        int height = gd.getDisplayMode().getHeight(); 
-        screenSize = new Dimension(width, height);
     }
     
     //Initialize the backend terminal board
