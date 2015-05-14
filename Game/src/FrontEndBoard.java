@@ -119,7 +119,7 @@ public class FrontEndBoard extends JPanel
 		    backendBoard.showTerminalBoard();
 
 		    // Game win found?
-		    if (backendBoard.checkWinState()){
+		    if (backendBoard.checkWinState(newAction)){
 		        mainWindow.displayMenu();
 		        if(backendBoard.getTurn()%2==0 ){
 		            System.out.println("PLAYER_1, you WIN!");
@@ -159,7 +159,7 @@ public class FrontEndBoard extends JPanel
 		backendBoard.showTerminalBoard();
 		updateBoardWithMove(turkMove.getColumn());
 		
-		if (backendBoard.checkWinState()){
+		if (backendBoard.checkWinState(turkMove)){
 			if(backendBoard.getTurn()%2==0 ){
 				System.out.println("PLAYER_1, you WIN!");
 				JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");

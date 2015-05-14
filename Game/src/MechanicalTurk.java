@@ -1,7 +1,8 @@
 
 public class MechanicalTurk implements MechanicalTurkInterface{
 	
-	private int AIclass; // TENTATIVE
+	@SuppressWarnings("unused")
+    private int AIclass; // TENTATIVE
 	
 	// mechanical turk constructor
 	public MechanicalTurk(int AIclass){
