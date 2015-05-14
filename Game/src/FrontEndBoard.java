@@ -48,7 +48,7 @@ public class FrontEndBoard extends JPanel
     private PlayArea playArea;
     private GridLayout frontEndBoardLayout = new GridLayout(rows, cols);
     private Path assetsPath; //Does this need to be a member? or can it just be computed at runtime?
-    private Player playerDetails;
+    private Player typeOfPlayer;
     
     //private static final String assLoc = "../assets/"; 
     //Paths accepts windows or *nix filepath structures for its argument and converts accordingly
@@ -115,9 +115,10 @@ public class FrontEndBoard extends JPanel
             double beginRange = tokenLocation.getX();
             double endRange = tokenLocation.getX() + token.getWidth();
             boolean inRow = cursor.getX() > beginRange && cursor.getX() < endRange;
-            if ( inRow ) {
+            boolean isBlankIcon = (token.getPlayer() == 0);
+            if ( inRow && isBlankIcon ) {
                 token.setIcon(glowingTokenIcon);
-            } else  {
+            } else if ( !inRow && isBlankIcon ) {
                 token.setIcon(blankTokenIcon);
             }
         }
@@ -267,7 +268,7 @@ public class FrontEndBoard extends JPanel
 	public void mouseMoved(MouseEvent e) {
     	int col = getColumn(e.getX());
         Action newMove = new Action(1, col);
-        //highlightColumn(e);
+        highlightColumn(e);
 	}
     
     // Get a column from a given x coordinate
