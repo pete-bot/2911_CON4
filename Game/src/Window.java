@@ -45,7 +45,7 @@ public class Window extends JFrame{
     private void initWindow(BackendBoard newBoard) {
 		setLayout(new BorderLayout());
 		///getContentPane().setBackground(Color.DARK_GRAY);
-        setSize(700, 690);
+        setSize(900, 900);
         setLocationRelativeTo(null);
         setResizable(false);
         

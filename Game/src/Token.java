@@ -1,3 +1,6 @@
+import java.awt.Dimension;
+
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 
@@ -6,10 +9,13 @@ public class Token extends JLabel {
     private int yPos;
     private int player = 0; //Default player is no player
     
-    public Token(int x, int y) { 
+    public Token(int x, int y, ImageIcon image) { 
         xPos = x;
         yPos = y;
         player = 0;
+        setIcon(image);
+        setHorizontalAlignment(JLabel.CENTER);
+        setVerticalAlignment(JLabel.CENTER);
     }
     
     public int getXPos(){
@@ -36,4 +42,6 @@ public class Token extends JLabel {
         System.out.println("Ypos: "+this.getYPos());
         System.out.println("Player: "+this.getPlayer());
     }
+    
+    
 }

@@ -1,7 +1,9 @@
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Point;
@@ -31,9 +33,9 @@ public class FrontEndBoard extends JPanel
 	implements MouseListener, MouseMotionListener {
 	
 	// our colours, should be updated to match the palette 
-	private Color hoverBackgroundColor;
-    private Color pressedBackgroundColor;
+    private Color gridColor = new Color(60, 58, 232, 255);
 	
+    Dimension size = new Dimension(800,800);
     private Token[] gameTokens = new Token[42]; 
     private BackendBoard backendBoard; //Should be 'backendBoard'
     private final int rows = 6;
@@ -42,6 +44,7 @@ public class FrontEndBoard extends JPanel
     private Window mainWindow;
     private MechanicalTurk newTurk;
     private PlayArea playArea;
+    private GridLayout frontEndBoardLayout = new GridLayout(rows, cols);
     private Path assetsPath; //Does this need to be a member? or can it just be computed at runtime?
     
     /*
@@ -64,7 +67,7 @@ public class FrontEndBoard extends JPanel
     
     
     
-	public FrontEndBoard(BackendBoard newGameBoard, Window mainWindow) {
+	public FrontEndBoard(BackendBoard backendBoard, Window mainWindow) {
 		super();
 		
 		// temporary 
@@ -73,24 +76,25 @@ public class FrontEndBoard extends JPanel
 		int AIclass = 0; //What does AIclass do?
 		newTurk = new MechanicalTurk(AIclass);
 		
-		
-		Dimension size = new Dimension(500,500);
-		backendBoard = newGameBoard;
+		this.backendBoard = backendBoard;
 		this.mainWindow = mainWindow; 
-		setLayout(new GridLayout(rows, cols));
+
+		FlowLayout panelLayout = new FlowLayout(FlowLayout.CENTER);
+		panelLayout.setVgap(20);
+		setLayout(panelLayout);
 		setSize(size);
 		
 		assetsPath = FileSystems.getDefault().getPath("assets");
 		System.out.println(assetsPath.toString());
 		
 		//Setup the clickable play area.
-		GridLayout frontEndBoardLayout = new GridLayout(rows, cols);
 		frontEndBoardLayout.setHgap(new Integer(5));
 		frontEndBoardLayout.setVgap(new Integer(5));
-		playArea = new PlayArea(new Color(60, 58, 232, 255), size); 
+		playArea = new PlayArea(gridColor, size); 
 		playArea.addMouseListener(this);
 		playArea.addMouseMotionListener(this);
 		playArea.setLayout(frontEndBoardLayout);
+		playArea.setPreferredSize(size);
 		add(playArea);
 		
 		//ImageIcon blankToken = new ImageIcon(assLoc + "sketch_circle_empty.png");
@@ -98,10 +102,9 @@ public class FrontEndBoard extends JPanel
 		for (int i = 0; i < 42; i++) {
         	int currX = i % 7;
         	int currY = 5 - ((int) Math.ceil( i/7 ));
-		    Token token = new Token(currX, currY);
-		    Dimension tokenSize = new Dimension(blankTokenIcon.getIconHeight(), blankTokenIcon.getIconWidth());
-		    token.setIcon(blankTokenIcon);
-		    token.setSize(tokenSize);
+		    Token token = new Token(currX, currY, blankTokenIcon);
+		    Dimension iconSize = new Dimension(blankTokenIcon.getIconHeight(), blankTokenIcon.getIconWidth());
+		    token.setPreferredSize(iconSize);
 		    playArea.add(token);
 		    gameTokens[i] = token;
 		}
@@ -278,7 +281,11 @@ public class FrontEndBoard extends JPanel
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-    	System.out.println(e.getLocationOnScreen());
+    	int x=e.getX();
+        int y=e.getY();
+        Point point = e.getPoint();
+        System.out.println(point);
+        System.out.println("x:" + x + ", y:" + y); //these co-ords are relative to the component
 		// TODO Auto-generated method stub
 	}
     
