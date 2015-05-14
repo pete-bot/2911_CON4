@@ -66,6 +66,7 @@ public class FrontEndBoard extends JPanel
     private static final String redToken = assLoc + "sketch_circle_red.jpg";
     private static final String yellowToken = assLoc + "sketch_circle_yellow.jpg";
     
+    private ImageIcon blankTokenIcon = new ImageIcon(assLoc + "circle100.png");
     
     
 	public FrontEndBoard(BackendBoard backendBoard, Window mainWindow) {
@@ -99,8 +100,6 @@ public class FrontEndBoard extends JPanel
 		playArea.setPreferredSize(gridSize);
 		add(playArea);
 		
-		//ImageIcon blankToken = new ImageIcon(assLoc + "sketch_circle_empty.png");
-		ImageIcon blankTokenIcon = new ImageIcon(assLoc + "circle100.png");
 		for (int i = 0; i < 42; i++) {
         	int currX = i % 7;
         	int currY = 5 - ((int) Math.ceil( i/7 ));
@@ -131,8 +130,9 @@ public class FrontEndBoard extends JPanel
     // implement player choice (go first or second)
     // this will be pulled from the intro menu
     // this is essentially the 'primary function through which the game is played'
-    public void getUserMove(Token b){
+    public void getUserMove(Action newAction){
   
+        /*
        	Action newAction;
 		if(backendBoard.getTurn()%2==0 ){
 			// PLAYER1 input
@@ -140,8 +140,9 @@ public class FrontEndBoard extends JPanel
 		}else{
 			newAction = new Action(2, b.getXPos());
 		}
+		*/
 	
-		if(!backendBoard.isLegal(newAction)){
+		if( !backendBoard.isLegal(newAction) ){
 			// need some error indicator
 			System.out.println("You have entered an invalid move, please try again.");
 			return;
@@ -153,7 +154,7 @@ public class FrontEndBoard extends JPanel
 		
 		// update SWING
 		// need to have another method to colour correct button.
-		updateBoardWithMove(b.getXPos());
+		updateBoardWithMove(newAction.getColumn());
 	
 		//XXX BEWARE, THERE BE WOBCKES HERE.
 		if (backendBoard.checkWinState()){
@@ -213,6 +214,7 @@ public class FrontEndBoard extends JPanel
     }
     
     // Updates the board with the next _legal_ move
+    // xPos is the column, refactor later.
     public void updateBoardWithMove(int xPos){
     	int tilesOnBoard = 42;
     	for (int count = tilesOnBoard - (cols - xPos); count >= 0; count -= 7){
@@ -234,21 +236,17 @@ public class FrontEndBoard extends JPanel
         backendBoard.resetBoard();
 		
         for (Token gameToken : gameTokens) {
-        	gameToken.setIcon(new ImageIcon(assLoc + "sketch_circle_empty.png"));
+        	gameToken.setIcon(blankTokenIcon);
         	gameToken.setPlayer(0);
         }
     }
 
-    //MouseListener and MouseMotionListener overrides
+    //MOUSELISTENER AND MOUSEMOTIONLISTENER OVERRIDES
     @Override
-    public void mouseEntered(MouseEvent event) {
-        //highlightColumn(event.getLocationOnScreen());
-    }
+    public void mouseEntered(MouseEvent event) { }
     
     @Override
-    public void mouseExited(MouseEvent e) { 
-    	doNothing();
-    }
+    public void mouseExited(MouseEvent e) { }
     
     @Override
     public void mouseClicked(MouseEvent e) { 
@@ -257,37 +255,24 @@ public class FrontEndBoard extends JPanel
     	int col = getColumn(e.getX());
         Action newMove = new Action(1, col);
         System.out.println(col);
+        getUserMove(newMove);
     }
     
     @Override
-    public void mousePressed(MouseEvent e) { 
-    	doNothing();
-    }
+    public void mousePressed(MouseEvent e) { }
     
     @Override
-    public void mouseReleased(MouseEvent e) { 
-    	//System.out.println(e.getLocationOnScreen());
-    	doNothing();
-    }
+    public void mouseReleased(MouseEvent e) { }
 
 	@Override
-	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
-	}
+	public void mouseDragged(MouseEvent e) { }
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-//    	int x=e.getX();
-//        int y=e.getY();
-//        Point point = e.getPoint();
-//        System.out.println(point);
-//        System.out.println("x:" + x + ", y:" + y); //these co-ords are relative to the component
+    	int col = getColumn(e.getX());
+        Action newMove = new Action(1, col);
+        //System.out.println(col);
 	}
-    
-    //Legibility function
-    private void doNothing() {
-    	return;
-    }
     
     // Get a column from a given x coordinate
     private int getColumn(int x) {
