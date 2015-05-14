@@ -2,4 +2,4 @@
 
 cd Game/src/
 rm *.class
-javac *.java && java Game
+javac -Xlint *.java && java Game
