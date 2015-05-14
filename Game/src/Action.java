@@ -7,7 +7,7 @@
 public class Action {
 
 	private int player;
-	private int move;
+	private int move; //Column to supply a movement
 	
 	public Action(int newPlayer, int newColumnChoice){
 		this.player = newPlayer;

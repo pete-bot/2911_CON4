@@ -30,13 +30,13 @@ public class BackendBoard {
 	
 	// this method assumes that the isLegal method has been called and has been 
 	public void makeMove(Action newAction){
-		int col;
-		for(col = 0; col < ROWMAX; col++){
-			if(board[col][newAction.getColumn()]==0){
+		int row;
+		for(row = 0; row < ROWMAX; row++){
+			if(board[row][newAction.getColumn()]==0){
 				break;
 			}
 		}
-		board[col][newAction.getColumn()] = newAction.getPlayer(); 	
+		board[row][newAction.getColumn()] = newAction.getPlayer(); 	
 	}
 	
 	public boolean isLegal(Action newAction){

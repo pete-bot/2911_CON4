@@ -35,7 +35,7 @@ public class FrontEndBoard extends JPanel
 	// our colours, should be updated to match the palette 
     private Color gridColor = new Color(60, 58, 232, 255);
 	
-    Dimension size = new Dimension(800,800);
+    Dimension gridSize = new Dimension(800,800);
     private Token[] gameTokens = new Token[42]; 
     private BackendBoard backendBoard; //Should be 'backendBoard'
     private final int rows = 6;
@@ -46,6 +46,7 @@ public class FrontEndBoard extends JPanel
     private PlayArea playArea;
     private GridLayout frontEndBoardLayout = new GridLayout(rows, cols);
     private Path assetsPath; //Does this need to be a member? or can it just be computed at runtime?
+    private Player playerDetails;
     
     /*
      *                               GRAPHIC IMAGE FILES
@@ -82,7 +83,8 @@ public class FrontEndBoard extends JPanel
 		FlowLayout panelLayout = new FlowLayout(FlowLayout.CENTER);
 		panelLayout.setVgap(20);
 		setLayout(panelLayout);
-		setSize(size);
+		setSize(gridSize);
+		//setSize(size);
 		
 		assetsPath = FileSystems.getDefault().getPath("assets");
 		System.out.println(assetsPath.toString());
@@ -90,11 +92,11 @@ public class FrontEndBoard extends JPanel
 		//Setup the clickable play area.
 		frontEndBoardLayout.setHgap(new Integer(5));
 		frontEndBoardLayout.setVgap(new Integer(5));
-		playArea = new PlayArea(gridColor, size); 
+		playArea = new PlayArea(gridColor, gridSize); 
 		playArea.addMouseListener(this);
 		playArea.addMouseMotionListener(this);
 		playArea.setLayout(frontEndBoardLayout);
-		playArea.setPreferredSize(size);
+		playArea.setPreferredSize(gridSize);
 		add(playArea);
 		
 		//ImageIcon blankToken = new ImageIcon(assLoc + "sketch_circle_empty.png");
@@ -112,7 +114,7 @@ public class FrontEndBoard extends JPanel
 
 	
 	// this highlights the column
-	public void highlightColumn(Point cursor) {
+	public void highlightColumn(MouseEvent cursor) {
         for (int i = 0; i < gameTokens.length; i++) {
             Token token = gameTokens[i];
             
@@ -122,19 +124,14 @@ public class FrontEndBoard extends JPanel
             double east = buttonLocation.getX() + token.getWidth();
             boolean inRow = cursor.getX() > west && cursor.getX() < east;
             token.setBackground(inRow ? new Color(0x6bb4e5) : null );
-
-            }
+        }
     }
-	
-	
-
-    
     
     // TODO
     // implement player choice (go first or second)
     // this will be pulled from the intro menu
     // this is essentially the 'primary function through which the game is played'
-    public void getColumnInput(Token b){
+    public void getUserMove(Token b){
   
        	Action newAction;
 		if(backendBoard.getTurn()%2==0 ){
@@ -172,7 +169,7 @@ public class FrontEndBoard extends JPanel
 			return;
 		}
 		
-		if(backendBoard.getTurn()%2==1 ){
+		if(backendBoard.getTurn() % 2==1 ){
 			System.out.println("PLAYER_1, please enter your move:");
 		}else{
 			System.out.println("PLAYER_2, please enter your move:");
@@ -256,11 +253,10 @@ public class FrontEndBoard extends JPanel
     @Override
     public void mouseClicked(MouseEvent e) { 
     	//XXX Testing
-    	int x=e.getX();
-        int y=e.getY();
-        Point point = e.getPoint();
-        System.out.println(point);
-        System.out.println("x:" + x + ", y:" + y); //these co-ords are relative to the component
+        //Package the appropriate column the mouse is on into an Action
+    	int col = getColumn(e.getX());
+        Action newMove = new Action(1, col);
+        System.out.println(col);
     }
     
     @Override
@@ -281,17 +277,33 @@ public class FrontEndBoard extends JPanel
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-    	int x=e.getX();
-        int y=e.getY();
-        Point point = e.getPoint();
-        System.out.println(point);
-        System.out.println("x:" + x + ", y:" + y); //these co-ords are relative to the component
-		// TODO Auto-generated method stub
+//    	int x=e.getX();
+//        int y=e.getY();
+//        Point point = e.getPoint();
+//        System.out.println(point);
+//        System.out.println("x:" + x + ", y:" + y); //these co-ords are relative to the component
 	}
     
     //Legibility function
     private void doNothing() {
     	return;
+    }
+    
+    // Get a column from a given x coordinate
+    private int getColumn(int x) {
+        int columnWidth = (int) gridSize.getWidth() / 7;
+        int currentColBegin = 0;
+        int currentColEnd = columnWidth;
+        int currentCol = 0;
+        while ( currentColEnd < gridSize.getWidth() ) {
+            if ( currentColBegin <= x && x <= currentColEnd ) {
+                return currentCol;
+            }
+            currentColBegin += columnWidth;
+            currentColEnd += columnWidth;
+            currentCol++;
+        }
+        return -1; // No column found.
     }
     
     public void disable() {
