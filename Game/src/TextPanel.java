@@ -7,6 +7,7 @@ import javax.swing.JTextArea;
 
 public class TextPanel extends JPanel {
 
+    private static final long serialVersionUID = 1L;
     private JTextArea textArea;
     private JScrollPane scrollPane;
 	
