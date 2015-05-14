@@ -88,6 +88,6 @@ public class Window extends JFrame{
     }
     
     public void displayMenu() {
-    	frontEndBoard.disable();
+    	//frontEndBoard.disable();
     }
 }

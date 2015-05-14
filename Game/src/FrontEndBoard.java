@@ -67,6 +67,9 @@ public class FrontEndBoard extends JPanel
     private static final String yellowToken = assLoc + "sketch_circle_yellow.jpg";
     
     private ImageIcon blankTokenIcon = new ImageIcon(assLoc + "circle100.png");
+    private ImageIcon glowingTokenIcon = new ImageIcon(assLoc + "glow.png");
+    private ImageIcon redTokenIcon = new ImageIcon(assLoc +  "sketch_circle_red.jpg");
+    private ImageIcon yellowTokenIcon = new ImageIcon(assLoc +  "sketch_circle_yellow.jpg");
     
     
 	public FrontEndBoard(BackendBoard backendBoard, Window mainWindow) {
@@ -114,15 +117,20 @@ public class FrontEndBoard extends JPanel
 	
 	// this highlights the column
 	public void highlightColumn(MouseEvent cursor) {
+	    //Change the icons of the tokens that are in the rows for the given column
         for (int i = 0; i < gameTokens.length; i++) {
             Token token = gameTokens[i];
             
             // this uses the mouse location to determine which column to highlight
-            Point buttonLocation = token.getLocationOnScreen();
-            double west = buttonLocation.getX();
-            double east = buttonLocation.getX() + token.getWidth();
-            boolean inRow = cursor.getX() > west && cursor.getX() < east;
-            token.setBackground(inRow ? new Color(0x6bb4e5) : null );
+            Point tokenLocation = token.getLocation();
+            double beginRange = tokenLocation.getX();
+            double endRange = tokenLocation.getX() + token.getWidth();
+            boolean inRow = cursor.getX() > beginRange && cursor.getX() < endRange;
+            //token.setBackground(inRow ? new Color(0x6bb4e5) : null );
+            if ( inRow )                 
+                token.setIcon(glowingTokenIcon);
+            else 
+                token.setIcon(blankTokenIcon);
         }
     }
     
@@ -216,16 +224,15 @@ public class FrontEndBoard extends JPanel
     // Updates the board with the next _legal_ move
     // xPos is the column, refactor later.
     public void updateBoardWithMove(int xPos){
-    	int tilesOnBoard = 42;
     	for (int count = tilesOnBoard - (cols - xPos); count >= 0; count -= 7){
     		Token currentButton = gameTokens[count];
     		if (currentButton.getPlayer() == 0){
     			if ( backendBoard.getTurn() % 2==0 ){
     				currentButton.setPlayer(1);
-    				currentButton.setIcon(new ImageIcon(assLoc +  "sketch_circle_red.jpg"));
+    				currentButton.setIcon(redTokenIcon);
     			} else{
     				currentButton.setPlayer(1);
-    				currentButton.setIcon(new ImageIcon(assLoc + "sketch_circle_yellow.jpg"));
+    				currentButton.setIcon(yellowTokenIcon);
     			}
     			break;
     		}
@@ -271,7 +278,7 @@ public class FrontEndBoard extends JPanel
 	public void mouseMoved(MouseEvent e) {
     	int col = getColumn(e.getX());
         Action newMove = new Action(1, col);
-        //System.out.println(col);
+        highlightColumn(e);
 	}
     
     // Get a column from a given x coordinate
