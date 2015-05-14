@@ -14,6 +14,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -48,32 +50,22 @@ public class FrontEndBoard extends JPanel
     private Path assetsPath; //Does this need to be a member? or can it just be computed at runtime?
     private Player playerDetails;
     
-    /*
-     *                               GRAPHIC IMAGE FILES
-     *  Uncomment:
-     *      (1) if you're sanjay and windows is a piece of shit
-     *      (2) everybody else
-     */
+    //private static final String assLoc = "../assets/"; 
+    //Paths accepts windows or *nix filepath structures for its argument and converts accordingly
+    Path assLoc = Paths.get("../assets/"); 
+    Path blankTokenPath = Paths.get(assLoc + "/circle100.png");
+    Path glowingTokenPath = Paths.get(assLoc + "/glow.png");
+    Path redTokenPath = Paths.get(assLoc + "/sketch_circle_red.jpg");
+    Path yellowTokenPath = Paths.get(assLoc + "/sketch_circle_yellow.jpg");
     
-    
-    //     (1) SANJAY: WINDOWS ECLIPSE
-    //     private static final String assLoc = "assets/";
-            
-    //     (2) EVERYONE ELSE: 
-    private static final String assLoc = "../assets/"; 
-    
-    private static final String emptyButton = assLoc + "sketch_circle_empty.png";
-    private static final String redToken = assLoc + "sketch_circle_red.jpg";
-    private static final String yellowToken = assLoc + "sketch_circle_yellow.jpg";
-    
-    private ImageIcon blankTokenIcon = new ImageIcon(assLoc + "circle100.png");
-    private ImageIcon glowingTokenIcon = new ImageIcon(assLoc + "glow.png");
-    private ImageIcon redTokenIcon = new ImageIcon(assLoc +  "sketch_circle_red.jpg");
-    private ImageIcon yellowTokenIcon = new ImageIcon(assLoc +  "sketch_circle_yellow.jpg");
-    
+    private ImageIcon blankTokenIcon = new ImageIcon(blankTokenPath.toString());
+    private ImageIcon glowingTokenIcon = new ImageIcon(glowingTokenPath.toString());
+    private ImageIcon redTokenIcon = new ImageIcon(redTokenPath.toString());
+    private ImageIcon yellowTokenIcon = new ImageIcon(yellowTokenPath.toString());
     
 	public FrontEndBoard(BackendBoard backendBoard, Window mainWindow) {
 		super();
+		System.out.println(assLoc);
 		
 		// temporary 
 		// this is a work around, we will need to collect this data from the 
@@ -90,12 +82,9 @@ public class FrontEndBoard extends JPanel
 		setSize(gridSize);
 		//setSize(size);
 		
-		assetsPath = FileSystems.getDefault().getPath("assets");
-		System.out.println(assetsPath.toString());
-		
 		//Setup the clickable play area.
-		frontEndBoardLayout.setHgap(new Integer(5));
-		frontEndBoardLayout.setVgap(new Integer(5));
+		frontEndBoardLayout.setHgap(new Integer(2));
+		frontEndBoardLayout.setVgap(new Integer(2));
 		playArea = new PlayArea(gridColor, gridSize); 
 		playArea.addMouseListener(this);
 		playArea.addMouseMotionListener(this);
@@ -126,11 +115,11 @@ public class FrontEndBoard extends JPanel
             double beginRange = tokenLocation.getX();
             double endRange = tokenLocation.getX() + token.getWidth();
             boolean inRow = cursor.getX() > beginRange && cursor.getX() < endRange;
-            //token.setBackground(inRow ? new Color(0x6bb4e5) : null );
-            if ( inRow )                 
+            if ( inRow ) {
                 token.setIcon(glowingTokenIcon);
-            else 
+            } else  {
                 token.setIcon(blankTokenIcon);
+            }
         }
     }
     
@@ -278,7 +267,7 @@ public class FrontEndBoard extends JPanel
 	public void mouseMoved(MouseEvent e) {
     	int col = getColumn(e.getX());
         Action newMove = new Action(1, col);
-        highlightColumn(e);
+        //highlightColumn(e);
 	}
     
     // Get a column from a given x coordinate
