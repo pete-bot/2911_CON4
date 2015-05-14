@@ -1,4 +1,7 @@
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 
 import javax.swing.JFrame;
 
@@ -9,6 +12,8 @@ public class Window extends JFrame{
 	private ButtonPanel buttonPanel;
     private FrontEndBoard frontEndBoard;
     private BackendBoard backendBoard;
+    private Dimension screenSize; 
+    private Dimension defaultSize;
 
     
     public Window(BackendBoard newBoard) {
@@ -17,9 +22,12 @@ public class Window extends JFrame{
         setVisible(true);
     }  
 
+    //TODO Perhaps the initial window should display a resolution that gets saved as a pref.
     private void initWindow(BackendBoard newBoard) {
 		setLayout(new BorderLayout());
-        setSize(900, 900); //This guy will have an initial size, but we can 
+		determineScreenSize();
+		defaultSize = screenSize;
+        setSize(defaultSize); 
         //setLocationRelativeTo(null); //What's this for?
         setResizable(false); //Do not allow the screen to be resized.
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -33,6 +41,14 @@ public class Window extends JFrame{
 		setVisible(true);
 		initTerminal();
 		//pack(); //Autosizes to match components
+    }
+    
+    private void determineScreenSize() {
+        //We go with GraphicsDevice to make sure there aren't multi-head setups.
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        int width = gd.getDisplayMode().getWidth();
+        int height = gd.getDisplayMode().getHeight(); 
+        screenSize = new Dimension(width, height);
     }
     
     //Initialize the backend terminal board

@@ -219,6 +219,7 @@ public class FrontEndBoard extends JPanel
     	//int col = getColumn(e.getX());
         //Action newMove = new Action(1, col);
         highlightColumn(e);
+        moveGraphicToken(e);
 	}
 
     @Override
@@ -235,6 +236,11 @@ public class FrontEndBoard extends JPanel
 
 	@Override
 	public void mouseDragged(MouseEvent e) { }
+	
+	private void moveGraphicToken(MouseEvent e) {
+
+	    return;
+	}
     
     // Get a column from a given x coordinate
     private int getColumn(int x) {
@@ -266,7 +272,6 @@ public class FrontEndBoard extends JPanel
     		b.setEnabled(true);
     	}
     }
-
 
 }
 
