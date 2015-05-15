@@ -1,7 +1,5 @@
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 
 import javax.swing.JFrame;
 
@@ -18,7 +16,6 @@ public class Window extends JFrame{
     public Window(BackendBoard newBoard) {
     	super("Connect Java: Advanced Wobfighter");
         initWindow(newBoard);
-        setVisible(true);
     }
 
     //TODO Perhaps the initial window should display a resolution that gets saved as a pref.
@@ -28,7 +25,6 @@ public class Window extends JFrame{
         //setLocationRelativeTo(null); //What's this for?
         setResizable(false); //Do not allow the screen to be resized.
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         // BUTTON MUST BE MADE BEFORE GRIDBOARD IS MADE
         buttonPanel = new ButtonPanel(this);

@@ -18,15 +18,15 @@ import javax.swing.JPanel;
 /*
  * This is the main grid of tokens
  */
-public class FrontEndBoard extends JPanel 
+public class FrontEndBoard extends JPanel
 	implements MouseListener, MouseMotionListener {
-	
+
     private static final long serialVersionUID = 1L;
-    // our colours, should be updated to match the palette 
+    // our colours, should be updated to match the palette
     private Color gridColor = new Color(60, 58, 232, 255);
-	
+
     Dimension gridSize = new Dimension(700,700);
-    private Token[] gameTokens = new Token[42]; 
+    private Token[] gameTokens = new Token[42];
     private BackendBoard backendBoard; //Should be 'backendBoard'
     private final int rows = 6;
     private final int cols = 7;
@@ -35,49 +35,56 @@ public class FrontEndBoard extends JPanel
     private MechanicalTurk newTurk;
     private PlayArea playArea;
     private GridLayout frontEndBoardLayout = new GridLayout(rows, cols);
-    
-    //private static final String assLoc = "../assets/"; 
+
+    //private static final String assLoc = "../assets/";
     //Paths accepts windows or *nix filepath structures for its argument and converts accordingly
-    Path assLoc = Paths.get("../assets/"); 
+    Path assLoc = Paths.get("../assets/");
     Path blankTokenPath = Paths.get(assLoc + "/circle100.png");
     Path glowingTokenPath = Paths.get(assLoc + "/glow.png");
     Path redTokenPath = Paths.get(assLoc + "/sketch_circle_red.jpg");
     Path yellowTokenPath = Paths.get(assLoc + "/sketch_circle_yellow.jpg");
     Path winTokenPath = Paths.get(assLoc + "/win.png");
-    
+
     private ImageIcon blankTokenIcon = new ImageIcon(blankTokenPath.toString());
     private ImageIcon glowingTokenIcon = new ImageIcon(glowingTokenPath.toString());
     private ImageIcon redTokenIcon = new ImageIcon(redTokenPath.toString());
     private ImageIcon yellowTokenIcon = new ImageIcon(yellowTokenPath.toString());
     private ImageIcon winTokenIcon = new ImageIcon(winTokenPath.toString());
-    
+
 	public FrontEndBoard(BackendBoard backendBoard, Window mainWindow) {
 		super();
 		System.out.println(assLoc);
-		
-		// temporary 
-		// this is a work around, we will need to collect this data from the 
+
+		// temporary
+		// this is a work around, we will need to collect this data from the
 		// menu option when it is implemented
 		int AIclass = 0; //What does AIclass do?
 		newTurk = new MechanicalTurk(AIclass);
-		
+
 		this.backendBoard = backendBoard;
-		this.mainWindow = mainWindow; 
+		this.mainWindow = mainWindow;
 
 		FlowLayout panelLayout = new FlowLayout(FlowLayout.CENTER);
 		panelLayout.setVgap(20); //FIXME This needs to be replaced with empty objects above and below.
 		setLayout(panelLayout);
+
+		//Dimension parentSize = mainWindow.getSize();
+		//int margin = 100;
+		//TODO although this is a smarter sizing behavior, we will need to add checks for our min size.
+		//So far, with the current tokens, 650,600 seem the smallest sensible grid size. (needs to be slightly off since it's 6x7)
+		//Dimension gridSize = new Dimension((int) parentSize.getHeight() - margin, (int) parentSize.getHeight() - margin);
+		//System.out.println(gridSize.toString());
 		setSize(gridSize);
-		
+
 		//Setup the clickable play area.
 		frontEndBoardLayout.setHgap(new Integer(2));
 		frontEndBoardLayout.setVgap(new Integer(2));
-		playArea = new PlayArea(gridColor, gridSize); 
+		playArea = new PlayArea(gridColor, gridSize);
 		playArea.addMouseListener(this);
 		playArea.addMouseMotionListener(this);
 		playArea.setLayout(frontEndBoardLayout);
 		add(playArea);
-		
+
 		for (int i = 0; i < 42; i++) {
         	int currX = i % 7;
         	int currY = 5 - ((int) Math.ceil( i/7 ));
@@ -89,13 +96,13 @@ public class FrontEndBoard extends JPanel
 		}
 	}
 
-	
+
 	// this highlights the column
 	public void highlightColumn(MouseEvent cursor) {
 	    //Change the icons of the tokens that are in the rows for the given column
         for (int i = 0; i < gameTokens.length; i++) {
             Token token = gameTokens[i];
-            
+
             // this uses the mouse location to determine which column to highlight
             Point tokenLocation = token.getLocation();
             double beginRange = tokenLocation.getX();
@@ -109,7 +116,7 @@ public class FrontEndBoard extends JPanel
             }
         }
     }
-	
+
 	// this highlights the win
 	public void highlightWin(ArrayList<Point> winList) {
 		Iterator<Point> winIterator = winList.iterator();
@@ -121,7 +128,7 @@ public class FrontEndBoard extends JPanel
 			t.setIcon(winTokenIcon);
 		}
     }
-    
+
     // TODO
     // implement player choice (go first or second)
     // this will be pulled from the intro menu
@@ -135,7 +142,7 @@ public class FrontEndBoard extends JPanel
 		    backendBoard.showTerminalBoard();
 
 		    ArrayList<Point> winList = backendBoard.checkWinState(newAction);
-		    
+
 		    // Game win found?
 		    if (!winList.isEmpty()){
 		        mainWindow.displayMenu();
@@ -157,7 +164,7 @@ public class FrontEndBoard extends JPanel
 		        System.out.println("PLAYER_2, please enter your move:");
 		    }
 
-		    backendBoard.IncrementTurn();		
+		    backendBoard.IncrementTurn();
 
 		    // call AI here.
 		    turkMove(backendBoard);
@@ -167,19 +174,19 @@ public class FrontEndBoard extends JPanel
     }
 
     // FIXME
-    // AI code should not persist in this class. 
+    // AI code should not persist in this class.
     // Theoretically this should be a 'secondPlayer' or 'competitor' method.
     public void turkMove(BackendBoard backendBoard){
 
 		System.out.println("The Turk makes its move...");
     	Action turkMove = newTurk.getTurkMove(backendBoard);
-		
+
 		backendBoard.makeMove(turkMove);
 		backendBoard.showTerminalBoard();
 		updateBoardWithMove(turkMove.getColumn());
-		
-		
-		
+
+
+
 		if (!backendBoard.checkWinState(turkMove).isEmpty()){
 			if(backendBoard.getTurn()%2==0 ){
 				System.out.println("PLAYER_1, you WIN!");
@@ -191,12 +198,12 @@ public class FrontEndBoard extends JPanel
 			mainWindow.resetWindow();
 			return;
 		}
-		
+
 		backendBoard.IncrementTurn();
-		
+
 		System.out.println("Control has returned to the player.");
     }
-    
+
     // Updates the board with the next _legal_ move
     // xPos is the column, refactor later.
     public void updateBoardWithMove(int xPos){
@@ -217,7 +224,7 @@ public class FrontEndBoard extends JPanel
 
     public void resetBoard() {
         backendBoard.resetBoard();
-		
+
         for (Token gameToken : gameTokens) {
         	gameToken.setIcon(blankTokenIcon);
         	gameToken.setPlayer(0);
@@ -226,12 +233,12 @@ public class FrontEndBoard extends JPanel
 
     //MOUSELISTENER AND MOUSEMOTIONLISTENER OVERRIDES
     @Override
-    public void mouseClicked(MouseEvent e) { 
+    public void mouseClicked(MouseEvent e) {
     	//FIXME Testing
         //Package the appropriate column the mouse is on into an Action
     	int col = getColumn(e.getX());
         Action newMove = new Action(1, col);
-        System.out.println(col);
+        System.out.printf("Column %d chosen.\n", col);
         getUserMove(newMove);
     }
 
@@ -245,31 +252,32 @@ public class FrontEndBoard extends JPanel
 
     @Override
     public void mouseEntered(MouseEvent event) { }
-    
+
     @Override
     public void mouseExited(MouseEvent e) { }
-    
+
     @Override
     public void mousePressed(MouseEvent e) { }
-    
+
     @Override
     public void mouseReleased(MouseEvent e) { }
 
 	@Override
 	public void mouseDragged(MouseEvent e) { }
-	
+
 	private void moveGraphicToken(MouseEvent e) {
 
 	    return;
 	}
-    
+
     // Get a column from a given x coordinate
+	// FIXME should throw an exception
     private int getColumn(int x) {
         int columnWidth = (int) gridSize.getWidth() / 7;
         int currentColBegin = 0;
         int currentColEnd = columnWidth;
         int currentCol = 0;
-        while ( currentColEnd < gridSize.getWidth() ) {
+        while ( currentColEnd <= gridSize.getWidth() ) {
             if ( currentColBegin <= x && x <= currentColEnd ) {
                 return currentCol;
             }
@@ -279,14 +287,14 @@ public class FrontEndBoard extends JPanel
         }
         return -1; // No column found.
     }
-    
+
     public void turnOff() {
     	setVisible(false);
     	for (Token b : gameTokens) {
-            b.setEnabled(false);    		
+            b.setEnabled(false);
     	}
     }
-    
+
     public void turnOn() {
     	setVisible(true);
     	for (Token b : gameTokens) {
