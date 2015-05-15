@@ -7,7 +7,7 @@ public class Window extends JFrame{
 
     //This is for serialization; don't worry about it.
 	private static final long serialVersionUID = 1L;
-	private ButtonPanel buttonPanel;
+	private ButtonPanel buttonPanel = new ButtonPanel(this);
     private FrontEndBoard frontEndBoard;
     private BackendBoard backendBoard;
     private Dimension defaultSize = new Dimension(1024,768);
@@ -15,6 +15,7 @@ public class Window extends JFrame{
 
     public Window(BackendBoard newBoard) {
     	super("Connect Java: Advanced Wobfighter");
+    	initFrontendBoard(newBoard);
         initWindow(newBoard);
     }
 
@@ -26,19 +27,30 @@ public class Window extends JFrame{
         setResizable(false); //Do not allow the screen to be resized.
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // BUTTON MUST BE MADE BEFORE GRIDBOARD IS MADE
-        buttonPanel = new ButtonPanel(this);
-        backendBoard = newBoard;
-        frontEndBoard = new FrontEndBoard(backendBoard, this);
-        add(buttonPanel, BorderLayout.SOUTH);
-		add(frontEndBoard, BorderLayout.NORTH);
-		setVisible(true);
-		initTerminal();
+        initFrontendBoard(newBoard);
+        add(frontEndBoard, BorderLayout.NORTH);
+        setVisible(true);
+        displayMenu();
 		//pack(); //Autosizes to match components
     }
 
+    private void initFrontendBoard(BackendBoard newBoard) {
+        backendBoard = newBoard;
+        Window mainWindow = this;
+        frontEndBoard = new FrontEndBoard(backendBoard, mainWindow);
+        frontEndBoard.setEnabled(false);
+        frontEndBoard.setVisible(false);
+    }
+
+    public void startNewGame() {
+        //We'll also need to disable the menu.
+        hideMainMenu();
+        showTerminalBoard();
+        frontEndBoard.turnOn();
+    }
+
     //Initialize the backend terminal board
-    private void initTerminal() {
+    private void showTerminalBoard() {
 		System.out.println("Welcome to WOBCON4. Enjoy the game.");
 		System.out.println("Initial Game State:");
 		backendBoard.showTerminalBoard();
@@ -48,12 +60,19 @@ public class Window extends JFrame{
     public void resetWindow() {
     	frontEndBoard.turnOn();
 		frontEndBoard.resetBoard();
-		initTerminal();
+		showTerminalBoard();
     }
 
     public void displayMenu() {
-    	//frontEndBoard.turnOff();
+        //turn off and clear the board.
+    	frontEndBoard.turnOff();
         frontEndBoard.resetBoard();
-        //Use a 'glassPane'? XXX
+        add(buttonPanel, BorderLayout.CENTER);
+		buttonPanel.setVisible(true);
+    }
+
+    private void hideMainMenu() {
+        buttonPanel.setEnabled(false);
+        buttonPanel.setVisible(false);
     }
 }

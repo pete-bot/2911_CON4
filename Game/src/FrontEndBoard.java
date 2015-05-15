@@ -145,7 +145,6 @@ public class FrontEndBoard extends JPanel
 
 		    // Game win found?
 		    if (!winList.isEmpty()){
-		        mainWindow.displayMenu();
 		        if(backendBoard.getTurn()%2==0 ){
 		            System.out.println("PLAYER_1, you WIN!");
 		            JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
@@ -176,6 +175,7 @@ public class FrontEndBoard extends JPanel
     // FIXME
     // AI code should not persist in this class.
     // Theoretically this should be a 'secondPlayer' or 'competitor' method.
+    // Also, this method should be making calls through getUserMove();
     public void turkMove(BackendBoard backendBoard){
 
 		System.out.println("The Turk makes its move...");
@@ -289,17 +289,19 @@ public class FrontEndBoard extends JPanel
     }
 
     public void turnOff() {
-    	setVisible(false);
     	for (Token b : gameTokens) {
             b.setEnabled(false);
     	}
+    	setVisible(false);
+    	setEnabled(false);
     }
 
     public void turnOn() {
-    	setVisible(true);
     	for (Token b : gameTokens) {
     		b.setEnabled(true);
     	}
+    	setVisible(true);
+    	setEnabled(true);
     }
 
 }
