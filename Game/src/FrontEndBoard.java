@@ -8,6 +8,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -36,16 +38,18 @@ public class FrontEndBoard extends JPanel
     
     //private static final String assLoc = "../assets/"; 
     //Paths accepts windows or *nix filepath structures for its argument and converts accordingly
-    Path assLoc = Paths.get("../assets/"); 
+    Path assLoc = Paths.get("assets/"); 
     Path blankTokenPath = Paths.get(assLoc + "/circle100.png");
     Path glowingTokenPath = Paths.get(assLoc + "/glow.png");
     Path redTokenPath = Paths.get(assLoc + "/sketch_circle_red.jpg");
     Path yellowTokenPath = Paths.get(assLoc + "/sketch_circle_yellow.jpg");
+    Path winTokenPath = Paths.get(assLoc + "/win.png");
     
     private ImageIcon blankTokenIcon = new ImageIcon(blankTokenPath.toString());
     private ImageIcon glowingTokenIcon = new ImageIcon(glowingTokenPath.toString());
     private ImageIcon redTokenIcon = new ImageIcon(redTokenPath.toString());
     private ImageIcon yellowTokenIcon = new ImageIcon(yellowTokenPath.toString());
+    private ImageIcon winTokenIcon = new ImageIcon(winTokenPath.toString());
     
 	public FrontEndBoard(BackendBoard backendBoard, Window mainWindow) {
 		super();
@@ -105,6 +109,18 @@ public class FrontEndBoard extends JPanel
             }
         }
     }
+	
+	// this highlights the win
+	public void highlightWin(ArrayList<Point> winList) {
+		Iterator<Point> winIterator = winList.iterator();
+		while (winIterator.hasNext()) {
+			Point winCoords = winIterator.next();
+			System.out.println("winCoords = " + winCoords.toString());
+			int indexToGet = (winCoords.x) * (cols) + (cols-winCoords.y);
+			Token t = gameTokens[42 - indexToGet];
+			t.setIcon(winTokenIcon);
+		}
+    }
     
     // TODO
     // implement player choice (go first or second)
@@ -118,8 +134,10 @@ public class FrontEndBoard extends JPanel
 		    backendBoard.makeMove(newAction);
 		    backendBoard.showTerminalBoard();
 
+		    ArrayList<Point> winList = backendBoard.checkWinState(newAction);
+		    
 		    // Game win found?
-		    if (backendBoard.checkWinState(newAction)){
+		    if (!winList.isEmpty()){
 		        mainWindow.displayMenu();
 		        if(backendBoard.getTurn()%2==0 ){
 		            System.out.println("PLAYER_1, you WIN!");
@@ -128,6 +146,7 @@ public class FrontEndBoard extends JPanel
 		            System.out.println("PLAYER_2, you WIN!");
 		            JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
 		        }
+		        highlightWin(winList);
 		        return;
 		    }
 
@@ -159,7 +178,9 @@ public class FrontEndBoard extends JPanel
 		backendBoard.showTerminalBoard();
 		updateBoardWithMove(turkMove.getColumn());
 		
-		if (backendBoard.checkWinState(turkMove)){
+		
+		
+		if (!backendBoard.checkWinState(turkMove).isEmpty()){
 			if(backendBoard.getTurn()%2==0 ){
 				System.out.println("PLAYER_1, you WIN!");
 				JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");

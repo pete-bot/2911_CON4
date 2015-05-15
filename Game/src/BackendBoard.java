@@ -1,3 +1,6 @@
+import java.awt.Point;
+import java.util.ArrayList;
+
 
 public class BackendBoard {
 
@@ -74,8 +77,10 @@ public class BackendBoard {
      *  @param lastColumn       The column of the last player move
      *  @param lastRow          Returns the last Row of the player action.
      */
-    public boolean checkWinState(Action lastTurn){
+    public ArrayList<Point> checkWinState(Action lastTurn){
+    	
         boolean win = false;
+        ArrayList<Point> winList = new ArrayList<Point>();
         
         int lastPlayer = lastTurn.getPlayer();
         int lastColumn = lastTurn.getColumn();
@@ -83,23 +88,38 @@ public class BackendBoard {
         
         //Check vertical wins
         win = checkVertical(lastPlayer, lastColumn, lastRow);
+        if (win) {
+        	return getVerticalWin();
+        }
         
         //Check horizontal wins
-        if (win != true) {
+        if (!win) {
             win = checkHorizontal(lastPlayer, lastColumn, lastRow);
         }
+        if (win) {
+        	return getHorizontalWin();
+        }
+        
         
         //Check ascending diagonal wins
-        if (win != true) {
+        if (!win) {
             win = checkAscDiagonal(lastPlayer, lastColumn, lastRow);
         }
-        
-        //check descending diagonal wins
-        if (win != true) {
-            win = checkDescDiagonal(lastPlayer, lastColumn, lastRow);
+        if (win) {
+        	return getDiagonalRightWin();
         }
         
-        return win;
+        
+        //check descending diagonal wins
+        if (!win) {
+            win = checkDescDiagonal(lastPlayer, lastColumn, lastRow);
+        }
+        if (win) {
+        	return getDiagonalLeftWin();
+        }
+        
+        winList.clear();
+        return winList;
     }
     
     /*
@@ -123,6 +143,28 @@ public class BackendBoard {
         }
         
         return win;
+    }
+    
+    private ArrayList<Point> getVerticalWin () {
+		ArrayList<Point> winList = new ArrayList<Point>();
+		
+		// find four Vertical pieces.
+			for(int row = 0; row < 3; row++){
+				for(int col = 0; col < COLMAX; col++){
+					if((board[row][col] != 0) && (board[row][col]==board[row+1][col]) 
+							&& (board[row][col]==board[row+2][col]) 
+							&& (board[row][col]==board[row+3][col])){
+						winList.add(new Point(row,col));
+						winList.add(new Point(row+1,col));
+						winList.add(new Point(row+2,col));
+						winList.add(new Point(row+3,col));
+						
+						return winList;
+					}
+				}
+			}
+		
+		return winList;
     }
     
     /*
@@ -159,6 +201,29 @@ public class BackendBoard {
             }
         }
         return win;
+    }
+    
+    private ArrayList<Point> getHorizontalWin () {
+		ArrayList<Point> winList = new ArrayList<Point>();
+		
+		// find four horizontal pieces.
+		for(int row = 0; row < ROWMAX; row++){
+			for(int col = 0; col < 4; col++){
+				if( (board[row][col] != 0) && (board[row][col]==board[row][col+1]) 
+						&& (board[row][col]==board[row][col+2]) 
+						&& (board[row][col]==board[row][col+3])){
+					winList.add(new Point(row,col));
+					winList.add(new Point(row,col+1));
+					winList.add(new Point(row,col+2));
+					winList.add(new Point(row,col+3));
+					
+					return winList;
+				}
+			}
+		}
+		
+		
+		return winList;
     }
     
     /*
@@ -201,6 +266,30 @@ public class BackendBoard {
         return win;
     }
 
+    
+    private ArrayList<Point> getDiagonalRightWin () {
+		ArrayList<Point> winList = new ArrayList<Point>();
+		
+		for(int row = 0; row < 3; row++){
+			for(int col = 0; col < 4; col++){
+				if((board[row][col] != 0) && (board[row][col]==board[row+1][col+1]) 
+						&& (board[row][col]==board[row+2][col+2]) 
+						&& (board[row][col]==board[row+3][col+3])){
+					System.out.println("winState: diag_right");
+					
+					winList.add(new Point(row,col));
+					winList.add(new Point(row+1,col+1));
+					winList.add(new Point(row+2,col+2));
+					winList.add(new Point(row+3,col+3));
+					
+					return winList;
+				}
+			}
+		}
+		
+		return winList;
+    }
+    
     /*
      * Check descending diagonal wins
      * Added by Sketch in "Updated win condition patch"
@@ -238,6 +327,28 @@ public class BackendBoard {
             win = true;
         }
         return win;
+    }
+    
+    private ArrayList<Point> getDiagonalLeftWin () {
+		ArrayList<Point> winList = new ArrayList<Point>();
+		
+		for(int row = 0; row<3; row++){
+			for(int col = 3; col<COLMAX; col++){
+				if((board[row][col] != 0) && (board[row][col]==board[row+1][col-1]) 
+						&& (board[row][col]==board[row+2][col-2]) 
+						&& (board[row][col]==board[row+3][col-3]) ){
+					
+					winList.add(new Point(row,col));
+					winList.add(new Point(row+1,col-1));
+					winList.add(new Point(row+2,col-2));
+					winList.add(new Point(row+3,col-3));
+					
+					return winList;
+				}
+			}
+		}
+		
+		return winList;
     }
     
     /*
