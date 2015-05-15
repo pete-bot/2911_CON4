@@ -38,7 +38,7 @@ public class FrontEndBoard extends JPanel
     
     //private static final String assLoc = "../assets/"; 
     //Paths accepts windows or *nix filepath structures for its argument and converts accordingly
-    Path assLoc = Paths.get("assets/"); 
+    Path assLoc = Paths.get("../assets/"); 
     Path blankTokenPath = Paths.get(assLoc + "/circle100.png");
     Path glowingTokenPath = Paths.get(assLoc + "/glow.png");
     Path redTokenPath = Paths.get(assLoc + "/sketch_circle_red.jpg");
