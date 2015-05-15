@@ -1,6 +1,9 @@
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 
 public class Window extends JFrame{
@@ -21,14 +24,23 @@ public class Window extends JFrame{
 
     //TODO Perhaps the initial window should display a resolution that gets saved as a pref.
     private void initWindow(BackendBoard newBoard) {
-		setLayout(new BorderLayout());
+		//setLayout(new BorderLayout());
+
+        setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.weightx = 1.0;
+        c.weighty = 1.0;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        JButton buttonTest = new JButton("Test");
+        add(buttonTest, c);
+
         setSize(defaultSize);
         //setLocationRelativeTo(null); //What's this for?
         setResizable(false); //Do not allow the screen to be resized.
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         initFrontendBoard(newBoard);
-        add(frontEndBoard, BorderLayout.NORTH);
+        //add(frontEndBoard, BorderLayout.NORTH);
         setVisible(true);
         displayMenu();
 		//pack(); //Autosizes to match components
