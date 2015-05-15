@@ -1,199 +1,155 @@
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Graphics;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /*
  * This is the main grid of tokens
  */
-public class FrontEndBoard extends JPanel implements MouseListener{
+public class FrontEndBoard extends JPanel 
+	implements MouseListener, MouseMotionListener {
 	
-	// our colours 
-	private Color hoverBackgroundColor;
-    private Color pressedBackgroundColor;
+    private static final long serialVersionUID = 1L;
+    // our colours, should be updated to match the palette 
+    private Color gridColor = new Color(60, 58, 232, 255);
 	
-	private JPanel gridBoard;
-    public GameButton[] buttonIcons;
-    private GameButton inputButton;
+    Dimension gridSize = new Dimension(700,700);
+    private Token[] gameTokens = new Token[42]; 
     private BackendBoard backendBoard; //Should be 'backendBoard'
-    private int rows = 6;
-    private int cols = 7;
+    private final int rows = 6;
+    private final int cols = 7;
     private final int tilesOnBoard = 42;
     private Window mainWindow;
     private MechanicalTurk newTurk;
+    private PlayArea playArea;
+    private GridLayout frontEndBoardLayout = new GridLayout(rows, cols);
     
+    //private static final String assLoc = "../assets/"; 
+    //Paths accepts windows or *nix filepath structures for its argument and converts accordingly
+    Path assLoc = Paths.get("../assets/"); 
+    Path blankTokenPath = Paths.get(assLoc + "/circle100.png");
+    Path glowingTokenPath = Paths.get(assLoc + "/glow.png");
+    Path redTokenPath = Paths.get(assLoc + "/sketch_circle_red.jpg");
+    Path yellowTokenPath = Paths.get(assLoc + "/sketch_circle_yellow.jpg");
     
+    private ImageIcon blankTokenIcon = new ImageIcon(blankTokenPath.toString());
+    private ImageIcon glowingTokenIcon = new ImageIcon(glowingTokenPath.toString());
+    private ImageIcon redTokenIcon = new ImageIcon(redTokenPath.toString());
+    private ImageIcon yellowTokenIcon = new ImageIcon(yellowTokenPath.toString());
     
-    
-    
-    /*
-     *                               GRAPHIC IMAGE FILES
-     *  Uncomment:
-     *      (1) if you're sanjay and windows is a piece of shit
-     *      (2) everybody else
-     */
-    
-    
-//     (1) SANJAY: WINDOWS ECLIPSE
-    private static final String assLoc = "assets/";
-    
-//     (2) EVERYONE ELSE: 
-//    private static final String assLoc = "../assets/"; 
-    
-    private static final String emptyButton = assLoc + "sketch_circle_empty.png";
-    private static final String redToken = assLoc + "sketch_circle_red.jpg";
-    private static final String yellowToken = assLoc + "sketch_circle_yellow.jpg";
-    
-    
-    
-	public FrontEndBoard(BackendBoard newGameBoard, Window mainWindow) {
+	public FrontEndBoard(BackendBoard backendBoard, Window mainWindow) {
+		super();
+		System.out.println(assLoc);
 		
 		// temporary 
 		// this is a work around, we will need to collect this data from the 
 		// menu option when it is implemented
-		int AIclass = 0;
+		int AIclass = 0; //What does AIclass do?
 		newTurk = new MechanicalTurk(AIclass);
 		
-		//XXX
-		backendBoard = newGameBoard;
+		this.backendBoard = backendBoard;
 		this.mainWindow = mainWindow; 
+
+		FlowLayout panelLayout = new FlowLayout(FlowLayout.CENTER);
+		panelLayout.setVgap(20); //FIXME This needs to be replaced with empty objects above and below.
+		setLayout(panelLayout);
+		setSize(gridSize);
 		
-		buttonIcons =  new GameButton[42];
-		setLayout(new GridLayout(rows, cols));
-		setSize(500,500);
+		//Setup the clickable play area.
+		frontEndBoardLayout.setHgap(new Integer(2));
+		frontEndBoardLayout.setVgap(new Integer(2));
+		playArea = new PlayArea(gridColor, gridSize); 
+		playArea.addMouseListener(this);
+		playArea.addMouseMotionListener(this);
+		playArea.setLayout(frontEndBoardLayout);
+		add(playArea);
 		
-		// this is to 'squash' the columns together - need to find better way
-		// to do this
-		Insets margin = new Insets(-3,0,-3,0);
-		
-		
-		
-//		this.inputButton = new GameButton(0, 0);
-//        this.inputButton.addActionListener(this);
-//        this.add(inputButton);
-//		
-		
-		
-		// create our button array
-        for (int i = 0; i <  42; i++) {
-            //XXX
-        	int currX = i%7;
-        	int currY = 5-((int) Math.ceil(i/7));
-        	final GameButton b = new GameButton(currX, currY); // why final?
-        	
-        	b.addActionListener(new ActionListener(){
-        			@Override
-        			public void actionPerformed(ActionEvent e){
-	        			  getColumnInput(b);
-	        		  }
-        		  });
-        	setVisible(true);
-        	b.setIcon(new ImageIcon(assLoc + "sketch_circle_empty.png"));
-        	b.setBorderPainted(false);
-        	b.setMargin(margin);
-        	setBorder(BorderFactory.createEmptyBorder());
-            b.setRolloverEnabled(true);
-            b.addMouseListener(this);
-            add(b);
-            buttonIcons[i] = b;
-        }
+		for (int i = 0; i < 42; i++) {
+        	int currX = i % 7;
+        	int currY = 5 - ((int) Math.ceil( i/7 ));
+		    Token token = new Token(currX, currY, blankTokenIcon);
+		    Dimension iconSize = new Dimension(blankTokenIcon.getIconHeight(), blankTokenIcon.getIconWidth());
+		    token.setPreferredSize(iconSize);
+		    playArea.add(token);
+		    gameTokens[i] = token;
+		}
 	}
 
 	
 	// this highlights the column
-	public void highlightColumn(Point cursor) {
-        for (int i = 0; i < buttonIcons.length; i++) {
-            JButton button = buttonIcons[i];
+	public void highlightColumn(MouseEvent cursor) {
+	    //Change the icons of the tokens that are in the rows for the given column
+        for (int i = 0; i < gameTokens.length; i++) {
+            Token token = gameTokens[i];
             
             // this uses the mouse location to determine which column to highlight
-            Point buttonLocation = button.getLocationOnScreen();
-            double west = buttonLocation.getX();
-            double east = buttonLocation.getX() + button.getWidth();
-            boolean inRow = cursor.getX() > west && cursor.getX() < east;
-            button.setBackground(inRow ? new Color(0x6bb4e5) : null );
-
+            Point tokenLocation = token.getLocation();
+            double beginRange = tokenLocation.getX();
+            double endRange = tokenLocation.getX() + token.getWidth();
+            boolean inRow = cursor.getX() > beginRange && cursor.getX() < endRange;
+            boolean isBlankIcon = (token.getPlayer() == 0);
+            if ( inRow && isBlankIcon ) {
+                token.setIcon(glowingTokenIcon);
+            } else if ( !inRow && isBlankIcon ) {
+                token.setIcon(blankTokenIcon);
             }
+        }
     }
-	
-	
-	// this is where the mouse position is determined and kept track of
-    @Override
-    public void mouseEntered(MouseEvent event) {
-        highlightColumn(event.getLocationOnScreen());
-
-    }
-    
     
     // TODO
     // implement player choice (go first or second)
     // this will be pulled from the intro menu
     // this is essentially the 'primary function through which the game is played'
-    public void getColumnInput(GameButton b){
-  
-       	Action newAction;
-		if(backendBoard.getTurn()%2==0 ){
-			// PLAYER1 input
-			newAction = new Action(1, b.getXPos());
-		}else{
-			newAction = new Action(2, b.getXPos());
+    public void getUserMove(Action newAction){
+		if( backendBoard.isLegal(newAction) ){
+
+		    updateBoardWithMove(newAction.getColumn());
+		    // Update terminal
+		    backendBoard.makeMove(newAction);
+		    backendBoard.showTerminalBoard();
+
+		    // Game win found?
+		    if (backendBoard.checkWinState(newAction)){
+		        mainWindow.displayMenu();
+		        if(backendBoard.getTurn()%2==0 ){
+		            System.out.println("PLAYER_1, you WIN!");
+		            JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
+		        }else{
+		            System.out.println("PLAYER_2, you WIN!");
+		            JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
+		        }
+		        return;
+		    }
+
+		    //Otherwise game continues
+		    if (backendBoard.getTurn() % 2==1 ){
+		        System.out.println("PLAYER_1, please enter your move:");
+		    }else{
+		        System.out.println("PLAYER_2, please enter your move:");
+		    }
+
+		    backendBoard.IncrementTurn();		
+
+		    // call AI here.
+		    turkMove(backendBoard);
+		} else{
+		    System.out.println("You have entered an invalid move, please try again.");
 		}
-	
-		if(!backendBoard.isLegal(newAction)){
-			// need some error indicator
-			System.out.println("You have entered an invalid move, please try again.");
-			return;
-		}
-		
-		// update terminal rep
-		backendBoard.makeMove(newAction);
-		backendBoard.showTerminalBoard();
-		
-		// update SWING
-		// need to have another method to colour correct button.
-		updateBoardWithMove(b.getXPos());
-	
-		//XXX BEWARE, THERE BE WOBCKES HERE.
-		if (backendBoard.checkWinState(newAction)){
-			mainWindow.displayMenu();
-			if(backendBoard.getTurn()%2==0 ){
-				System.out.println("PLAYER_1, you WIN!");
-				JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
-			}else{
-				System.out.println("PLAYER_2, you WIN!");
-				JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
-			}
-			
-			return;
-		}
-		
-		if(backendBoard.getTurn()%2==1 ){
-			System.out.println("PLAYER_1, please enter your move:");
-		}else{
-			System.out.println("PLAYER_2, please enter your move:");
-		}
-		
-		backendBoard.IncrementTurn();		
-    	
-		// call AI here.
-		turkMove(backendBoard);
-		
-		
     }
 
-    // 
+    // FIXME
+    // AI code should not persist in this class. 
+    // Theoretically this should be a 'secondPlayer' or 'competitor' method.
     public void turkMove(BackendBoard backendBoard){
 
 		System.out.println("The Turk makes its move...");
@@ -207,12 +163,11 @@ public class FrontEndBoard extends JPanel implements MouseListener{
 			if(backendBoard.getTurn()%2==0 ){
 				System.out.println("PLAYER_1, you WIN!");
 				JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
-				mainWindow.resetWindow(); // at the moment, window resets at win
 			}else{
 				System.out.println("PLAYER_2, you WIN!");
 				JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
-				mainWindow.resetWindow();
 			}
+			mainWindow.resetWindow();
 			return;
 		}
 		
@@ -221,75 +176,103 @@ public class FrontEndBoard extends JPanel implements MouseListener{
 		System.out.println("Control has returned to the player.");
     }
     
-    
     // Updates the board with the next _legal_ move
+    // xPos is the column, refactor later.
     public void updateBoardWithMove(int xPos){
-    	int tilesOnBoard = 42;
     	for (int count = tilesOnBoard - (cols - xPos); count >= 0; count -= 7){
-    		GameButton currentButton = buttonIcons[count];
+    		Token currentButton = gameTokens[count];
     		if (currentButton.getPlayer() == 0){
     			if ( backendBoard.getTurn() % 2==0 ){
     				currentButton.setPlayer(1);
-    				currentButton.setIcon(new ImageIcon(assLoc +  "sketch_circle_red.jpg"));
+    				currentButton.setIcon(redTokenIcon);
     			} else{
     				currentButton.setPlayer(1);
-    				currentButton.setIcon(new ImageIcon(assLoc + "sketch_circle_yellow.jpg"));
+    				currentButton.setIcon(yellowTokenIcon);
     			}
     			break;
     		}
     	}
     }
 
-    //This does not redisplay properly
     public void resetBoard() {
         backendBoard.resetBoard();
 		
-		// create our button array
-		// this needs to simply repaint
-		
-        for (GameButton gameButton : buttonIcons) {
-        	gameButton.setIcon(new ImageIcon(assLoc + "sketch_circle_empty.jpg"));
-        	gameButton.setPlayer(0);
+        for (Token gameToken : gameTokens) {
+        	gameToken.setIcon(blankTokenIcon);
+        	gameToken.setPlayer(0);
         }
+    }
 
-		setVisible(true);
-    }
-    
-    //XXX BEWARE, THESE GUYS DON'T DO ANYTHING BUT ARE NEEDED APPARENTLY
+    //MOUSELISTENER AND MOUSEMOTIONLISTENER OVERRIDES
     @Override
-    public void mouseExited(MouseEvent e) { 
-    	doNothing();
-    }
     public void mouseClicked(MouseEvent e) { 
-    	doNothing();
+    	//FIXME Testing
+        //Package the appropriate column the mouse is on into an Action
+    	int col = getColumn(e.getX());
+        Action newMove = new Action(1, col);
+        System.out.println(col);
+        getUserMove(newMove);
     }
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+    	//int col = getColumn(e.getX());
+        //Action newMove = new Action(1, col);
+        highlightColumn(e);
+        moveGraphicToken(e);
+	}
+
     @Override
-    public void mousePressed(MouseEvent e) { 
-    	doNothing();
-    }
+    public void mouseEntered(MouseEvent event) { }
+    
     @Override
-    public void mouseReleased(MouseEvent e) { 
-    	doNothing();
+    public void mouseExited(MouseEvent e) { }
+    
+    @Override
+    public void mousePressed(MouseEvent e) { }
+    
+    @Override
+    public void mouseReleased(MouseEvent e) { }
+
+	@Override
+	public void mouseDragged(MouseEvent e) { }
+	
+	private void moveGraphicToken(MouseEvent e) {
+
+	    return;
+	}
+    
+    // Get a column from a given x coordinate
+    private int getColumn(int x) {
+        int columnWidth = (int) gridSize.getWidth() / 7;
+        int currentColBegin = 0;
+        int currentColEnd = columnWidth;
+        int currentCol = 0;
+        while ( currentColEnd < gridSize.getWidth() ) {
+            if ( currentColBegin <= x && x <= currentColEnd ) {
+                return currentCol;
+            }
+            currentColBegin += columnWidth;
+            currentColEnd += columnWidth;
+            currentCol++;
+        }
+        return -1; // No column found.
     }
     
-    //Legibility function
-    private void doNothing() {
-    	return;
-    }
-    
-    public void disable() {
+    public void turnOff() {
     	setVisible(false);
-    	for (GameButton b : buttonIcons) {
+    	for (Token b : gameTokens) {
             b.setEnabled(false);    		
     	}
     }
     
-    public void enable() {
+    public void turnOn() {
     	setVisible(true);
-    	for (GameButton b : buttonIcons) {
+    	for (Token b : gameTokens) {
     		b.setEnabled(true);
     	}
     }
+
 }
 
 
