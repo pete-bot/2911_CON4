@@ -145,6 +145,7 @@ public class FrontEndBoard extends JPanel
 
 		    // Game win found?
 		    if (!winList.isEmpty()){
+		        highlightWin(winList);
 		        if(backendBoard.getTurn()%2==0 ){
 		            System.out.println("PLAYER_1, you WIN!");
 		            JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
@@ -152,7 +153,6 @@ public class FrontEndBoard extends JPanel
 		            System.out.println("PLAYER_2, you WIN!");
 		            JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
 		        }
-		        highlightWin(winList);
 		        return;
 		    }
 
