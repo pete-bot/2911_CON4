@@ -24,6 +24,8 @@ public class ButtonPanel extends JPanel implements ActionListener {
 		add(restartButton);
 		add(exitButton);
 
+		setBounds(500,500,500,500);
+
         window = mainWindow;
 	}
 
