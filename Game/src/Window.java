@@ -30,13 +30,13 @@ public class Window extends JFrame{
         GridBagConstraints c = new GridBagConstraints();
         c.weightx = 1.0;
         c.weighty = 1.0;
-        c.fill = GridBagConstraints.HORIZONTAL;
+        //c.fill = GridBagConstraints.HORIZONTAL;
         JButton buttonTest = new JButton("Test");
         add(buttonTest, c);
 
         setSize(defaultSize);
         //setLocationRelativeTo(null); //What's this for?
-        setResizable(false); //Do not allow the screen to be resized.
+        //setResizable(false); //Do not allow the screen to be resized.
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         initFrontendBoard(newBoard);
