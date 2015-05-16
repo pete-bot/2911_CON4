@@ -1,7 +1,10 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -36,16 +39,16 @@ public class FrontEndBoard extends JPanel implements MouseListener,
     private PlayArea playArea;
     private GridLayout frontEndBoardLayout = new GridLayout(rows, cols);
 
-    private ButtonPanel buttonPanel;
+    private PauseButton pausePanel;
 
     // private static final String assLoc = "../assets/";
     // Paths accepts windows or *nix filepath structures for its argument and
     // converts accordingly
     Path assLoc = Paths.get("../assets/");
-    Path blankTokenPath = Paths.get(assLoc + "/circle100.png");
+    Path blankTokenPath = Paths.get(assLoc + "/circle101.png");
     Path glowingTokenPath = Paths.get(assLoc + "/glow.png");
-    Path redTokenPath = Paths.get(assLoc + "/sketch_circle_red.jpg");
-    Path yellowTokenPath = Paths.get(assLoc + "/sketch_circle_yellow.jpg");
+    Path redTokenPath = Paths.get(assLoc + "/circle101_RED.png");
+    Path yellowTokenPath = Paths.get(assLoc + "/circle101_YELLOW.png");
     Path winTokenPath = Paths.get(assLoc + "/win.png");
 
     private ImageIcon blankTokenIcon = new ImageIcon(blankTokenPath.toString());
@@ -56,59 +59,87 @@ public class FrontEndBoard extends JPanel implements MouseListener,
             yellowTokenPath.toString());
     private ImageIcon winTokenIcon = new ImageIcon(winTokenPath.toString());
 
+    
+    
     public FrontEndBoard(BackendBoard backendBoard, Window mainWindow) {
         super();
         System.out.println(assLoc);
-
-        buttonPanel = new ButtonPanel(mainWindow);
+        
+        pausePanel = new PauseButton(mainWindow);
+        pausePanel.setOpaque(false);
 
         // AIclass is a simple way of passing in which AI that the user may want
-        // to
-        // play against, ie difficulty/personaltiy whatever. we can easily
-        // remove.
         int AIclass = 0;
         newTurk = new MechanicalTurk(AIclass);
 
         this.backendBoard = backendBoard;
         this.mainWindow = mainWindow;
-
-        FlowLayout panelLayout = new FlowLayout(FlowLayout.CENTER);
-        panelLayout.setVgap(20); // FIXME This needs to be replaced with empty
-                                 // objects above and below.
-        setLayout(panelLayout);
-
-        // Dimension parentSize = mainWindow.getSize();
-        // int margin = 100;
-        // TODO although this is a smarter sizing behavior, we will need to add
-        // checks for our min size.
-        // So far, with the current tokens, 650,600 seem the smallest sensible
-        // grid size. (needs to be slightly off since it's 6x7)
-        // Dimension gridSize = new Dimension((int) parentSize.getHeight() -
-        // margin, (int) parentSize.getHeight() - margin);
-        // System.out.println(gridSize.toString());
+        
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+    	gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(2, 2, 2, 2);
+        
+        // these values change the way the resizing modifies spacing distribution on teh tokens
+        gbc.weightx = 0;
+        gbc.weighty = 0;
+        
+        gbc.anchor = GridBagConstraints.SOUTH;
+        gbc.fill = GridBagConstraints.BOTH;
+        
+        
         setSize(gridSize);
 
         // Setup the clickable play area.
-        frontEndBoardLayout.setHgap(new Integer(2));
-        frontEndBoardLayout.setVgap(new Integer(2));
+        //frontEndBoardLayout.setHgap(new Integer(2));
+        //frontEndBoardLayout.setVgap(new Integer(2));
         playArea = new PlayArea(gridColor, gridSize);
         playArea.addMouseListener(this);
         playArea.addMouseMotionListener(this);
         playArea.setLayout(frontEndBoardLayout);
-        add(playArea);
-
-        for (int i = 0; i < 42; i++) {
-            int currX = i % 7;
-            int currY = 5 - ((int) Math.ceil(i / 7));
-            Token token = new Token(currX, currY, blankTokenIcon);
-            Dimension iconSize = new Dimension(blankTokenIcon.getIconHeight(),
-                    blankTokenIcon.getIconWidth());
-            token.setPreferredSize(iconSize);
-            playArea.add(token);
-            gameTokens[i] = token;
+        add(playArea, gbc);
+        
+        int i = 0, currY = 0, currX = 0;
+        for (currY = 0; currY < 6; currY++) {
+            for(currX = 0; currX<7; currX++){
+            	Token token = new Token(currX, currY, blankTokenIcon);
+                token.setOpaque(false);
+                Dimension iconSize = new Dimension(blankTokenIcon.getIconHeight(),
+                        blankTokenIcon.getIconWidth());
+                token.setPreferredSize(iconSize);
+                playArea.add(token);
+                gameTokens[i] = token;
+                i++;
+                gbc.gridx++;
+            }
+            gbc.gridy++;
         }
 
-        add(buttonPanel);
+        
+        
+        
+        // BACKUP
+//        for (int i = 0; i < 42; i++) {
+//            int currX = i % 7;
+//            int currY = 5 - ((int) Math.ceil(i / 7));
+//            Token token = new Token(currX, currY, blankTokenIcon);
+//            token.setOpaque(false);
+//            Dimension iconSize = new Dimension(blankTokenIcon.getIconHeight(),
+//                    blankTokenIcon.getIconWidth());
+//            token.setPreferredSize(iconSize);
+//            playArea.add(token);
+//            gameTokens[i] = token;
+//        }
+        
+        gbc.gridy++;
+        
+        // disable opacity on the 
+        setOpaque(false);
+        
+        // adjust position of menu button
+        gbc.gridx = 40;
+        add(pausePanel, gbc);
 
     }
 
