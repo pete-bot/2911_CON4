@@ -36,6 +36,8 @@ public class FrontEndBoard extends JPanel
     private PlayArea playArea;
     private GridLayout frontEndBoardLayout = new GridLayout(rows, cols);
 
+	private ButtonPanel buttonPanel;
+    
     //private static final String assLoc = "../assets/";
     //Paths accepts windows or *nix filepath structures for its argument and converts accordingly
     Path assLoc = Paths.get("../assets/");
@@ -54,16 +56,17 @@ public class FrontEndBoard extends JPanel
 	public FrontEndBoard(BackendBoard backendBoard, Window mainWindow) {
 		super();
 		System.out.println(assLoc);
-
-		// temporary
-		// this is a work around, we will need to collect this data from the
-		// menu option when it is implemented
-		int AIclass = 0; //What does AIclass do?
+		
+		buttonPanel = new ButtonPanel(mainWindow);
+		
+		// AIclass is a simple way of passing in which AI that the user may want to 
+		// play against, ie difficulty/personaltiy whatever. we can easily remove.
+		int AIclass = 0;
 		newTurk = new MechanicalTurk(AIclass);
 
 		this.backendBoard = backendBoard;
 		this.mainWindow = mainWindow;
-
+		
 		FlowLayout panelLayout = new FlowLayout(FlowLayout.CENTER);
 		panelLayout.setVgap(20); //FIXME This needs to be replaced with empty objects above and below.
 		setLayout(panelLayout);
@@ -94,6 +97,9 @@ public class FrontEndBoard extends JPanel
 		    playArea.add(token);
 		    gameTokens[i] = token;
 		}
+		
+		add(buttonPanel);
+		
 	}
 
 

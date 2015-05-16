@@ -8,6 +8,7 @@ public class Window extends JFrame{
     //This is for serialization; don't worry about it.
 	private static final long serialVersionUID = 1L;
 	private ButtonPanel buttonPanel = new ButtonPanel(this);
+	private MainMenuPanel menuPanel = new MainMenuPanel(this);
     private FrontEndBoard frontEndBoard;
     private BackendBoard backendBoard;
     private Dimension defaultSize = new Dimension(1024,768);
@@ -24,7 +25,7 @@ public class Window extends JFrame{
 		setLayout(new BorderLayout());
         setSize(defaultSize);
         //setLocationRelativeTo(null); //What's this for?
-        setResizable(false); //Do not allow the screen to be resized.
+        setResizable(true); //Do not allow the screen to be resized.
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         initFrontendBoard(newBoard);
@@ -67,7 +68,8 @@ public class Window extends JFrame{
         //turn off and clear the board.
     	frontEndBoard.turnOff();
         frontEndBoard.resetBoard();
-        add(buttonPanel, BorderLayout.CENTER);
+        add(menuPanel, BorderLayout.CENTER);
+        pack();
 		buttonPanel.setVisible(true);
     }
 
