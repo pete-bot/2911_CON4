@@ -5,9 +5,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-
 public class PlayArea extends JLabel {
- 
+
     private static final long serialVersionUID = 1L;
     Dimension minSize;
 
@@ -15,8 +14,8 @@ public class PlayArea extends JLabel {
         setBackground(color);
         setBorder(BorderFactory.createLineBorder(Color.black));
         setOpaque(true);
-		setVerticalAlignment(SwingConstants.CENTER);
-		setHorizontalAlignment(SwingConstants.CENTER);
+        setVerticalAlignment(SwingConstants.CENTER);
+        setHorizontalAlignment(SwingConstants.CENTER);
         minSize = dimension;
     }
 
@@ -27,5 +26,5 @@ public class PlayArea extends JLabel {
     public Dimension getPreferredSize() {
         return minSize;
     }
-    
+
 }

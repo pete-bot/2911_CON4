@@ -1,6 +1,5 @@
-
 public interface MechanicalTurkInterface {
 
-	public Action getTurkMove(BackendBoard backendBoard);
-	
+    public Action getTurkMove(BackendBoard backendBoard);
+
 }

@@ -1,4 +1,3 @@
-
 public enum Player {
-    NO_PLAYER, USER, COMPETITOR 
+    NO_PLAYER, USER, COMPETITOR
 }

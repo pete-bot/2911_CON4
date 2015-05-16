@@ -18,16 +18,16 @@ import javax.swing.JPanel;
 /*
  * This is the main grid of tokens
  */
-public class FrontEndBoard extends JPanel
-	implements MouseListener, MouseMotionListener {
+public class FrontEndBoard extends JPanel implements MouseListener,
+        MouseMotionListener {
 
     private static final long serialVersionUID = 1L;
     // our colours, should be updated to match the palette
     private Color gridColor = new Color(60, 58, 232, 255);
 
-    Dimension gridSize = new Dimension(700,700);
+    Dimension gridSize = new Dimension(700, 700);
     private Token[] gameTokens = new Token[42];
-    private BackendBoard backendBoard; //Should be 'backendBoard'
+    private BackendBoard backendBoard; // Should be 'backendBoard'
     private final int rows = 6;
     private final int cols = 7;
     private final int tilesOnBoard = 42;
@@ -36,10 +36,11 @@ public class FrontEndBoard extends JPanel
     private PlayArea playArea;
     private GridLayout frontEndBoardLayout = new GridLayout(rows, cols);
 
-	private ButtonPanel buttonPanel;
-    
-    //private static final String assLoc = "../assets/";
-    //Paths accepts windows or *nix filepath structures for its argument and converts accordingly
+    private ButtonPanel buttonPanel;
+
+    // private static final String assLoc = "../assets/";
+    // Paths accepts windows or *nix filepath structures for its argument and
+    // converts accordingly
     Path assLoc = Paths.get("../assets/");
     Path blankTokenPath = Paths.get(assLoc + "/circle100.png");
     Path glowingTokenPath = Paths.get(assLoc + "/glow.png");
@@ -48,243 +49,259 @@ public class FrontEndBoard extends JPanel
     Path winTokenPath = Paths.get(assLoc + "/win.png");
 
     private ImageIcon blankTokenIcon = new ImageIcon(blankTokenPath.toString());
-    private ImageIcon glowingTokenIcon = new ImageIcon(glowingTokenPath.toString());
+    private ImageIcon glowingTokenIcon = new ImageIcon(
+            glowingTokenPath.toString());
     private ImageIcon redTokenIcon = new ImageIcon(redTokenPath.toString());
-    private ImageIcon yellowTokenIcon = new ImageIcon(yellowTokenPath.toString());
+    private ImageIcon yellowTokenIcon = new ImageIcon(
+            yellowTokenPath.toString());
     private ImageIcon winTokenIcon = new ImageIcon(winTokenPath.toString());
 
-	public FrontEndBoard(BackendBoard backendBoard, Window mainWindow) {
-		super();
-		System.out.println(assLoc);
-		
-		buttonPanel = new ButtonPanel(mainWindow);
-		
-		// AIclass is a simple way of passing in which AI that the user may want to 
-		// play against, ie difficulty/personaltiy whatever. we can easily remove.
-		int AIclass = 0;
-		newTurk = new MechanicalTurk(AIclass);
+    public FrontEndBoard(BackendBoard backendBoard, Window mainWindow) {
+        super();
+        System.out.println(assLoc);
 
-		this.backendBoard = backendBoard;
-		this.mainWindow = mainWindow;
-		
-		FlowLayout panelLayout = new FlowLayout(FlowLayout.CENTER);
-		panelLayout.setVgap(20); //FIXME This needs to be replaced with empty objects above and below.
-		setLayout(panelLayout);
+        buttonPanel = new ButtonPanel(mainWindow);
 
-		//Dimension parentSize = mainWindow.getSize();
-		//int margin = 100;
-		//TODO although this is a smarter sizing behavior, we will need to add checks for our min size.
-		//So far, with the current tokens, 650,600 seem the smallest sensible grid size. (needs to be slightly off since it's 6x7)
-		//Dimension gridSize = new Dimension((int) parentSize.getHeight() - margin, (int) parentSize.getHeight() - margin);
-		//System.out.println(gridSize.toString());
-		setSize(gridSize);
+        // AIclass is a simple way of passing in which AI that the user may want
+        // to
+        // play against, ie difficulty/personaltiy whatever. we can easily
+        // remove.
+        int AIclass = 0;
+        newTurk = new MechanicalTurk(AIclass);
 
-		//Setup the clickable play area.
-		frontEndBoardLayout.setHgap(new Integer(2));
-		frontEndBoardLayout.setVgap(new Integer(2));
-		playArea = new PlayArea(gridColor, gridSize);
-		playArea.addMouseListener(this);
-		playArea.addMouseMotionListener(this);
-		playArea.setLayout(frontEndBoardLayout);
-		add(playArea);
+        this.backendBoard = backendBoard;
+        this.mainWindow = mainWindow;
 
-		for (int i = 0; i < 42; i++) {
-        	int currX = i % 7;
-        	int currY = 5 - ((int) Math.ceil( i/7 ));
-		    Token token = new Token(currX, currY, blankTokenIcon);
-		    Dimension iconSize = new Dimension(blankTokenIcon.getIconHeight(), blankTokenIcon.getIconWidth());
-		    token.setPreferredSize(iconSize);
-		    playArea.add(token);
-		    gameTokens[i] = token;
-		}
-		
-		add(buttonPanel);
-		
-	}
+        FlowLayout panelLayout = new FlowLayout(FlowLayout.CENTER);
+        panelLayout.setVgap(20); // FIXME This needs to be replaced with empty
+                                 // objects above and below.
+        setLayout(panelLayout);
 
+        // Dimension parentSize = mainWindow.getSize();
+        // int margin = 100;
+        // TODO although this is a smarter sizing behavior, we will need to add
+        // checks for our min size.
+        // So far, with the current tokens, 650,600 seem the smallest sensible
+        // grid size. (needs to be slightly off since it's 6x7)
+        // Dimension gridSize = new Dimension((int) parentSize.getHeight() -
+        // margin, (int) parentSize.getHeight() - margin);
+        // System.out.println(gridSize.toString());
+        setSize(gridSize);
 
-	// this highlights the column
-	public void highlightColumn(MouseEvent cursor) {
-	    //Change the icons of the tokens that are in the rows for the given column
+        // Setup the clickable play area.
+        frontEndBoardLayout.setHgap(new Integer(2));
+        frontEndBoardLayout.setVgap(new Integer(2));
+        playArea = new PlayArea(gridColor, gridSize);
+        playArea.addMouseListener(this);
+        playArea.addMouseMotionListener(this);
+        playArea.setLayout(frontEndBoardLayout);
+        add(playArea);
+
+        for (int i = 0; i < 42; i++) {
+            int currX = i % 7;
+            int currY = 5 - ((int) Math.ceil(i / 7));
+            Token token = new Token(currX, currY, blankTokenIcon);
+            Dimension iconSize = new Dimension(blankTokenIcon.getIconHeight(),
+                    blankTokenIcon.getIconWidth());
+            token.setPreferredSize(iconSize);
+            playArea.add(token);
+            gameTokens[i] = token;
+        }
+
+        add(buttonPanel);
+
+    }
+
+    // this highlights the column
+    public void highlightColumn(MouseEvent cursor) {
+        // Change the icons of the tokens that are in the rows for the given
+        // column
         for (int i = 0; i < gameTokens.length; i++) {
             Token token = gameTokens[i];
 
-            // this uses the mouse location to determine which column to highlight
+            // this uses the mouse location to determine which column to
+            // highlight
             Point tokenLocation = token.getLocation();
             double beginRange = tokenLocation.getX();
             double endRange = tokenLocation.getX() + token.getWidth();
-            boolean inRow = cursor.getX() > beginRange && cursor.getX() < endRange;
+            boolean inRow = cursor.getX() > beginRange
+                    && cursor.getX() < endRange;
             boolean isBlankIcon = (token.getPlayer() == 0);
-            if ( inRow && isBlankIcon ) {
+            if (inRow && isBlankIcon) {
                 token.setIcon(glowingTokenIcon);
-            } else if ( !inRow && isBlankIcon ) {
+            } else if (!inRow && isBlankIcon) {
                 token.setIcon(blankTokenIcon);
             }
         }
     }
 
-	// this highlights the win
-	public void highlightWin(ArrayList<Point> winList) {
-		Iterator<Point> winIterator = winList.iterator();
-		while (winIterator.hasNext()) {
-			Point winCoords = winIterator.next();
-			System.out.println("winCoords = " + winCoords.toString());
-			int indexToGet = (winCoords.x) * (cols) + (cols-winCoords.y);
-			Token t = gameTokens[42 - indexToGet];
-			t.setIcon(winTokenIcon);
-		}
+    // this highlights the win
+    public void highlightWin(ArrayList<Point> winList) {
+        Iterator<Point> winIterator = winList.iterator();
+        while (winIterator.hasNext()) {
+            Point winCoords = winIterator.next();
+            System.out.println("winCoords = " + winCoords.toString());
+            int indexToGet = (winCoords.x) * (cols) + (cols - winCoords.y);
+            Token t = gameTokens[42 - indexToGet];
+            t.setIcon(winTokenIcon);
+        }
     }
 
     // TODO
     // implement player choice (go first or second)
     // this will be pulled from the intro menu
-    // this is essentially the 'primary function through which the game is played'
-    public void getUserMove(Action newAction){
-		if( backendBoard.isLegal(newAction) ){
+    // this is essentially the 'primary function through which the game is
+    // played'
+    public void getUserMove(Action newAction) {
+        if (backendBoard.isLegal(newAction)) {
 
-		    updateBoardWithMove(newAction.getColumn());
-		    // Update terminal
-		    backendBoard.makeMove(newAction);
-		    backendBoard.showTerminalBoard();
+            updateBoardWithMove(newAction.getColumn());
+            // Update terminal
+            backendBoard.makeMove(newAction);
+            backendBoard.showTerminalBoard();
 
-		    ArrayList<Point> winList = backendBoard.checkWinState(newAction);
+            ArrayList<Point> winList = backendBoard.checkWinState(newAction);
 
-		    // Game win found?
-		    if (!winList.isEmpty()){
-		        highlightWin(winList);
-		        if(backendBoard.getTurn()%2==0 ){
-		            System.out.println("PLAYER_1, you WIN!");
-		            JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
-		        }else{
-		            System.out.println("PLAYER_2, you WIN!");
-		            JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
-		        }
-		        return;
-		    }
+            // Game win found?
+            if (!winList.isEmpty()) {
+                highlightWin(winList);
+                if (backendBoard.getTurn() % 2 == 0) {
+                    System.out.println("PLAYER_1, you WIN!");
+                    JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
+                } else {
+                    System.out.println("PLAYER_2, you WIN!");
+                    JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
+                }
+                return;
+            }
 
-		    //Otherwise game continues
-		    if (backendBoard.getTurn() % 2==1 ){
-		        System.out.println("PLAYER_1, please enter your move:");
-		    }else{
-		        System.out.println("PLAYER_2, please enter your move:");
-		    }
+            // Otherwise game continues
+            if (backendBoard.getTurn() % 2 == 1) {
+                System.out.println("PLAYER_1, please enter your move:");
+            } else {
+                System.out.println("PLAYER_2, please enter your move:");
+            }
 
-		    backendBoard.IncrementTurn();
+            backendBoard.IncrementTurn();
 
-		    // call AI here.
-		    turkMove(backendBoard);
-		} else{
-		    System.out.println("You have entered an invalid move, please try again.");
-		}
+            // call AI here.
+            turkMove(backendBoard);
+        } else {
+            System.out
+                    .println("You have entered an invalid move, please try again.");
+        }
     }
 
     // FIXME
     // AI code should not persist in this class.
     // Theoretically this should be a 'secondPlayer' or 'competitor' method.
     // Also, this method should be making calls through getUserMove();
-    public void turkMove(BackendBoard backendBoard){
+    public void turkMove(BackendBoard backendBoard) {
 
-		System.out.println("The Turk makes its move...");
-    	Action turkMove = newTurk.getTurkMove(backendBoard);
+        System.out.println("The Turk makes its move...");
+        Action turkMove = newTurk.getTurkMove(backendBoard);
 
-		backendBoard.makeMove(turkMove);
-		backendBoard.showTerminalBoard();
-		updateBoardWithMove(turkMove.getColumn());
+        backendBoard.makeMove(turkMove);
+        backendBoard.showTerminalBoard();
+        updateBoardWithMove(turkMove.getColumn());
 
+        if (!backendBoard.checkWinState(turkMove).isEmpty()) {
+            if (backendBoard.getTurn() % 2 == 0) {
+                System.out.println("PLAYER_1, you WIN!");
+                JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
+            } else {
+                System.out.println("PLAYER_2, you WIN!");
+                JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
+            }
+            mainWindow.resetWindow();
+            return;
+        }
 
+        backendBoard.IncrementTurn();
 
-		if (!backendBoard.checkWinState(turkMove).isEmpty()){
-			if(backendBoard.getTurn()%2==0 ){
-				System.out.println("PLAYER_1, you WIN!");
-				JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
-			}else{
-				System.out.println("PLAYER_2, you WIN!");
-				JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
-			}
-			mainWindow.resetWindow();
-			return;
-		}
-
-		backendBoard.IncrementTurn();
-
-		System.out.println("Control has returned to the player.");
+        System.out.println("Control has returned to the player.");
     }
 
     // Updates the board with the next _legal_ move
     // xPos is the column, refactor later.
-    public void updateBoardWithMove(int xPos){
-    	for (int count = tilesOnBoard - (cols - xPos); count >= 0; count -= 7){
-    		Token currentButton = gameTokens[count];
-    		if (currentButton.getPlayer() == 0){
-    			if ( backendBoard.getTurn() % 2==0 ){
-    				currentButton.setPlayer(1);
-    				currentButton.setIcon(redTokenIcon);
-    			} else{
-    				currentButton.setPlayer(1);
-    				currentButton.setIcon(yellowTokenIcon);
-    			}
-    			break;
-    		}
-    	}
+    public void updateBoardWithMove(int xPos) {
+        for (int count = tilesOnBoard - (cols - xPos); count >= 0; count -= 7) {
+            Token currentButton = gameTokens[count];
+            if (currentButton.getPlayer() == 0) {
+                if (backendBoard.getTurn() % 2 == 0) {
+                    currentButton.setPlayer(1);
+                    currentButton.setIcon(redTokenIcon);
+                } else {
+                    currentButton.setPlayer(1);
+                    currentButton.setIcon(yellowTokenIcon);
+                }
+                break;
+            }
+        }
     }
 
     public void resetBoard() {
         backendBoard.resetBoard();
 
         for (Token gameToken : gameTokens) {
-        	gameToken.setIcon(blankTokenIcon);
-        	gameToken.setPlayer(0);
+            gameToken.setIcon(blankTokenIcon);
+            gameToken.setPlayer(0);
         }
     }
 
-    //MOUSELISTENER AND MOUSEMOTIONLISTENER OVERRIDES
+    // MOUSELISTENER AND MOUSEMOTIONLISTENER OVERRIDES
     @Override
     public void mouseClicked(MouseEvent e) {
-    	//FIXME Testing
-        //Package the appropriate column the mouse is on into an Action
-    	int col = getColumn(e.getX());
+        // FIXME Testing
+        // Package the appropriate column the mouse is on into an Action
+        int col = getColumn(e.getX());
         Action newMove = new Action(1, col);
         System.out.printf("Column %d chosen.\n", col);
         getUserMove(newMove);
     }
 
-	@Override
-	public void mouseMoved(MouseEvent e) {
-    	//int col = getColumn(e.getX());
-        //Action newMove = new Action(1, col);
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        // int col = getColumn(e.getX());
+        // Action newMove = new Action(1, col);
         highlightColumn(e);
         moveGraphicToken(e);
-	}
+    }
 
     @Override
-    public void mouseEntered(MouseEvent event) { }
+    public void mouseEntered(MouseEvent event) {
+    }
 
     @Override
-    public void mouseExited(MouseEvent e) { }
+    public void mouseExited(MouseEvent e) {
+    }
 
     @Override
-    public void mousePressed(MouseEvent e) { }
+    public void mousePressed(MouseEvent e) {
+    }
 
     @Override
-    public void mouseReleased(MouseEvent e) { }
+    public void mouseReleased(MouseEvent e) {
+    }
 
-	@Override
-	public void mouseDragged(MouseEvent e) { }
+    @Override
+    public void mouseDragged(MouseEvent e) {
+    }
 
-	private void moveGraphicToken(MouseEvent e) {
+    private void moveGraphicToken(MouseEvent e) {
 
-	    return;
-	}
+        return;
+    }
 
     // Get a column from a given x coordinate
-	// FIXME should throw an exception
+    // FIXME should throw an exception
     private int getColumn(int x) {
         int columnWidth = (int) gridSize.getWidth() / 7;
         int currentColBegin = 0;
         int currentColEnd = columnWidth;
         int currentCol = 0;
-        while ( currentColEnd <= gridSize.getWidth() ) {
-            if ( currentColBegin <= x && x <= currentColEnd ) {
+        while (currentColEnd <= gridSize.getWidth()) {
+            if (currentColBegin <= x && x <= currentColEnd) {
                 return currentCol;
             }
             currentColBegin += columnWidth;
@@ -295,21 +312,19 @@ public class FrontEndBoard extends JPanel
     }
 
     public void turnOff() {
-    	for (Token b : gameTokens) {
+        for (Token b : gameTokens) {
             b.setEnabled(false);
-    	}
-    	setVisible(false);
-    	setEnabled(false);
+        }
+        setVisible(false);
+        setEnabled(false);
     }
 
     public void turnOn() {
-    	for (Token b : gameTokens) {
-    		b.setEnabled(true);
-    	}
-    	setVisible(true);
-    	setEnabled(true);
+        for (Token b : gameTokens) {
+            b.setEnabled(true);
+        }
+        setVisible(true);
+        setEnabled(true);
     }
 
 }
-
-
