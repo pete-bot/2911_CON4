@@ -31,6 +31,8 @@ public class Window extends JFrame {
     // used as the main title bar
     private JPanel titlePane;
 
+    private Path assetsLocation;
+
 
     // may need to change - stolen shamelessly for testing, need our own implementation
     private BackgroundPanel bg_pattern;
@@ -49,8 +51,10 @@ public class Window extends JFrame {
     	// this can be cleaned up - needs to be sorted out ryan style
     	// TODO: fix rollen's shit
 
-    	Path assLoc = Paths.get( System.getProperty("user.dir") + "/assets/");
-        Path bgPath = Paths.get(assLoc + "/bg_pattern_2.jpg");
+        String runningDir = System.getProperty("user.dir");
+        assetsLocation = Paths.get( runningDir.matches(".*src") ? runningDir.replaceFirst("src", "") + "assets/" : runningDir + "/assets");
+        Path bgPath = Paths.get(assetsLocation + "/bg_pattern_2.jpg");
+
     	BufferedImage img = null;
 		try {
 		     File f = new File(bgPath.toString());
@@ -84,7 +88,7 @@ public class Window extends JFrame {
 	    titlePane = new JPanel();
 	    titlePane.setPreferredSize(new Dimension(400,300));
 	    titlePane.setOpaque(false);
-		Path titlePath = Paths.get(assLoc + "/game_title.png");
+		Path titlePath = Paths.get(assetsLocation + "/game_title.png");
 		ImageIcon icon = new ImageIcon(titlePath.toString());
 	    JLabel gameTitle= new JLabel();
 	    gameTitle.setIcon(icon);

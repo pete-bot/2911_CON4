@@ -41,28 +41,18 @@ public class FrontEndBoard extends JPanel implements MouseListener,
 
     private PauseButton pausePanel;
 
-    // private static final String assLoc = "../assets/";
-    // Paths accepts windows or *nix filepath structures for its argument and
-    // converts accordingly
-    Path assLoc = Paths.get(System.getProperty("user.dir") + "/assets");
-    Path blankTokenPath = Paths.get(assLoc + "/circle101.png");
-    Path glowingTokenPath = Paths.get(assLoc + "/glow.png");
-    Path redTokenPath = Paths.get(assLoc + "/circle101_RED.png");
-    Path yellowTokenPath = Paths.get(assLoc + "/circle101_YELLOW.png");
-    Path winTokenPath = Paths.get(assLoc + "/win.png");
-
-    private ImageIcon blankTokenIcon = new ImageIcon(blankTokenPath.toString());
-    private ImageIcon glowingTokenIcon = new ImageIcon( glowingTokenPath.toString());
-    private ImageIcon redTokenIcon = new ImageIcon(redTokenPath.toString());
-    private ImageIcon yellowTokenIcon = new ImageIcon( yellowTokenPath.toString());
-    private ImageIcon winTokenIcon = new ImageIcon(winTokenPath.toString());
-
-
+    Path assetsLocation;
+    private ImageIcon blankTokenIcon;
+    private ImageIcon glowingTokenIcon;
+    private ImageIcon redTokenIcon;
+    private ImageIcon yellowTokenIcon;
+    private ImageIcon winTokenIcon;
 
     public FrontEndBoard(BackendBoard backendBoard, Window mainWindow) {
         super();
+        setUpPaths();
         System.out.println("You are running this game from: " + System.getProperty("user.dir"));
-        System.out.println(assLoc);
+        System.out.println("Asset location" + assetsLocation.toString());
 
         pausePanel = new PauseButton(mainWindow);
         pausePanel.setOpaque(false);
@@ -140,6 +130,22 @@ public class FrontEndBoard extends JPanel implements MouseListener,
         gbc.gridx = 40;
         add(pausePanel, gbc);
 
+    }
+
+    private void setUpPaths() {
+        String runningDir = System.getProperty("user.dir");
+        assetsLocation = Paths.get( runningDir.matches(".*src") ? runningDir.replaceFirst("src", "") + "assets/" : runningDir + "/assets");
+        Path blankTokenPath = Paths.get(assetsLocation + "/circle101.png");
+        Path glowingTokenPath = Paths.get(assetsLocation + "/glow.png");
+        Path redTokenPath = Paths.get(assetsLocation + "/circle101_RED.png");
+        Path yellowTokenPath = Paths.get(assetsLocation + "/circle101_YELLOW.png");
+        Path winTokenPath = Paths.get(assetsLocation + "/win.png");
+
+        blankTokenIcon = new ImageIcon(blankTokenPath.toString());
+        glowingTokenIcon = new ImageIcon( glowingTokenPath.toString());
+        redTokenIcon = new ImageIcon(redTokenPath.toString());
+        yellowTokenIcon = new ImageIcon( yellowTokenPath.toString());
+        winTokenIcon = new ImageIcon(winTokenPath.toString());
     }
 
     // this highlights the column

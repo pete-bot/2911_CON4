@@ -55,10 +55,8 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         gbc.gridy = 2;
         gbc.insets = new Insets(10, 10, 10, 10);
 
-
-    	Path assLoc = Paths.get(System.getProperty("user.dir") + "../assets/");
-
-
+        String runningDir = System.getProperty("user.dir");
+        Path assetsLocation = Paths.get( runningDir.matches(".*src") ? runningDir.replaceFirst("src", "") + "assets/" : runningDir + "/assets");
 
         //bg.toString()
 
