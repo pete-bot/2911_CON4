@@ -44,7 +44,7 @@ public class FrontEndBoard extends JPanel implements MouseListener,
     // private static final String assLoc = "../assets/";
     // Paths accepts windows or *nix filepath structures for its argument and
     // converts accordingly
-    Path assLoc = Paths.get("../assets/");
+    Path assLoc = Paths.get(System.getProperty("user.dir") + "/assets");
     Path blankTokenPath = Paths.get(assLoc + "/circle101.png");
     Path glowingTokenPath = Paths.get(assLoc + "/glow.png");
     Path redTokenPath = Paths.get(assLoc + "/circle101_RED.png");
@@ -52,19 +52,18 @@ public class FrontEndBoard extends JPanel implements MouseListener,
     Path winTokenPath = Paths.get(assLoc + "/win.png");
 
     private ImageIcon blankTokenIcon = new ImageIcon(blankTokenPath.toString());
-    private ImageIcon glowingTokenIcon = new ImageIcon(
-            glowingTokenPath.toString());
+    private ImageIcon glowingTokenIcon = new ImageIcon( glowingTokenPath.toString());
     private ImageIcon redTokenIcon = new ImageIcon(redTokenPath.toString());
-    private ImageIcon yellowTokenIcon = new ImageIcon(
-            yellowTokenPath.toString());
+    private ImageIcon yellowTokenIcon = new ImageIcon( yellowTokenPath.toString());
     private ImageIcon winTokenIcon = new ImageIcon(winTokenPath.toString());
 
-    
-    
+
+
     public FrontEndBoard(BackendBoard backendBoard, Window mainWindow) {
         super();
+        System.out.println("You are running this game from: " + System.getProperty("user.dir"));
         System.out.println(assLoc);
-        
+
         pausePanel = new PauseButton(mainWindow);
         pausePanel.setOpaque(false);
 
@@ -74,21 +73,21 @@ public class FrontEndBoard extends JPanel implements MouseListener,
 
         this.backendBoard = backendBoard;
         this.mainWindow = mainWindow;
-        
+
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
     	gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(2, 2, 2, 2);
-        
+
         // these values change the way the resizing modifies spacing distribution on teh tokens
         gbc.weightx = 0;
         gbc.weighty = 0;
-        
+
         gbc.anchor = GridBagConstraints.SOUTH;
         gbc.fill = GridBagConstraints.BOTH;
-        
-        
+
+
         setSize(gridSize);
 
         // Setup the clickable play area.
@@ -99,7 +98,7 @@ public class FrontEndBoard extends JPanel implements MouseListener,
         playArea.addMouseMotionListener(this);
         playArea.setLayout(frontEndBoardLayout);
         add(playArea, gbc);
-        
+
         int i = 0, currY = 0, currX = 0;
         for (currY = 0; currY < 6; currY++) {
             for(currX = 0; currX<7; currX++){
@@ -116,9 +115,9 @@ public class FrontEndBoard extends JPanel implements MouseListener,
             gbc.gridy++;
         }
 
-        
-        
-        
+
+
+
         // BACKUP
 //        for (int i = 0; i < 42; i++) {
 //            int currX = i % 7;
@@ -131,12 +130,12 @@ public class FrontEndBoard extends JPanel implements MouseListener,
 //            playArea.add(token);
 //            gameTokens[i] = token;
 //        }
-        
+
         gbc.gridy++;
-        
-        // disable opacity on the 
+
+        // disable opacity on the
         setOpaque(false);
-        
+
         // adjust position of menu button
         gbc.gridx = 40;
         add(pausePanel, gbc);
