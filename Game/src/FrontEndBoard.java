@@ -1,6 +1,5 @@
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -53,39 +52,32 @@ public class FrontEndBoard extends JPanel implements MouseListener,
     private JButton spacer = new JButton("");
     
     public FrontEndBoard(BackendBoard backendBoard, Window mainWindow) {
-
         super();
-        
-    	// AIclass is a simple way of passing in which AI that the user may want
-        int AIclass = 0;
-        newTurk = new MechanicalTurk(AIclass);
-    	
-    	
-    	
-    	setUpPaths();
+        setUpPaths();
         System.out.println("You are running this game from: " + System.getProperty("user.dir"));
         System.out.println("Asset location" + assetsLocation.toString());
 
         pausePanel = new PauseButton(mainWindow);
         pausePanel.setOpaque(false);
 
+        // AIclass is a simple way of passing in which AI that the user may want
+        int AIclass = 0;
+        newTurk = new MechanicalTurk(AIclass);
+
         this.backendBoard = backendBoard;
         this.mainWindow = mainWindow;
 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.weightx = 0;
-        gbc.weighty = 0.1;
-        
-        gbc.gridx = 0;
+    	gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.insets = new Insets(1, 1, 1, 1);
+        gbc.insets = new Insets(2, 2, 2, 2);
 
         // these values change the way the resizing modifies spacing distribution on teh tokens
-        
+        gbc.weightx = 0;
+        gbc.weighty = 0;
 
-        //gbc.anchor = GridBagConstraints.;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        //gbc.anchor = GridBagConstraints.SOUTH;
         
         
         
@@ -122,24 +114,26 @@ public class FrontEndBoard extends JPanel implements MouseListener,
             for(currX = 0; currX<7; currX++){
             	Token token = new Token(currX, currY, blankTokenIcon);
                 token.setOpaque(false);
-                //Dimension iconSize = new Dimension(100,70);
-                //token.setPreferredSize(iconSize);
-                playArea.add(token, gbc);
+                Dimension iconSize = new Dimension(100,100);
+                token.setPreferredSize(iconSize);
+                playArea.add(token);
                 gameTokens[i] = token;
                 i++;
                 gbc.gridx++;
             }
-            gbc.gridy++;        }
+            gbc.gridy++;
+        }
         
         gbc.gridy++;
 
+        gbc.fill = GridBagConstraints.BOTH;
         
         
         // disable opacity on the
         setOpaque(false);
 
         // adjust position of menu button
-        gbc.gridx = 0;
+        gbc.gridx = 25;
         add(pausePanel, gbc);
         
     }
@@ -199,6 +193,7 @@ public class FrontEndBoard extends JPanel implements MouseListener,
     // implement player choice (go first or second)
     // this will be pulled from the intro menu
     // this is essentially the 'primary function through which the game is
+    // played'
     public void getUserMove(Action newAction) {
         if (backendBoard.isLegal(newAction)) {
 
@@ -252,7 +247,10 @@ public class FrontEndBoard extends JPanel implements MouseListener,
         backendBoard.showTerminalBoard();
         updateBoardWithMove(turkMove.getColumn());
 
-        if (!backendBoard.checkWinState(turkMove).isEmpty()) {
+        ArrayList<Point> winList = backendBoard.checkWinState(turkMove);
+        
+        if (!winList.isEmpty()) {
+        	highlightWin(winList);
             if (backendBoard.getTurn() % 2 == 0) {
                 System.out.println("PLAYER_1, you WIN!");
                 JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");

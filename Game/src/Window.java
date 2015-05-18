@@ -174,14 +174,14 @@ public class Window extends JFrame {
 
     public void pauseGame(){
     	frontEndBoard.turnOff();
-    	//titlePane.setVisible(true);
+    	titlePane.setVisible(true);
     	pauseMenu.setVisible(true);
     	// show pause menu;
     }
 
     public void resumeGame(){
     	frontEndBoard.turnOn();
-    	//titlePane.setVisible(false);
+    	titlePane.setVisible(false);
     	pauseMenu.setVisible(false);
     	// hide pause menu
     }
