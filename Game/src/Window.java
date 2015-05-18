@@ -83,7 +83,6 @@ public class Window extends JFrame {
         gbc.fill = GridBagConstraints.BOTH;
 
 
-
         // Title
 	    titlePane = new JPanel();
 	    titlePane.setPreferredSize(new Dimension(400,300));
@@ -190,36 +189,3 @@ public class Window extends JFrame {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-/*
- BufferedImage img = null;
-        try {
-             File f = new File("/home/petey/workspace/2911_CON4/Game/assets/bg_pattern.jpg");
-             img = ImageIO.read(f);
-             System.out.println("File " + f.toString());
-        } catch (Exception e) {
-            System.out.println("Cannot read file: " + e);
-        }
-
-        BackgroundPanel background = new BackgroundPanel(img, BackgroundPanel.TILED, 0.50f, 0.5f);
-
-        frame.setContentPane(background);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(200, 100);
-        frame.setVisible(true);
-
-
-
-
- */

@@ -104,23 +104,7 @@ public class FrontEndBoard extends JPanel implements MouseListener,
             }
             gbc.gridy++;
         }
-
-
-
-
-        // BACKUP
-//        for (int i = 0; i < 42; i++) {
-//            int currX = i % 7;
-//            int currY = 5 - ((int) Math.ceil(i / 7));
-//            Token token = new Token(currX, currY, blankTokenIcon);
-//            token.setOpaque(false);
-//            Dimension iconSize = new Dimension(blankTokenIcon.getIconHeight(),
-//                    blankTokenIcon.getIconWidth());
-//            token.setPreferredSize(iconSize);
-//            playArea.add(token);
-//            gameTokens[i] = token;
-//        }
-
+        
         gbc.gridy++;
 
         // disable opacity on the
