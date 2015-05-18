@@ -25,7 +25,7 @@ public class Window extends JFrame {
     private MainMenuPanel menuPanel = new MainMenuPanel(this);
     private FrontEndBoard frontEndBoard;
     private BackendBoard backendBoard;
-    private Dimension defaultSize = new Dimension(1024, 800);
+    private Dimension defaultSize = new Dimension(1024, 900);
     private GridBagConstraints gbc;
     private PauseMenuPanel pauseMenu = new PauseMenuPanel(this);
     // used as the main title bar

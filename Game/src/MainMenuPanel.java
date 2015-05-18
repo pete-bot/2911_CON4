@@ -38,7 +38,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
     private JButton optionsButton = new JButton("");
     private JButton spacer = new JButton("");
-    private JButton genericButton_2 = new JButton("Generic Button_2 ");
 
     private Window window;
 
@@ -60,8 +59,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         
         String runningDir = System.getProperty("user.dir");
         Path assetsLocation = Paths.get( runningDir.matches(".*src") ? runningDir.replaceFirst("src", "") + "assets/" : runningDir + "/assets");
-
-        
         Path spacerIcon = Paths.get(assetsLocation + "/spacer.png");
         ImageIcon space_Icon = new ImageIcon(spacerIcon.toString());
         

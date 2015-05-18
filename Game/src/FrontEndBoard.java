@@ -14,7 +14,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -48,6 +50,8 @@ public class FrontEndBoard extends JPanel implements MouseListener,
     private ImageIcon yellowTokenIcon;
     private ImageIcon winTokenIcon;
 
+    private JButton spacer = new JButton("");
+    
     public FrontEndBoard(BackendBoard backendBoard, Window mainWindow) {
         super();
         setUpPaths();
@@ -74,9 +78,24 @@ public class FrontEndBoard extends JPanel implements MouseListener,
         gbc.weightx = 0;
         gbc.weighty = 0;
 
-        gbc.anchor = GridBagConstraints.SOUTH;
-        gbc.fill = GridBagConstraints.BOTH;
-
+        //gbc.anchor = GridBagConstraints.SOUTH;
+        
+        
+        
+        javax.swing.border.Border empty = BorderFactory.createEmptyBorder();
+        Path spacerIcon = Paths.get(assetsLocation + "/half_spacer.png");
+        ImageIcon space_Icon = new ImageIcon(spacerIcon.toString());
+        
+        spacer.setIcon(space_Icon);
+        spacer.setOpaque(false);
+        spacer.setContentAreaFilled(false);
+        spacer.setBorderPainted(false);
+        spacer.setBorder(empty);
+        
+        add(spacer, gbc);
+        gbc.gridy++;
+        
+        
 
         setSize(gridSize);
 
@@ -87,6 +106,8 @@ public class FrontEndBoard extends JPanel implements MouseListener,
         playArea.addMouseListener(this);
         playArea.addMouseMotionListener(this);
         playArea.setLayout(frontEndBoardLayout);
+        playArea.setBorder(empty);
+        
         add(playArea, gbc);
 
         int i = 0, currY = 0, currX = 0;
@@ -94,8 +115,7 @@ public class FrontEndBoard extends JPanel implements MouseListener,
             for(currX = 0; currX<7; currX++){
             	Token token = new Token(currX, currY, blankTokenIcon);
                 token.setOpaque(false);
-                Dimension iconSize = new Dimension(blankTokenIcon.getIconHeight(),
-                        blankTokenIcon.getIconWidth());
+                Dimension iconSize = new Dimension(100,100);
                 token.setPreferredSize(iconSize);
                 playArea.add(token);
                 gameTokens[i] = token;
@@ -107,13 +127,16 @@ public class FrontEndBoard extends JPanel implements MouseListener,
         
         gbc.gridy++;
 
+        gbc.fill = GridBagConstraints.BOTH;
+        
+        
         // disable opacity on the
         setOpaque(false);
 
         // adjust position of menu button
-        gbc.gridx = 40;
+        gbc.gridx = 25;
         add(pausePanel, gbc);
-
+        
     }
 
     private void setUpPaths() {
