@@ -1,6 +1,5 @@
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -248,7 +247,10 @@ public class FrontEndBoard extends JPanel implements MouseListener,
         backendBoard.showTerminalBoard();
         updateBoardWithMove(turkMove.getColumn());
 
-        if (!backendBoard.checkWinState(turkMove).isEmpty()) {
+        ArrayList<Point> winList = backendBoard.checkWinState(turkMove);
+        
+        if (!winList.isEmpty()) {
+        	highlightWin(winList);
             if (backendBoard.getTurn() % 2 == 0) {
                 System.out.println("PLAYER_1, you WIN!");
                 JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
