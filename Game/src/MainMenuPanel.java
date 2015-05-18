@@ -28,11 +28,8 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
     private JButton optionsButton = new JButton("");
     private JButton spacer = new JButton("");
-<<<<<<< HEAD
-=======
-    //private JButton genericButton_2 = new JButton("Generic Button_2 ");
->>>>>>> 24c1a0c3fdb19ed4196281f1dc2d7c17d3fe8280
 
+    
     private Window window;
 
     // constructor

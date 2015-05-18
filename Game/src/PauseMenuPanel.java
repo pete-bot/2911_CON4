@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 
 import java.awt.Color;
-=======
->>>>>>> 24c1a0c3fdb19ed4196281f1dc2d7c17d3fe8280
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
