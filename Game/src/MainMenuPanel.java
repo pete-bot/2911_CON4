@@ -1,31 +1,21 @@
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javafx.scene.layout.Border;
+//import javafx.scene.layout.Border;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
-import javax.swing.border.TitledBorder;
 
 public class MainMenuPanel extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -38,7 +28,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
     private JButton optionsButton = new JButton("");
     private JButton spacer = new JButton("");
-    private JButton genericButton_2 = new JButton("Generic Button_2 ");
+    //private JButton genericButton_2 = new JButton("Generic Button_2 ");
 
     private Window window;
 

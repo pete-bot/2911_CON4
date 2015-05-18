@@ -3,8 +3,6 @@ import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-
 public class PlayArea extends JLabel {
 
     private static final long serialVersionUID = 1L;
