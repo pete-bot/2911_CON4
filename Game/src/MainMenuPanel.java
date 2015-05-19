@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 
 //import javafx.scene.layout.Border;
 
+
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -16,113 +17,69 @@ import java.nio.file.Paths;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.border.Border;
 
 public class MainMenuPanel extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
 
-    private JButton plavervsAIGameButton = new JButton("");
+    private JButton pvCPUButton = new JButton("");
     private JButton restartButton = new JButton("Restart Game");
     private JButton exitButton = new JButton("");
-
-    private JButton playervsPlayerGameButton = new JButton("");
-
+    private JButton pvpButton = new JButton("");
     private JButton optionsButton = new JButton("");
     private JButton spacer = new JButton("");
+    private Border emptyBorder = BorderFactory.createEmptyBorder();
 
-    
+    private Path assetsLocation;
+    private ImageIcon pvCPUIcon;
+    private ImageIcon pvpIcon;
+    private ImageIcon optionsIcon;
+    private ImageIcon spacerIcon;
+    private ImageIcon quitIcon;
+
     private Window window;
 
     // constructor
     public MainMenuPanel(Window mainWindow) {
 
-        // create GridBagLayout et al
+
         setLayout(new GridBagLayout());
-        //this.setSize(new Dimension(1024, 768));
+        setBackground(new Color(119, 136, 153, 0));
         GridBagConstraints gbc = new GridBagConstraints();
 
-        //init bridBagConstraints and inset (default spacing on buttons)
+        //init GridBagConstraints and inset (default spacing on buttons)
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.insets = new Insets(10, 10, 10, 10);
 
-        
-        javax.swing.border.Border empty = BorderFactory.createEmptyBorder();
-        
-        String runningDir = System.getProperty("user.dir");
-        Path assetsLocation = Paths.get( runningDir.matches(".*src") ? runningDir.replaceFirst("src", "") + "assets/" : runningDir + "/assets");
-        Path spacerIcon = Paths.get(assetsLocation + "/spacer.png");
-        ImageIcon space_Icon = new ImageIcon(spacerIcon.toString());
-        
-        spacer.setIcon(space_Icon);
-        spacer.setOpaque(false);
-        spacer.setContentAreaFilled(false);
-        spacer.setBorderPainted(false);
-        spacer.setBorder(empty);
-        
+        initIcons();
+        spacer.setIcon(spacerIcon);
+        pvCPUButton.setIcon(pvCPUIcon);
+        pvpButton.setIcon(pvpIcon);
+        optionsButton.setIcon(optionsIcon);
+        exitButton.setIcon(quitIcon);
+
+        initButton(spacer);
+        initButton(pvCPUButton);
+        initButton(pvpButton);
+        initButton(optionsButton);
+        initButton(exitButton);
+
+        pvCPUButton.addActionListener(this);
+        pvpButton.addActionListener(this);
+        optionsButton.addActionListener(this);
+        exitButton.addActionListener(this);
+
         add(spacer, gbc);
         gbc.gridy++;
-        
-        
-        
-        // set menu border colour and opacity
-        setBackground(new Color(119, 136, 153, 0));
 
-    	// init buttons w/ listeners
-        plavervsAIGameButton.addActionListener(this);
-        restartButton.addActionListener(this);
-        exitButton.addActionListener(this);
-        
-
-        
-        Path playerVsAIIcon = Paths.get(assetsLocation + "/player_AI.png");
-        ImageIcon playerAI = new ImageIcon(playerVsAIIcon.toString());
-        
-        Path playerVsPlayerIcon = Paths.get(assetsLocation + "/player_player.png");
-        ImageIcon playerPlayer = new ImageIcon(playerVsPlayerIcon.toString());
-        
-        Path optionsIcon = Paths.get(assetsLocation + "/options.png");
-        ImageIcon options = new ImageIcon(optionsIcon.toString());
-        
-        Path quitIcon = Paths.get(assetsLocation + "/quit.png");        
-        ImageIcon quit = new ImageIcon(quitIcon.toString());
-        
-        
-        plavervsAIGameButton.setIcon(playerAI);
-        playervsPlayerGameButton.setIcon(playerPlayer);
-        optionsButton.setIcon(options);
-        exitButton.setIcon(quit);
-        
-        
-        // set opacity of each button
-        plavervsAIGameButton.setOpaque(false);
-        plavervsAIGameButton.setContentAreaFilled(false);
-        plavervsAIGameButton.setBorderPainted(false);
-        plavervsAIGameButton.setBorder(empty);
-        
-        playervsPlayerGameButton.setOpaque(false);
-        playervsPlayerGameButton.setContentAreaFilled(false);
-        playervsPlayerGameButton.setBorderPainted(false);
-        playervsPlayerGameButton.setBorder(empty);
-        
-        
-        optionsButton.setOpaque(false);
-        optionsButton.setContentAreaFilled(false);
-        optionsButton.setBorderPainted(false);
-        optionsButton.setBorder(empty);
-        
-        exitButton.setOpaque(false);
-        exitButton.setContentAreaFilled(false);
-        exitButton.setBorderPainted(false);
-        exitButton.setBorder(empty);
-        
-        
         //TODO: change button icons here to suit aesthetic.
 
-        add(plavervsAIGameButton, gbc);
+        add(pvCPUButton, gbc);
         gbc.gridy++;
         gbc.gridy++;
 
-        add(playervsPlayerGameButton, gbc);
+        add(pvpButton, gbc);
         gbc.gridy++;
         gbc.gridy++;
 
@@ -140,12 +97,40 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         window = mainWindow;
     }
 
+    //This must be called before buttons can add icons
+    private void initIcons() {
+        //Get the running directory
+        String runningDir = System.getProperty("user.dir");
+        assetsLocation = Paths.get( runningDir.matches(".*src") ? runningDir.replaceFirst("src", "") + "assets/" : runningDir + "/assets");
+
+        //Setup paths
+        Path spacerIconPath = Paths.get(assetsLocation + "/spacer.png");
+        Path pvCPUIconPath = Paths.get(assetsLocation + "/player_AI.png");
+        Path pvpIconPath = Paths.get(assetsLocation + "/player_player.png");
+        Path optionsIconPath = Paths.get(assetsLocation + "/options.png");
+        Path quitIconPath = Paths.get(assetsLocation + "/quit.png");
+
+        //Setup icons
+        spacerIcon = new ImageIcon(spacerIconPath.toString());
+        pvCPUIcon = new ImageIcon(pvCPUIconPath.toString());
+        pvpIcon = new ImageIcon(pvpIconPath.toString());
+        optionsIcon = new ImageIcon(optionsIconPath.toString());
+        quitIcon = new ImageIcon(quitIconPath.toString());
+    }
+
+    private void initButton(JButton b) {
+        b.setOpaque(false);
+        b.setContentAreaFilled(false);
+        b.setBorderPainted(false);
+        b.setBorder(emptyBorder);
+    }
+
     public void actionPerformed(ActionEvent e) {
 
         JButton buttonPressed = (JButton) e.getSource();
 
         // Reset game
-        if ( buttonPressed.equals(plavervsAIGameButton)) {
+        if ( buttonPressed.equals(pvCPUButton)) {
             window.startNewGame();
         } else if (buttonPressed.equals(restartButton)){
             window.resetWindow();
