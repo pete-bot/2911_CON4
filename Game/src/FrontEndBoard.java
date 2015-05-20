@@ -223,6 +223,7 @@ public class FrontEndBoard extends JPanel implements MouseListener,
                     System.out.println("PLAYER_2, you WIN!");
                     JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
                 }
+                resetBoard();
                 return;
             }
 
