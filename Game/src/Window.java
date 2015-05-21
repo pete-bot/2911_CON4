@@ -40,7 +40,7 @@ public class Window extends JFrame {
 
     private void initBackground() {
 
-        ImageIcon asset = assets.getAsset("bg_pattern_2.jpg");
+        ImageIcon asset = assets.getAsset("sample_bg.png");
         Image img = asset == null ? null : asset.getImage();
         background = new BackgroundPanel(img, BackgroundPanel.SCALED, 0.50f,
                 0.5f);
@@ -73,9 +73,10 @@ public class Window extends JFrame {
         titlePane = new JPanel();
         titlePane.setPreferredSize(new Dimension(400, 300));
         titlePane.setOpaque(false);
-        ImageIcon titleIcon = assets.getAsset("game_title.png");
+        ImageIcon titleIcon = assets.getAsset("sample_title.png");
         JLabel gameTitle = new JLabel();
         gameTitle.setIcon(titleIcon);
+        gameTitle.setRolloverEnabled(false);
         titlePane.add(gameTitle);
     }
 

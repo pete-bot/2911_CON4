@@ -31,7 +31,7 @@ public class PauseButton extends JPanel implements ActionListener {
 
         javax.swing.border.Border empty = BorderFactory.createEmptyBorder();
 
-        ImageIcon menuIcon = assets.getAsset("menu.png");
+        ImageIcon menuIcon = assets.getAsset("menu_button.png");
 
         pauseButton.setIcon(menuIcon);
         pauseButton.setOpaque(false);

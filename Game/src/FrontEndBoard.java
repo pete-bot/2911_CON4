@@ -25,7 +25,8 @@ MouseMotionListener {
 
     private static final long serialVersionUID = 1L;
     // TODO our colours, should be updated to match the palette
-    private Color gridColor = new Color(60, 58, 232, 255);
+    //private Color gridColor = new Color(60, 58, 232, 255);
+    private Color gridColor = new Color(255, 255, 255, 255);
     private Dimension gridSize = new Dimension(700, 700);
     private Token[] gameTokens = new Token[42];
     private BackendBoard backendBoard; // Should be 'backendBoard'
@@ -197,11 +198,11 @@ MouseMotionListener {
     }
 
     private void initIcons() {
-        blankTokenIcon = assets.getAsset("circle101.png");
-        glowingTokenIcon = assets.getAsset("glow.png");
-        redTokenIcon = assets.getAsset("circl101_RED.png");
-        yellowTokenIcon = assets.getAsset("circle101_YELLOW.png");
-        winTokenIcon = assets.getAsset("win.png");
+        blankTokenIcon = assets.getAsset("sample_token.png");
+        glowingTokenIcon = assets.getAsset("sample_token_glow.png");
+        redTokenIcon = assets.getAsset("sample_token_red.png");
+        yellowTokenIcon = assets.getAsset("sample_token_yellow.png");
+        winTokenIcon = assets.getAsset("sample_token_win.png");
         spaceIcon = assets.getAsset("half_spacer.png");
     }
 

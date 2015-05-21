@@ -112,18 +112,19 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         b.setContentAreaFilled(false);
         b.setBorderPainted(false);
         b.setBorder(emptyBorder);
+        b.setRolloverEnabled(false);
     }
 
     // This must be called before buttons can add icons
     private void initIcons() {
         spacerIcon = assets.getAsset("spacer.png");
-        pvCPUIcon = assets.getAsset("player_AI.png");
+        //pvCPUIcon = assets.getAsset("player_AI.png");
+        pvCPUIcon = assets.getAsset("new_game_button.png");
         pvpIcon = assets.getAsset("player_player.png");
-        optionsIcon = assets.getAsset("options.png");
-        quitIcon = assets.getAsset("quit.png");
-        resumeIcon = assets.getAsset("resume.png");
+        optionsIcon = assets.getAsset("options_button.png");
+        quitIcon = assets.getAsset("quit_button.png");
+        resumeIcon = assets.getAsset("resume_game_button.png");
         restartIcon = assets.getAsset("restart.png");
-        exitIcon = assets.getAsset("quit.png");
     }
 
     private void removeMainMenuItems() {
@@ -160,7 +161,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         gbc.gridy++;
 
         initButton(exitButton);
-        exitButton.setIcon(exitIcon);
+        exitButton.setIcon(quitIcon);
         add(exitButton, gbc);
 
         gbc.fill = GridBagConstraints.BOTH;
