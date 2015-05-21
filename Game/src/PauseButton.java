@@ -3,8 +3,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -35,13 +33,7 @@ public class PauseButton extends JPanel implements ActionListener {
 
         javax.swing.border.Border empty = BorderFactory.createEmptyBorder();
 
-        String runningDir = System.getProperty("user.dir");
-        Path assetsLocation = Paths
-                .get(runningDir.matches(".*src") ? runningDir.replaceFirst(
-                        "src", "") + "assets/" : runningDir + "/assets");
-        Path menuPath = Paths.get(assetsLocation + "/menu.png");
-        ImageIcon menuIcon = new ImageIcon(menuPath.toString());
-        // ImageIcon menuIcon = assets.getAsset('menu.png');
+        ImageIcon menuIcon = assets.getAsset("menu.png");
 
         pauseButton.setIcon(menuIcon);
         pauseButton.setOpaque(false);
@@ -55,10 +47,8 @@ public class PauseButton extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
         JButton buttonPressed = (JButton) e.getSource();
 
-        // Reset game
         if (buttonPressed.equals(pauseButton)) {
             window.pauseGame();
         }

@@ -39,24 +39,26 @@ public class GameAssets {
         // eclipse (in the main project tree)
         assetsLocation = Paths.get(runningDir.matches(".*src") ? runningDir
                 .replaceFirst("src", "") + "assets/" : runningDir + "/assets");
-
+        addAssets();
     }
 
-    public ImageIcon getAsset(String filename) {
-        return assets.get(filename);
-    }
-
-    private void setupAssetsMap() {
+    private void addAssets() {
         File dir = new File(assetsLocation.toString());
         File[] listOfAssets = dir.listFiles();
         for (int i = 0; i < listOfAssets.length; i++) {
             if (listOfAssets[i].isFile()) {
                 String filename = listOfAssets[i].getName();
-                ImageIcon newAsset = new ImageIcon(assetsLocation + filename);
+                System.out.println(filename);
+                ImageIcon newAsset = new ImageIcon(assetsLocation + "/"
+                        + filename);
                 assets.put(filename, newAsset);
             } else { // All assets must be at the top level
                 continue;
             }
         }
+    }
+
+    public ImageIcon getAsset(String filename) {
+        return assets.get(filename);
     }
 }
