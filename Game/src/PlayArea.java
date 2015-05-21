@@ -17,8 +17,6 @@ public class PlayArea extends JLabel {
         setBorder(BorderFactory.createLineBorder(Color.black));
         setOpaque(false);
         setLayout(new GridLayout(rows,cols));
-        //setVerticalAlignment(SwingConstants.CENTER);
-        //setHorizontalAlignment(SwingConstants.CENTER);
         minSize = dimension;
     }
 

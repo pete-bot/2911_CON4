@@ -17,8 +17,6 @@ public class Window extends JFrame {
 
     // This is for serialization; don't worry about it.
     private static final long serialVersionUID = 1L;
-
-    // should we initialise these in the constructor? does that have any practical effect on the program?
     private ButtonPanel buttonPanel = new ButtonPanel(this);
     private MainMenuPanel menuPanel = new MainMenuPanel(this);
     private FrontEndBoard frontEndBoard;
@@ -26,49 +24,47 @@ public class Window extends JFrame {
     private Dimension defaultSize = new Dimension(1024, 900);
     private GridBagConstraints gbc;
     private PauseMenuPanel pauseMenu = new PauseMenuPanel(this);
-    // used as the main title bar
     private JPanel titlePane;
-
+    private BackgroundPanel background;
     private Path assetsLocation;
-
-
-    // may need to change - stolen shamelessly for testing, need our own implementation
-    private BackgroundPanel bg_pattern;
+    private Path bgPath;
 
     public Window(BackendBoard newBoard) {
         super("Generic tile-themed sequence pattern based fun simulator.");
         initFrontendBoard(newBoard);
         initWindow(newBoard);
-
     }
 
-    // TODO Perhaps the initial window should display a resolution that gets
-    // saved as a pref.
     private void initWindow(BackendBoard newBoard) {
+		initPaths();
+		initImages();
+		initLayout();
+        initTitle();
+	    add(titlePane, gbc);
 
-    	// this can be cleaned up - needs to be sorted out ryan style
-    	// TODO: fix rollen's shit
+        setPreferredSize(defaultSize);
+        setResizable(true); // XXX Here for testing, remove later.
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
 
-        String runningDir = System.getProperty("user.dir");
-        assetsLocation = Paths.get( runningDir.matches(".*src") ? runningDir.replaceFirst("src", "") + "assets/" : runningDir + "/assets");
-        Path bgPath = Paths.get(assetsLocation + "/bg_pattern_2.jpg");
+	    gbc.gridy+=10;
+        add(frontEndBoard, gbc);
 
-    	BufferedImage img = null;
-		try {
-		     File f = new File(bgPath.toString());
-		     img = ImageIO.read(f);
-		     System.out.println("File " + f.toString());
-		} catch (Exception e) {
-		     System.out.println("Cannot read file: " + e);
-		}
+        gbc.gridy++;
+        add(pauseMenu, gbc);
 
-		BackgroundPanel background = new BackgroundPanel(img, BackgroundPanel.SCALED, 0.50f, 0.5f);
-		setContentPane(background);
+        //So what is pauseMenu vs menuPanel?
+    	gbc.gridx = 0;
+        gbc.gridy = 0;
 
+        add(menuPanel, gbc);
 
-    	// create GridBagLayout et al
+        pauseMenu.setVisible(false);
+        //pack(); //Autosizes to match components
+    }
+
+    private void initLayout() {
     	setLayout(new GridBagLayout());
-    	// init gridbagConstraints
         gbc = new GridBagConstraints();
     	gbc.gridx = 0;
         gbc.gridy = 0;
@@ -79,9 +75,9 @@ public class Window extends JFrame {
 
         gbc.anchor = GridBagConstraints.FIRST_LINE_START;
         gbc.fill = GridBagConstraints.BOTH;
+    }
 
-
-        // Title
+    private void initTitle() {
 	    titlePane = new JPanel();
 	    titlePane.setPreferredSize(new Dimension(400,300));
 	    titlePane.setOpaque(false);
@@ -90,34 +86,26 @@ public class Window extends JFrame {
 	    JLabel gameTitle= new JLabel();
 	    gameTitle.setIcon(icon);
 	    titlePane.add(gameTitle);
-	    add(titlePane, gbc);
+    }
 
-	    gbc.gridy+=10;
+    private void initPaths() {
+        String runningDir = System.getProperty("user.dir");
+        assetsLocation = Paths.get( runningDir.matches(".*src") ? runningDir.replaceFirst("src", "") + "assets/" : runningDir + "/assets");
+        bgPath = Paths.get(assetsLocation + "/bg_pattern_2.jpg");
+    }
 
+    private void initImages() {
+    	BufferedImage img = null;
+		try {
+		     File f = new File(bgPath.toString());
+		     img = ImageIO.read(f);
+		     System.out.println("File " + f.toString());
+		} catch (Exception e) {
+		     System.out.println("Cannot read file: " + e);
+		}
 
-    	//this.setSize(new Dimension(1024, 768));
-
-    	//setSize(defaultSize);
-        // this should change the frame size consistently- across all panels
-        setPreferredSize(defaultSize);
-
-
-        // sets the JFrame window pos on screen
-        //setLocationRelativeTo(null);
-        setResizable(true); // allow the screen to be resized.
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        initFrontendBoard(newBoard);
-        add(frontEndBoard, gbc);
-        gbc.gridy++;
-        displayMenu();
-        setVisible(true);
-
-        add(pauseMenu, gbc);
-        pauseMenu.setVisible(false);
-
-
-        //pack(); //Autosizes to match components
+		background = new BackgroundPanel(img, BackgroundPanel.SCALED, 0.50f, 0.5f);
+		setContentPane(background);
     }
 
     private void initFrontendBoard(BackendBoard newBoard) {
@@ -129,14 +117,12 @@ public class Window extends JFrame {
     }
 
     public void startNewGame() {
-        // We'll also need to disable the menu.
         hideMainMenu();
         showTerminalBoard();
         frontEndBoard.turnOn();
         pack();
     }
 
-    // Initialize the backend terminal board
     private void showTerminalBoard() {
         System.out.println("Welcome to WOBCON4. Enjoy the game.");
         System.out.println("Initial Game State:");
@@ -155,16 +141,10 @@ public class Window extends JFrame {
     public void displayMenu() {
         // turn off and clear the board.
 
-    	gbc = new GridBagConstraints();
-    	gbc.gridx = 0;
-        gbc.gridy = 0;
-
-        add(menuPanel, gbc);
-        pack();
+        pack(); //Why the hell does it not work without this?
         buttonPanel.setVisible(true);
     }
 
-    // hide our main menu
     private void hideMainMenu() {
         menuPanel.setEnabled(false);
         menuPanel.setVisible(false);
@@ -176,14 +156,12 @@ public class Window extends JFrame {
     	frontEndBoard.turnOff();
     	titlePane.setVisible(true);
     	pauseMenu.setVisible(true);
-    	// show pause menu;
     }
 
     public void resumeGame(){
     	frontEndBoard.turnOn();
     	titlePane.setVisible(false);
     	pauseMenu.setVisible(false);
-    	// hide pause menu
     }
 
 }

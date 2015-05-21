@@ -29,8 +29,7 @@ public class FrontEndBoard extends JPanel implements MouseListener,
     private static final long serialVersionUID = 1L;
     //TODO our colours, should be updated to match the palette
     private Color gridColor = new Color(60, 58, 232, 255);
-
-    Dimension gridSize = new Dimension(700, 700);
+    private Dimension gridSize = new Dimension(700, 700);
     private Token[] gameTokens = new Token[42];
     private BackendBoard backendBoard; // Should be 'backendBoard'
     private final int rows = 6;
@@ -77,6 +76,7 @@ public class FrontEndBoard extends JPanel implements MouseListener,
         gbc.weightx = 0;
         gbc.weighty = 0;
 
+        // FIXME Encapsulate this...
         spacer.setIcon(spaceIcon);
         spacer.setOpaque(false);
         spacer.setContentAreaFilled(false);
@@ -90,7 +90,6 @@ public class FrontEndBoard extends JPanel implements MouseListener,
 
         playArea.addMouseListener(this);
         playArea.addMouseMotionListener(this);
-
         add(playArea, gbc);
 
         //TODO migrate this to PlayArea
@@ -367,19 +366,19 @@ public class FrontEndBoard extends JPanel implements MouseListener,
     }
 
     public void turnOff() {
+        setVisible(false);
+        setEnabled(false);
         for (Token b : gameTokens) {
             b.setEnabled(false);
         }
-        setVisible(false);
-        setEnabled(false);
     }
 
     public void turnOn() {
+        setVisible(true);
+        setEnabled(true);
         for (Token b : gameTokens) {
             b.setEnabled(true);
         }
-        setVisible(true);
-        setEnabled(true);
     }
 
 }
