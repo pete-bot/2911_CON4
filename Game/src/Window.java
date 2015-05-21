@@ -18,12 +18,12 @@ public class Window extends JFrame {
     // This is for serialization; don't worry about it.
     private static final long serialVersionUID = 1L;
     private ButtonPanel buttonPanel = new ButtonPanel(this);
-    private MainMenuPanel menuPanel = new MainMenuPanel(this);
     private FrontEndBoard frontEndBoard;
     private BackendBoard backendBoard;
     private Dimension defaultSize = new Dimension(1024, 900);
     private GridBagConstraints gbc;
     private PauseMenuPanel pauseMenu = new PauseMenuPanel(this);
+    private MainMenuPanel menuPanel = new MainMenuPanel(this);
     private JPanel titlePane;
     private BackgroundPanel background;
     private Path assetsLocation;
@@ -40,9 +40,11 @@ public class Window extends JFrame {
 		initImages();
 		initLayout();
         initTitle();
+
 	    add(titlePane, gbc);
 
         setPreferredSize(defaultSize);
+        setSize(defaultSize);
         setResizable(true); // XXX Here for testing, remove later.
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
@@ -50,16 +52,18 @@ public class Window extends JFrame {
 	    gbc.gridy+=10;
         add(frontEndBoard, gbc);
 
-        gbc.gridy++;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
         add(pauseMenu, gbc);
 
-        //So what is pauseMenu vs menuPanel?
     	gbc.gridx = 0;
         gbc.gridy = 0;
 
         add(menuPanel, gbc);
 
         pauseMenu.setVisible(false);
+        menuPanel.setVisible(false);
+	    titlePane.setVisible(false);
         //pack(); //Autosizes to match components
     }
 
@@ -141,14 +145,15 @@ public class Window extends JFrame {
     public void displayMenu() {
         // turn off and clear the board.
 
+        titlePane.setVisible(true);
+        menuPanel.setVisible(true);
         pack(); //Why the hell does it not work without this?
-        buttonPanel.setVisible(true);
+        //buttonPanel.setVisible(true);
     }
 
     private void hideMainMenu() {
         menuPanel.setEnabled(false);
         menuPanel.setVisible(false);
-
         titlePane.setVisible(false);
     }
 
