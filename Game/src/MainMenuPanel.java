@@ -4,8 +4,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 //import javafx.scene.layout.Border;
 import javax.swing.BorderFactory;
@@ -25,7 +23,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     private JButton optionsButton = new JButton();
     private JButton spacer = new JButton();
     private Border emptyBorder = BorderFactory.createEmptyBorder();
-    private Path assetsLocation;
     private ImageIcon pvCPUIcon;
     private ImageIcon pvpIcon;
     private ImageIcon optionsIcon;
@@ -34,14 +31,17 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     private ImageIcon resumeIcon;
     private ImageIcon restartIcon;
     private ImageIcon exitIcon;
+    private GameAssets assets;
     private Window window;
     private Color defaultColor = new Color(119, 136, 153, 0);
 
-    public MainMenuPanel(Window mainWindow) {
+    public MainMenuPanel(Window mainWindow, GameAssets assets) {
+        this.assets = assets;
+        this.window = mainWindow;
         setLayout(new GridBagLayout());
         setBackground(defaultColor);
+        initIcons();
         addMainMenuItems();
-        window = mainWindow;
     }
 
     @Override
@@ -116,30 +116,14 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
     // This must be called before buttons can add icons
     private void initIcons() {
-        // Get the running directory
-        String runningDir = System.getProperty("user.dir");
-        assetsLocation = Paths.get(runningDir.matches(".*src") ? runningDir
-                .replaceFirst("src", "") + "assets/" : runningDir + "/assets");
-
-        // Setup paths
-        Path spacerIconPath = Paths.get(assetsLocation + "/spacer.png");
-        Path pvCPUIconPath = Paths.get(assetsLocation + "/player_AI.png");
-        Path pvpIconPath = Paths.get(assetsLocation + "/player_player.png");
-        Path optionsIconPath = Paths.get(assetsLocation + "/options.png");
-        Path quitIconPath = Paths.get(assetsLocation + "/quit.png");
-        Path resumePath = Paths.get(assetsLocation + "/resume.png");
-        Path restartPath = Paths.get(assetsLocation + "/restart.png");
-        Path exitPath = Paths.get(assetsLocation + "/quit.png");
-
-        // Setup icons
-        spacerIcon = new ImageIcon(spacerIconPath.toString());
-        pvCPUIcon = new ImageIcon(pvCPUIconPath.toString());
-        pvpIcon = new ImageIcon(pvpIconPath.toString());
-        optionsIcon = new ImageIcon(optionsIconPath.toString());
-        quitIcon = new ImageIcon(quitIconPath.toString());
-        resumeIcon = new ImageIcon(resumePath.toString());
-        restartIcon = new ImageIcon(restartPath.toString());
-        exitIcon = new ImageIcon(exitPath.toString());
+        spacerIcon = assets.getAsset("spacer.png");
+        pvCPUIcon = assets.getAsset("player_AI.png");
+        pvpIcon = assets.getAsset("player_player.png");
+        optionsIcon = assets.getAsset("options.png");
+        quitIcon = assets.getAsset("quit.png");
+        resumeIcon = assets.getAsset("resume.png");
+        restartIcon = assets.getAsset("restart.png");
+        exitIcon = assets.getAsset("quit.png");
     }
 
     private void removeMainMenuItems() {
@@ -166,9 +150,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         resumeButton.setIcon(resumeIcon);
         add(resumeButton, gbc);
         gbc.gridy++;
-
-        Path optionsPath = Paths.get(assetsLocation + "/options.png");
-        ImageIcon optionsIcon = new ImageIcon(optionsPath.toString());
 
         add(optionsButton, gbc);
         gbc.gridy++;

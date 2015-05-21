@@ -10,19 +10,16 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class Window extends JFrame {
-
-    // This is for serialization; don't worry about it.
     private static final long serialVersionUID = 1L;
 
     private FrontEndBoard frontEndBoard;
     private BackendBoard backendBoard;
     private Dimension defaultSize = new Dimension(1024, 900);
-    private GridBagConstraints gbc; // This is a member variable because this is
-    // a singleton class
-    private MainMenuPanel menuPanel = new MainMenuPanel(this);
+    private GridBagConstraints gbc;
+    private GameAssets assets = new GameAssets();
+    private MainMenuPanel menuPanel = new MainMenuPanel(this, this.assets);
     private JPanel titlePane;
     private BackgroundPanel background;
-    private GameAssets assets = new GameAssets();
 
     public Window(BackendBoard newBoard) {
         super("Generic tile-themed sequence pattern based fun simulator.");

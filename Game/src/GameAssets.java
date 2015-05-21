@@ -29,10 +29,10 @@ public class GameAssets {
         for (int i = 0; i < listOfAssets.length; i++) {
             if (listOfAssets[i].isFile()) {
                 String filename = listOfAssets[i].getName();
-                System.out.println(filename);
                 ImageIcon newAsset = new ImageIcon(assetsLocation + "/"
                         + filename);
                 assets.put(filename, newAsset);
+                System.out.println("Adding asset " + filename);
             } else { // All assets must be at the top level
                 continue;
             }
