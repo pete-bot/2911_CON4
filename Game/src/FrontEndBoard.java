@@ -36,7 +36,7 @@ public class FrontEndBoard extends JPanel implements MouseListener,
     private final int cols = 7;
     private final int tilesOnBoard = 42;
     private Window mainWindow;
-    private MechanicalTurk newTurk;
+    private AB_1D newTurk;
     private PlayArea playArea;
     private GridLayout frontEndBoardLayout = new GridLayout(rows, cols);
 
@@ -62,7 +62,7 @@ public class FrontEndBoard extends JPanel implements MouseListener,
 
         // AIclass is a simple way of passing in which AI that the user may want
         int AIclass = 0;
-        newTurk = new MechanicalTurk(AIclass);
+        newTurk = new AB_1D(AIclass);
 
         this.backendBoard = backendBoard;
         this.mainWindow = mainWindow;
