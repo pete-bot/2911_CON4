@@ -18,8 +18,13 @@ public class State implements Comparable {
 	//choice constructor
 	public State(int column, State prevState) {
 		this.boardRep = prevState.getBoard();
-		this.stateRank = generateBoard(column);
-//		this.thisAction = generateAction(stateRank);
+		this.stateRank = generateScore(column, 2);
+		this.thisAction = generateAction(column);
+	}
+
+	private Action generateAction(int column) {
+		Action a = new Action(2, column);
+		return a;
 	}
 
 	private BackendBoard getBoard() {
@@ -27,7 +32,7 @@ public class State implements Comparable {
 	}
 
 	public int compareTo(Object o) {
-		return getHValue();
+		return getHValue()-((State) o).getHValue();
 	}
 
 	private int getHValue() {
@@ -37,77 +42,95 @@ public class State implements Comparable {
 	public Action getAction(){
 		return thisAction;
 	}
+	
+	public int generateScore(int player, int column){
+		int[][] board = this.boardRep.getBoard();
+//		int highestScore = 0;
+		
+		int vertScore = 0;
+		int horzScore = 0;
+//		int diagScore = 0;
+		
+		
+		if (player == 1){
+			vertScore = checkVertical(board, column, 1);
+			horzScore = checkHorizontal(board, column, 1);
+			
+			
+		} else if (player == 2){
+			vertScore = checkVertical(board, column, 2);
+			horzScore = checkHorizontal(board, column, 2);
+			
+		}
+		
+		
+		return (vertScore > horzScore) ? vertScore : horzScore;
+	}
 
-	private int generateBoard(int column){
-		int score = 0;
+	private int checkHorizontal(int[][] board, int column, int player) {
 		
-		//Make placeholder move and extract the board array, create a co-ordinate
-		this.boardRep.makeMove(new Action(2, column));
-		if(!this.boardRep.checkWinState(new Action(2, column)).isEmpty()) {
-			return Integer.MAX_VALUE;
-		}
-		int[][] b = this.boardRep.getBoard();
-		int[] xy = new int[] {0, column};
+        int rightadjacentTiles = 1;
+        int leftadjacentTiles = 1;
+        int leftColIndex = column - 1;
+        int rightColIndex = column + 1;
+        int lastRow = 6;
+        
+        //find the spot above the last piece played
+        while (lastRow != 0){
+        	if (board[lastRow][column] == 1 || board[lastRow][column] == 2){
+        		break;
+        	}
+        }
+        
+        lastRow++;
+        
+        //check if move fits return 0 if it does not
+        if (lastRow > 6){
+        	return 0;
+        }
+        
+
+        // Iterate left if there are lefts to iterate to
+        if (column >= 0) {
+
+            // Left iteration from last placed node, checking if tile is owned
+            // by player
+            while (leftColIndex >= 0
+                    && board[lastRow][leftColIndex] == player) {
+                leftadjacentTiles++;
+                leftColIndex--;
+            }
+
+            // If we haven't won already
+            if (leftadjacentTiles < 4) {
+                // Right iteration
+                while (rightColIndex < 7
+                        && board[lastRow][rightColIndex] == player) {
+                    rightadjacentTiles++;
+                    rightColIndex++;
+                }
+
+            }
+
+        }
+        return (leftadjacentTiles > rightadjacentTiles) ? leftadjacentTiles : rightadjacentTiles;
+
+	}
+
+	private int checkVertical(int[][] board, int column, int player) {
+		int x = 0;
+		int row = 6;
 		
-		//Find co-ordinate of tile played
-		for(int i = xy[0]; i < 6; i++) {
-			if(b[i][column] == 2) {
-				xy[0] = i;
+		while (row != 0){
+			if (board[row][column] == player){
+				x++;
+			} else if (board[row][column] == '0'){
+				//do nothing
+			} else if (board[row][column] != player){
 				break;
 			}
-		}
-		
-		/*Scan surrounding tiles*/
-		//Scan column, first determine deviation from edge
-		int lowerBound = (xy[0] + 3) > 5 ? 5 : (xy[0] + 3);
-		int counter = 0;
-		for(int i = xy[0]; i < lowerBound; i++) {
-			if(b[i][column] == 2) {
-				counter++;
-			} else if(b[i][column] == 1) {
-				break;
-			}
-		}
-		if(counter < 4 && xy[0] > 3) { //Check that there's room in the column to have a possible win, otherwise ignore
-			counter = 0;
-		}
-		score += counter;
-		
-		//Scan row, first determine deviation from edge
-		int leftBound = (column - 3) < 0 ? 0 : (column - 3);
-		int rightBound = (column + 3) > 6 ? 6 : (column + 3);
-		for(int i = column; i < rightBound; i++) {
-			if(b[i][column] == 2) {
-				counter++;
-			} else if(b[i][column] == 1) {
-				break;
-			} else {
-				if(b[i+1][column] == 0) {
-					break;
-				} else {
-					counter++;
-				}
-			}
-		}
-		for(int i = column; i > leftBound; i--) {
-			if(b[i][column] == 2) {
-				counter++;
-			} else if(b[i][column] == 1) {
-				break;
-			} else {
-				if(b[i+1][column] == 0) {
-					break;
-				} else {
-					counter++;
-				}
-			}
-		}
-		// MIGHT NEED TO CHECK IF THERES ROOM IN THE ROW TO WIN HERE!
-		score += counter;
-		
-		//Scan leading diagonal
-		
-		//Scan leading diagonal
-		return score;
+			row--;
+		}		
+		return x;
 	}
 }
