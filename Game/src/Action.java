@@ -1,6 +1,6 @@
 /*
  * not sure if this is necessary - possibly useful to encapsulate the 'action' of a player
- * usfeful to check legality of move etc. 
+ * useful to check legality of move etc.
  */
 
 public class Action {
@@ -13,14 +13,14 @@ public class Action {
         this.move = newColumnChoice;
     }
 
-    // return the player number
-    public int getPlayer() {
-        return this.player;
-    }
-
     // return the player move
     public int getColumn() {
         return this.move;
+    }
+
+    // return the player number
+    public int getPlayer() {
+        return this.player;
     }
 
     public void showAction() {

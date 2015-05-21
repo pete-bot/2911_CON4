@@ -22,12 +22,9 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     private JButton exitButton = new JButton();
     private JButton pvpButton = new JButton();
     private JButton resumeButton = new JButton();
-    // This might become deprecated
     private JButton optionsButton = new JButton();
-
     private JButton spacer = new JButton();
     private Border emptyBorder = BorderFactory.createEmptyBorder();
-
     private Path assetsLocation;
     private ImageIcon pvCPUIcon;
     private ImageIcon pvpIcon;
@@ -37,9 +34,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     private ImageIcon resumeIcon;
     private ImageIcon restartIcon;
     private ImageIcon exitIcon;
-
     private Window window;
-
     private Color defaultColor = new Color(119, 136, 153, 0);
 
     public MainMenuPanel(Window mainWindow) {

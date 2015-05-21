@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 public class PauseButton extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
     private JButton pauseButton = new JButton("");
-
+    private GameAssets assets = new GameAssets();
     private Window window;
 
     // constructor
@@ -41,6 +41,7 @@ public class PauseButton extends JPanel implements ActionListener {
                         "src", "") + "assets/" : runningDir + "/assets");
         Path menuPath = Paths.get(assetsLocation + "/menu.png");
         ImageIcon menuIcon = new ImageIcon(menuPath.toString());
+        // ImageIcon menuIcon = assets.getAsset('menu.png');
 
         pauseButton.setIcon(menuIcon);
         pauseButton.setOpaque(false);
@@ -52,6 +53,7 @@ public class PauseButton extends JPanel implements ActionListener {
         window = mainWindow;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
 
         JButton buttonPressed = (JButton) e.getSource();

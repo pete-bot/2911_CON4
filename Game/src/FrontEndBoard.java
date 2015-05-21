@@ -2,7 +2,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -38,9 +37,8 @@ public class FrontEndBoard extends JPanel implements MouseListener,
     private Window mainWindow;
     private MechanicalTurk newTurk;
     private PlayArea playArea;
-
     private PauseButton pauseButton;
-
+    private GameAssets gameAssets = new GameAssets();
     private Path assetsLocation;
     private ImageIcon blankTokenIcon;
     private ImageIcon glowingTokenIcon;
@@ -48,7 +46,6 @@ public class FrontEndBoard extends JPanel implements MouseListener,
     private ImageIcon yellowTokenIcon;
     private ImageIcon winTokenIcon;
     private ImageIcon spaceIcon;
-
     private JButton spacer = new JButton(""); // Spacers are buttons for added
                                               // functionality in GridBagLayout
     private Border emptyBorder = BorderFactory.createEmptyBorder();
@@ -103,80 +100,22 @@ public class FrontEndBoard extends JPanel implements MouseListener,
         add(pauseButton, gbc);
     }
 
-    // TODO Remove this guy later once the proper interfaces are setup and
-    // working.
-    private void setupAI(int classRank) {
-        // AIclass is a simple way of passing in which AI that the user may want
-        int AIclass = classRank;
-        newTurk = new MechanicalTurk(AIclass);
-    }
-
-    private void setupSpacer(GridBagConstraints gbc) {
-        spacer.setIcon(spaceIcon);
-        spacer.setOpaque(false);
-        spacer.setContentAreaFilled(false);
-        spacer.setBorderPainted(false);
-        spacer.setBorder(emptyBorder);
-    }
-
-    private void setupPaths() {
-        String runningDir = System.getProperty("user.dir");
-        assetsLocation = Paths.get(runningDir.matches(".*src") ? runningDir
-                .replaceFirst("src", "") + "assets/" : runningDir + "/assets");
-        Path blankTokenPath = Paths.get(assetsLocation + "/circle101.png");
-        Path glowingTokenPath = Paths.get(assetsLocation + "/glow.png");
-        Path redTokenPath = Paths.get(assetsLocation + "/circle101_RED.png");
-        Path yellowTokenPath = Paths.get(assetsLocation
-                + "/circle101_YELLOW.png");
-        Path winTokenPath = Paths.get(assetsLocation + "/win.png");
-        Path spaceIconPath = Paths.get(assetsLocation + "/half_spacer.png");
-
-        blankTokenIcon = new ImageIcon(blankTokenPath.toString());
-        glowingTokenIcon = new ImageIcon(glowingTokenPath.toString());
-        redTokenIcon = new ImageIcon(redTokenPath.toString());
-        yellowTokenIcon = new ImageIcon(yellowTokenPath.toString());
-        winTokenIcon = new ImageIcon(winTokenPath.toString());
-        spaceIcon = new ImageIcon(spaceIconPath.toString());
-
-        // XXX Remove from production code!
-        System.out.println("You are running this game from: "
-                + System.getProperty("user.dir"));
-        System.out.println("Asset location" + assetsLocation.toString());
-    }
-
-    // this highlights the column
-    public void highlightColumn(MouseEvent cursor) {
-        // Change the icons of the tokens that are in the rows for the given
-        // column
-        for (int i = 0; i < gameTokens.length; i++) {
-            Token token = gameTokens[i];
-
-            // this uses the mouse location to determine which column to
-            // highlight
-            Point tokenLocation = token.getLocation();
-            double beginRange = tokenLocation.getX();
-            double endRange = tokenLocation.getX() + token.getWidth();
-            boolean inRow = cursor.getX() > beginRange
-                    && cursor.getX() < endRange;
-            boolean isBlankIcon = (token.getPlayer() == 0);
-            if (inRow && isBlankIcon) {
-                token.setIcon(glowingTokenIcon);
-            } else if (!inRow && isBlankIcon) {
-                token.setIcon(blankTokenIcon);
+    // Get a column from a given x coordinate
+    // FIXME should throw an exception
+    private int getColumn(int x) {
+        int columnWidth = (int) gridSize.getWidth() / 7;
+        int currentColBegin = 0;
+        int currentColEnd = columnWidth;
+        int currentCol = 0;
+        while (currentColEnd <= gridSize.getWidth()) {
+            if (currentColBegin <= x && x <= currentColEnd) {
+                return currentCol;
             }
+            currentColBegin += columnWidth;
+            currentColEnd += columnWidth;
+            currentCol++;
         }
-    }
-
-    // this highlights the win
-    public void highlightWin(ArrayList<Point> winList) {
-        Iterator<Point> winIterator = winList.iterator();
-        while (winIterator.hasNext()) {
-            Point winCoords = winIterator.next();
-            System.out.println("winCoords = " + winCoords.toString());
-            int indexToGet = (winCoords.x) * (cols) + (cols - winCoords.y);
-            Token t = gameTokens[42 - indexToGet];
-            t.setIcon(winTokenIcon);
-        }
+        return -1; // No column found.
     }
 
     // TODO
@@ -225,6 +164,135 @@ public class FrontEndBoard extends JPanel implements MouseListener,
         }
     }
 
+    // this highlights the column
+    public void highlightColumn(MouseEvent cursor) {
+        // Change the icons of the tokens that are in the rows for the given
+        // column
+        for (int i = 0; i < gameTokens.length; i++) {
+            Token token = gameTokens[i];
+
+            // this uses the mouse location to determine which column to
+            // highlight
+            Point tokenLocation = token.getLocation();
+            double beginRange = tokenLocation.getX();
+            double endRange = tokenLocation.getX() + token.getWidth();
+            boolean inRow = cursor.getX() > beginRange
+                    && cursor.getX() < endRange;
+            boolean isBlankIcon = token.getPlayer() == 0;
+            if (inRow && isBlankIcon) {
+                token.setIcon(glowingTokenIcon);
+            } else if (!inRow && isBlankIcon) {
+                token.setIcon(blankTokenIcon);
+            }
+        }
+    }
+
+    // this highlights the win
+    public void highlightWin(ArrayList<Point> winList) {
+        Iterator<Point> winIterator = winList.iterator();
+        while (winIterator.hasNext()) {
+            Point winCoords = winIterator.next();
+            System.out.println("winCoords = " + winCoords.toString());
+            int indexToGet = winCoords.x * cols + cols - winCoords.y;
+            Token t = gameTokens[42 - indexToGet];
+            t.setIcon(winTokenIcon);
+        }
+    }
+
+    // MOUSELISTENER AND MOUSEMOTIONLISTENER OVERRIDES
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        // FIXME Testing
+        // Package the appropriate column the mouse is on into an Action
+        int col = getColumn(e.getX());
+        Action newMove = new Action(1, col);
+        System.out.printf("Column %d chosen.\n", col);
+        getUserMove(newMove);
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent event) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        // int col = getColumn(e.getX());
+        // Action newMove = new Action(1, col);
+        highlightColumn(e);
+        moveGraphicToken(e);
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    private void moveGraphicToken(MouseEvent e) {
+
+        return;
+    }
+
+    public void resetBoard() {
+        backendBoard.resetBoard();
+
+        for (Token gameToken : gameTokens) {
+            gameToken.setIcon(blankTokenIcon);
+            gameToken.setPlayer(0);
+        }
+    }
+
+    // TODO Remove this guy later once the proper interfaces are setup and
+    // working.
+    private void setupAI(int classRank) {
+        // AIclass is a simple way of passing in which AI that the user may want
+        int AIclass = classRank;
+        newTurk = new MechanicalTurk(AIclass);
+    }
+
+    private void setupPaths() {
+        String runningDir = System.getProperty("user.dir");
+        assetsLocation = Paths.get(runningDir.matches(".*src") ? runningDir
+                .replaceFirst("src", "") + "assets/" : runningDir + "/assets");
+        Path blankTokenPath = Paths.get(assetsLocation + "/circle101.png");
+        Path glowingTokenPath = Paths.get(assetsLocation + "/glow.png");
+        Path redTokenPath = Paths.get(assetsLocation + "/circle101_RED.png");
+        Path yellowTokenPath = Paths.get(assetsLocation
+                + "/circle101_YELLOW.png");
+        Path winTokenPath = Paths.get(assetsLocation + "/win.png");
+        Path spaceIconPath = Paths.get(assetsLocation + "/half_spacer.png");
+
+        blankTokenIcon = new ImageIcon(blankTokenPath.toString());
+        glowingTokenIcon = new ImageIcon(glowingTokenPath.toString());
+        redTokenIcon = new ImageIcon(redTokenPath.toString());
+        yellowTokenIcon = new ImageIcon(yellowTokenPath.toString());
+        winTokenIcon = new ImageIcon(winTokenPath.toString());
+        spaceIcon = new ImageIcon(spaceIconPath.toString());
+
+        // XXX Remove from production code!
+        System.out.println("You are running this game from: "
+                + System.getProperty("user.dir"));
+        System.out.println("Asset location" + assetsLocation.toString());
+    }
+
+    private void setupSpacer(GridBagConstraints gbc) {
+        spacer.setIcon(spaceIcon);
+        spacer.setOpaque(false);
+        spacer.setContentAreaFilled(false);
+        spacer.setBorderPainted(false);
+        spacer.setBorder(emptyBorder);
+    }
+
     // FIXME
     // AI code should not persist in this class.
     // Theoretically this should be a 'secondPlayer' or 'competitor' method.
@@ -258,6 +326,22 @@ public class FrontEndBoard extends JPanel implements MouseListener,
         System.out.println("Control has returned to the player.");
     }
 
+    public void turnOff() {
+        setVisible(false);
+        setEnabled(false);
+        for (Token b : gameTokens) {
+            b.setEnabled(false);
+        }
+    }
+
+    public void turnOn() {
+        setVisible(true);
+        setEnabled(true);
+        for (Token b : gameTokens) {
+            b.setEnabled(true);
+        }
+    }
+
     // Updates the board with the next _legal_ move
     // xPos is the column, refactor later.
     public void updateBoardWithMove(int xPos) {
@@ -273,93 +357,6 @@ public class FrontEndBoard extends JPanel implements MouseListener,
                 }
                 break;
             }
-        }
-    }
-
-    public void resetBoard() {
-        backendBoard.resetBoard();
-
-        for (Token gameToken : gameTokens) {
-            gameToken.setIcon(blankTokenIcon);
-            gameToken.setPlayer(0);
-        }
-    }
-
-    // MOUSELISTENER AND MOUSEMOTIONLISTENER OVERRIDES
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        // FIXME Testing
-        // Package the appropriate column the mouse is on into an Action
-        int col = getColumn(e.getX());
-        Action newMove = new Action(1, col);
-        System.out.printf("Column %d chosen.\n", col);
-        getUserMove(newMove);
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        // int col = getColumn(e.getX());
-        // Action newMove = new Action(1, col);
-        highlightColumn(e);
-        moveGraphicToken(e);
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent event) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-    }
-
-    private void moveGraphicToken(MouseEvent e) {
-
-        return;
-    }
-
-    // Get a column from a given x coordinate
-    // FIXME should throw an exception
-    private int getColumn(int x) {
-        int columnWidth = (int) gridSize.getWidth() / 7;
-        int currentColBegin = 0;
-        int currentColEnd = columnWidth;
-        int currentCol = 0;
-        while (currentColEnd <= gridSize.getWidth()) {
-            if (currentColBegin <= x && x <= currentColEnd) {
-                return currentCol;
-            }
-            currentColBegin += columnWidth;
-            currentColEnd += columnWidth;
-            currentCol++;
-        }
-        return -1; // No column found.
-    }
-
-    public void turnOff() {
-        setVisible(false);
-        setEnabled(false);
-        for (Token b : gameTokens) {
-            b.setEnabled(false);
-        }
-    }
-
-    public void turnOn() {
-        setVisible(true);
-        setEnabled(true);
-        for (Token b : gameTokens) {
-            b.setEnabled(true);
         }
     }
 

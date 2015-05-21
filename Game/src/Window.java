@@ -17,11 +17,12 @@ public class Window extends JFrame {
 
     // This is for serialization; don't worry about it.
     private static final long serialVersionUID = 1L;
+
     private FrontEndBoard frontEndBoard;
     private BackendBoard backendBoard;
     private Dimension defaultSize = new Dimension(1024, 900);
-    private GridBagConstraints gbc;
-    private PauseMenuPanel pauseMenu = new PauseMenuPanel(this);
+    private GridBagConstraints gbc; // This is a member variable because this is
+    // a singleton class
     private MainMenuPanel menuPanel = new MainMenuPanel(this);
     private JPanel titlePane;
     private BackgroundPanel background;
@@ -45,15 +46,8 @@ public class Window extends JFrame {
         titlePane.setVisible(false);
     }
 
-    private void initFrontendBoard(BackendBoard newBoard) {
-        backendBoard = newBoard;
-        Window mainWindow = this;
-        frontEndBoard = new FrontEndBoard(backendBoard, mainWindow);
-        frontEndBoard.setEnabled(false);
-        frontEndBoard.setVisible(false);
-    }
-
-    private void initImages() {
+    private void initBackground() {
+        bgPath = Paths.get(assetsLocation + "/bg_pattern_2.jpg");
         BufferedImage img = null;
         try {
             File f = new File(bgPath.toString());
@@ -66,6 +60,14 @@ public class Window extends JFrame {
         background = new BackgroundPanel(img, BackgroundPanel.SCALED, 0.50f,
                 0.5f);
         setContentPane(background);
+    }
+
+    private void initFrontendBoard(BackendBoard newBoard) {
+        backendBoard = newBoard;
+        Window mainWindow = this;
+        frontEndBoard = new FrontEndBoard(backendBoard, mainWindow);
+        frontEndBoard.setEnabled(false);
+        frontEndBoard.setVisible(false);
     }
 
     private void initLayout() {
@@ -86,7 +88,6 @@ public class Window extends JFrame {
         String runningDir = System.getProperty("user.dir");
         assetsLocation = Paths.get(runningDir.matches(".*src") ? runningDir
                 .replaceFirst("src", "") + "assets/" : runningDir + "/assets");
-        bgPath = Paths.get(assetsLocation + "/bg_pattern_2.jpg");
     }
 
     private void initTitle() {
@@ -102,7 +103,7 @@ public class Window extends JFrame {
 
     private void initWindow(BackendBoard newBoard) {
         initPaths();
-        initImages();
+        initBackground();
         initLayout();
         initTitle();
 
@@ -135,7 +136,7 @@ public class Window extends JFrame {
 
     public void resetWindow() {
         titlePane.setVisible(false);
-        pauseMenu.setVisible(false);
+        menuPanel.setVisible(false);
         frontEndBoard.turnOn();
         frontEndBoard.resetBoard();
         showTerminalBoard();
@@ -144,14 +145,11 @@ public class Window extends JFrame {
     public void resumeGame() {
         frontEndBoard.turnOn();
         titlePane.setVisible(false);
-        pauseMenu.setVisible(false);
+        menuPanel.setVisible(false);
     }
 
     private void showTerminalBoard() {
-        System.out.println("Welcome to WOBCON4. Enjoy the game.");
-        System.out.println("Initial Game State:");
         backendBoard.showTerminalBoard();
-        System.out.println("User, please enter your column choice:");
     }
 
     public void startNewGame() {
