@@ -27,7 +27,7 @@ public class FrontEndBoard extends JPanel implements MouseListener,
         MouseMotionListener {
 
     private static final long serialVersionUID = 1L;
-    //TODO our colours, should be updated to match the palette
+    // TODO our colours, should be updated to match the palette
     private Color gridColor = new Color(60, 58, 232, 255);
     private Dimension gridSize = new Dimension(700, 700);
     private Token[] gameTokens = new Token[42];
@@ -37,11 +37,11 @@ public class FrontEndBoard extends JPanel implements MouseListener,
     private final int tilesOnBoard = 42;
     private Window mainWindow;
     private MechanicalTurk newTurk;
-    private PlayArea playArea = new PlayArea(gridColor, gridSize);
+    private PlayArea playArea;
 
-    private PauseButton pausePanel;
+    private PauseButton pauseButton;
 
-    Path assetsLocation;
+    private Path assetsLocation;
     private ImageIcon blankTokenIcon;
     private ImageIcon glowingTokenIcon;
     private ImageIcon redTokenIcon;
@@ -49,17 +49,19 @@ public class FrontEndBoard extends JPanel implements MouseListener,
     private ImageIcon winTokenIcon;
     private ImageIcon spaceIcon;
 
-    private JButton spacer = new JButton(""); //Spacers are buttons for added functionality in GridBagLayout
+    private JButton spacer = new JButton(""); // Spacers are buttons for added
+                                              // functionality in GridBagLayout
     private Border emptyBorder = BorderFactory.createEmptyBorder();
 
     public FrontEndBoard(BackendBoard backendBoard, Window mainWindow) {
         super();
-        setUpPaths();
+        setupPaths();
 
-        pausePanel = new PauseButton(mainWindow);
-        pausePanel.setOpaque(false);
+        pauseButton = new PauseButton(mainWindow);
+        pauseButton.setOpaque(false);
 
-        //XXX Remove all instances of AI code from FrontEndBoard when we can switch
+        // XXX Remove all instances of AI code from FrontEndBoard when we can
+        // The gameplan is: create a strategy pattern way of
         int terrifiedChildAI = 0;
         setupAI(terrifiedChildAI);
 
@@ -72,93 +74,73 @@ public class FrontEndBoard extends JPanel implements MouseListener,
         gbc.gridy = 0;
         gbc.insets = new Insets(2, 2, 2, 2);
 
-        // these values change the way the resizing modifies spacing distribution on the tokens
+        // these values change the way the resizing modifies spacing
+        // distribution on the tokens
         gbc.weightx = 0;
         gbc.weighty = 0;
 
-        // FIXME Encapsulate this...
-        spacer.setIcon(spaceIcon);
-        spacer.setOpaque(false);
-        spacer.setContentAreaFilled(false);
-        spacer.setBorderPainted(false);
-        spacer.setBorder(emptyBorder);
+        setupSpacer(gbc);
         add(spacer, gbc);
 
         gbc.gridy++;
 
         setSize(gridSize);
 
+        playArea = new PlayArea(gridColor, gridSize, blankTokenIcon);
         playArea.addMouseListener(this);
         playArea.addMouseMotionListener(this);
+        gameTokens = playArea.getTokens();
         add(playArea, gbc);
 
-        //TODO migrate this to PlayArea
-        //populateWithTokens();
-        int i = 0, currY = 0, currX = 0;
-        for (currY = 0; currY < rows; currY++) {
-            for(currX = 0; currX < cols; currX++){
-                Token token = new Token(currX, currY, blankTokenIcon);
-                token.setOpaque(false);
-                Dimension iconSize = new Dimension(100,100);
-                token.setPreferredSize(iconSize);
-                playArea.add(token);
-                gameTokens[i] = token;
-                i++;
-                gbc.gridx++;
-            }
-            gbc.gridy++;
-        }
-
         gbc.gridy++;
-        gbc.fill = GridBagConstraints.BOTH;
+        gbc.fill = GridBagConstraints.REMAINDER;
 
         setOpaque(false);
 
         // adjust position of menu button
-        gbc.gridx = 0; //Any non-zero value doesn't seem to affect this much
-        add(pausePanel, gbc);
+        gbc.gridx = 0; // Any non-zero value doesn't seem to affect this much
+        gbc.weightx = 1.0;
+        add(pauseButton, gbc);
     }
 
-    //TODO Remove this guy later once the proper interfaces are setup and working.
+    // TODO Remove this guy later once the proper interfaces are setup and
+    // working.
     private void setupAI(int classRank) {
         // AIclass is a simple way of passing in which AI that the user may want
         int AIclass = classRank;
         newTurk = new MechanicalTurk(AIclass);
     }
 
-    private void populateWithTokens() {
-        for (int i = 0; i <  42; i++) {
-            int currX = i%7;
-            int currY = 5-((int) Math.ceil(i/7));
-            Token token = new Token(currX, currY, blankTokenIcon);
-            token.setOpaque(false);
-            Dimension iconSize = new Dimension(100,100);
-            token.setPreferredSize(iconSize);
-            playArea.add(token);
-            gameTokens[i] = token;
-            i++;
-        }
+    private void setupSpacer(GridBagConstraints gbc) {
+        spacer.setIcon(spaceIcon);
+        spacer.setOpaque(false);
+        spacer.setContentAreaFilled(false);
+        spacer.setBorderPainted(false);
+        spacer.setBorder(emptyBorder);
     }
 
-    private void setUpPaths() {
+    private void setupPaths() {
         String runningDir = System.getProperty("user.dir");
-        assetsLocation = Paths.get( runningDir.matches(".*src") ? runningDir.replaceFirst("src", "") + "assets/" : runningDir + "/assets");
+        assetsLocation = Paths.get(runningDir.matches(".*src") ? runningDir
+                .replaceFirst("src", "") + "assets/" : runningDir + "/assets");
         Path blankTokenPath = Paths.get(assetsLocation + "/circle101.png");
         Path glowingTokenPath = Paths.get(assetsLocation + "/glow.png");
         Path redTokenPath = Paths.get(assetsLocation + "/circle101_RED.png");
-        Path yellowTokenPath = Paths.get(assetsLocation + "/circle101_YELLOW.png");
+        Path yellowTokenPath = Paths.get(assetsLocation
+                + "/circle101_YELLOW.png");
         Path winTokenPath = Paths.get(assetsLocation + "/win.png");
         Path spaceIconPath = Paths.get(assetsLocation + "/half_spacer.png");
 
         blankTokenIcon = new ImageIcon(blankTokenPath.toString());
-        glowingTokenIcon = new ImageIcon( glowingTokenPath.toString());
+        glowingTokenIcon = new ImageIcon(glowingTokenPath.toString());
         redTokenIcon = new ImageIcon(redTokenPath.toString());
-        yellowTokenIcon = new ImageIcon( yellowTokenPath.toString());
+        yellowTokenIcon = new ImageIcon(yellowTokenPath.toString());
         winTokenIcon = new ImageIcon(winTokenPath.toString());
         spaceIcon = new ImageIcon(spaceIconPath.toString());
 
-        //XXX Remove from production code!
-        System.out.println("You are running this game from: " + System.getProperty("user.dir"));
+        // XXX Remove from production code!
+        System.out.println("You are running this game from: "
+                + System.getProperty("user.dir"));
         System.out.println("Asset location" + assetsLocation.toString());
     }
 
@@ -259,7 +241,7 @@ public class FrontEndBoard extends JPanel implements MouseListener,
         ArrayList<Point> winList = backendBoard.checkWinState(turkMove);
 
         if (!winList.isEmpty()) {
-        	highlightWin(winList);
+            highlightWin(winList);
             if (backendBoard.getTurn() % 2 == 0) {
                 System.out.println("PLAYER_1, you WIN!");
                 JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
