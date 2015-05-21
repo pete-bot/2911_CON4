@@ -12,6 +12,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
+import java.awt.Dimension;
+
 public class MainMenuPanel extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
 
@@ -33,13 +35,14 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     private ImageIcon exitIcon;
     private GameAssets assets;
     private Window window;
-    private Color defaultColor = new Color(119, 136, 153, 0);
+    private Color defaultColor = new Color(127, 127, 127, 127);
 
     public MainMenuPanel(Window mainWindow, GameAssets assets) {
         this.assets = assets;
         this.window = mainWindow;
         setLayout(new GridBagLayout());
         setBackground(defaultColor);
+        setSize(new Dimension(100,100));
         initIcons();
         addMainMenuItems();
     }
@@ -67,13 +70,13 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         gbc.insets = new Insets(10, 10, 10, 10);
 
         initIcons();
-        spacer.setIcon(spacerIcon);
+        //spacer.setIcon(spacerIcon);
         pvCPUButton.setIcon(pvCPUIcon);
         pvpButton.setIcon(pvpIcon);
         optionsButton.setIcon(optionsIcon);
         exitButton.setIcon(quitIcon);
 
-        initButton(spacer);
+        //initButton(spacer);
         initButton(pvCPUButton);
         initButton(pvpButton);
         initButton(optionsButton);
@@ -84,8 +87,8 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         optionsButton.addActionListener(this);
         exitButton.addActionListener(this);
 
-        add(spacer, gbc);
-        gbc.gridy++;
+        //add(spacer, gbc);
+        //gbc.gridy++;
 
         // TODO: change button icons here to suit aesthetic.
 
@@ -117,14 +120,13 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
     // This must be called before buttons can add icons
     private void initIcons() {
-        spacerIcon = assets.getAsset("spacer.png");
-        //pvCPUIcon = assets.getAsset("player_AI.png");
+        //spacerIcon = assets.getAsset("spacer.png"); //Thought: why do we need a transparent image?
         pvCPUIcon = assets.getAsset("new_game_button.png");
-        pvpIcon = assets.getAsset("player_player.png");
+        pvpIcon = assets.getAsset("passnplay_button.png");
         optionsIcon = assets.getAsset("options_button.png");
         quitIcon = assets.getAsset("quit_button.png");
         resumeIcon = assets.getAsset("resume_game_button.png");
-        restartIcon = assets.getAsset("restart.png");
+        restartIcon = assets.getAsset("restart_button.png");
     }
 
     private void removeMainMenuItems() {

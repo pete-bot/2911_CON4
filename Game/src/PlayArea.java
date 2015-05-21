@@ -18,7 +18,6 @@ public class PlayArea extends JLabel {
     public PlayArea(Color color, Dimension dimension, ImageIcon blankTokenIcon) {
         setBackground(color);
         setBorder(BorderFactory.createLineBorder(Color.black));
-        setOpaque(false);
         setLayout(new GridLayout(rows,cols));
         minSize = dimension;
         this.blankTokenIcon = blankTokenIcon;

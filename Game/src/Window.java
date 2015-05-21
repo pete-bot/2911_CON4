@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import java.awt.Color;
 
 public class Window extends JFrame {
     private static final long serialVersionUID = 1L;
@@ -39,7 +40,6 @@ public class Window extends JFrame {
     }
 
     private void initBackground() {
-
         ImageIcon asset = assets.getAsset("sample_bg.png");
         Image img = asset == null ? null : asset.getImage();
         background = new BackgroundPanel(img, BackgroundPanel.SCALED, 0.50f,
@@ -71,13 +71,12 @@ public class Window extends JFrame {
 
     private void initTitle() {
         titlePane = new JPanel();
-        titlePane.setPreferredSize(new Dimension(400, 300));
-        titlePane.setOpaque(false);
+        titlePane.setSize(new Dimension(420, 200));
         ImageIcon titleIcon = assets.getAsset("sample_title.png");
         JLabel gameTitle = new JLabel();
         gameTitle.setIcon(titleIcon);
-        gameTitle.setRolloverEnabled(false);
         titlePane.add(gameTitle);
+        titlePane.setBackground(new Color(127, 127, 127, 127));
     }
 
     private void initWindow(BackendBoard newBoard) {
@@ -85,6 +84,8 @@ public class Window extends JFrame {
         initLayout();
         initTitle();
 
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.CENTER;
         add(titlePane, gbc);
 
         setPreferredSize(defaultSize);
@@ -96,14 +97,16 @@ public class Window extends JFrame {
         gbc.gridy += 10;
         add(frontEndBoard, gbc);
 
-        gbc.gridx = 0;
-        gbc.gridy = 0;
+        //gbc.gridx = 0;
+        //gbc.gridy = 0;
+
+        //GridBagConstraints gbc_diff = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.CENTER;
 
         add(menuPanel, gbc);
 
         menuPanel.setVisible(false);
         titlePane.setVisible(false);
-        // pack(); //Autosizes to match components
     }
 
     public void pauseGame() {
@@ -134,7 +137,6 @@ public class Window extends JFrame {
         hideMainMenu();
         showTerminalBoard();
         frontEndBoard.turnOn();
-        pack();
     }
 
 }

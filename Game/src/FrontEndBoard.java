@@ -26,7 +26,7 @@ MouseMotionListener {
     private static final long serialVersionUID = 1L;
     // TODO our colours, should be updated to match the palette
     //private Color gridColor = new Color(60, 58, 232, 255);
-    private Color gridColor = new Color(255, 255, 255, 255);
+    private Color gridColor = new Color(127, 127, 127, 127);
     private Dimension gridSize = new Dimension(700, 700);
     private Token[] gameTokens = new Token[42];
     private BackendBoard backendBoard; // Should be 'backendBoard'
