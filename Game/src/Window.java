@@ -1,13 +1,9 @@
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -26,8 +22,7 @@ public class Window extends JFrame {
     private MainMenuPanel menuPanel = new MainMenuPanel(this);
     private JPanel titlePane;
     private BackgroundPanel background;
-    private Path assetsLocation;
-    private Path bgPath;
+    private GameAssets assets = new GameAssets();
 
     public Window(BackendBoard newBoard) {
         super("Generic tile-themed sequence pattern based fun simulator.");
@@ -47,16 +42,9 @@ public class Window extends JFrame {
     }
 
     private void initBackground() {
-        bgPath = Paths.get(assetsLocation + "/bg_pattern_2.jpg");
-        BufferedImage img = null;
-        try {
-            File f = new File(bgPath.toString());
-            img = ImageIO.read(f);
-            System.out.println("File " + f.toString());
-        } catch (Exception e) {
-            System.out.println("Cannot read file: " + e);
-        }
 
+        ImageIcon asset = assets.getAsset("bg_pattern_2.jpg");
+        Image img = asset == null ? null : asset.getImage();
         background = new BackgroundPanel(img, BackgroundPanel.SCALED, 0.50f,
                 0.5f);
         setContentPane(background);
@@ -84,25 +72,17 @@ public class Window extends JFrame {
         gbc.fill = GridBagConstraints.BOTH;
     }
 
-    private void initPaths() {
-        String runningDir = System.getProperty("user.dir");
-        assetsLocation = Paths.get(runningDir.matches(".*src") ? runningDir
-                .replaceFirst("src", "") + "assets/" : runningDir + "/assets");
-    }
-
     private void initTitle() {
         titlePane = new JPanel();
         titlePane.setPreferredSize(new Dimension(400, 300));
         titlePane.setOpaque(false);
-        Path titlePath = Paths.get(assetsLocation + "/game_title.png");
-        ImageIcon icon = new ImageIcon(titlePath.toString());
+        ImageIcon titleIcon = assets.getAsset("game_title.png");
         JLabel gameTitle = new JLabel();
-        gameTitle.setIcon(icon);
+        gameTitle.setIcon(titleIcon);
         titlePane.add(gameTitle);
     }
 
     private void initWindow(BackendBoard newBoard) {
-        initPaths();
         initBackground();
         initLayout();
         initTitle();

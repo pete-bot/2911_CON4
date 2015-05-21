@@ -7,8 +7,6 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -23,7 +21,7 @@ import javax.swing.border.Border;
  * This is the main grid of tokens
  */
 public class FrontEndBoard extends JPanel implements MouseListener,
-        MouseMotionListener {
+MouseMotionListener {
 
     private static final long serialVersionUID = 1L;
     // TODO our colours, should be updated to match the palette
@@ -38,21 +36,20 @@ public class FrontEndBoard extends JPanel implements MouseListener,
     private MechanicalTurk newTurk;
     private PlayArea playArea;
     private PauseButton pauseButton;
-    private GameAssets gameAssets = new GameAssets();
-    private Path assetsLocation;
+    private JButton spacer = new JButton("");
+    private Border emptyBorder = BorderFactory.createEmptyBorder();
+    private GameAssets assets = new GameAssets();
+
     private ImageIcon blankTokenIcon;
     private ImageIcon glowingTokenIcon;
     private ImageIcon redTokenIcon;
     private ImageIcon yellowTokenIcon;
     private ImageIcon winTokenIcon;
     private ImageIcon spaceIcon;
-    private JButton spacer = new JButton(""); // Spacers are buttons for added
-                                              // functionality in GridBagLayout
-    private Border emptyBorder = BorderFactory.createEmptyBorder();
 
     public FrontEndBoard(BackendBoard backendBoard, Window mainWindow) {
         super();
-        setupPaths();
+        initIcons();
 
         pauseButton = new PauseButton(mainWindow);
         pauseButton.setOpaque(false);
@@ -160,7 +157,7 @@ public class FrontEndBoard extends JPanel implements MouseListener,
             turkMove(backendBoard);
         } else {
             System.out
-                    .println("You have entered an invalid move, please try again.");
+            .println("You have entered an invalid move, please try again.");
         }
     }
 
@@ -197,6 +194,15 @@ public class FrontEndBoard extends JPanel implements MouseListener,
             Token t = gameTokens[42 - indexToGet];
             t.setIcon(winTokenIcon);
         }
+    }
+
+    private void initIcons() {
+        blankTokenIcon = assets.getAsset("circle101.png");
+        glowingTokenIcon = assets.getAsset("glow.png");
+        redTokenIcon = assets.getAsset("circl101_RED.png");
+        yellowTokenIcon = assets.getAsset("circle101_YELLOW.png");
+        winTokenIcon = assets.getAsset("win.png");
+        spaceIcon = assets.getAsset("half_spacer.png");
     }
 
     // MOUSELISTENER AND MOUSEMOTIONLISTENER OVERRIDES
@@ -258,31 +264,6 @@ public class FrontEndBoard extends JPanel implements MouseListener,
         // AIclass is a simple way of passing in which AI that the user may want
         int AIclass = classRank;
         newTurk = new MechanicalTurk(AIclass);
-    }
-
-    private void setupPaths() {
-        String runningDir = System.getProperty("user.dir");
-        assetsLocation = Paths.get(runningDir.matches(".*src") ? runningDir
-                .replaceFirst("src", "") + "assets/" : runningDir + "/assets");
-        Path blankTokenPath = Paths.get(assetsLocation + "/circle101.png");
-        Path glowingTokenPath = Paths.get(assetsLocation + "/glow.png");
-        Path redTokenPath = Paths.get(assetsLocation + "/circle101_RED.png");
-        Path yellowTokenPath = Paths.get(assetsLocation
-                + "/circle101_YELLOW.png");
-        Path winTokenPath = Paths.get(assetsLocation + "/win.png");
-        Path spaceIconPath = Paths.get(assetsLocation + "/half_spacer.png");
-
-        blankTokenIcon = new ImageIcon(blankTokenPath.toString());
-        glowingTokenIcon = new ImageIcon(glowingTokenPath.toString());
-        redTokenIcon = new ImageIcon(redTokenPath.toString());
-        yellowTokenIcon = new ImageIcon(yellowTokenPath.toString());
-        winTokenIcon = new ImageIcon(winTokenPath.toString());
-        spaceIcon = new ImageIcon(spaceIconPath.toString());
-
-        // XXX Remove from production code!
-        System.out.println("You are running this game from: "
-                + System.getProperty("user.dir"));
-        System.out.println("Asset location" + assetsLocation.toString());
     }
 
     private void setupSpacer(GridBagConstraints gbc) {

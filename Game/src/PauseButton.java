@@ -18,8 +18,6 @@ public class PauseButton extends JPanel implements ActionListener {
     // constructor
     public PauseButton(Window mainWindow) {
 
-        // TODO: set pause button icon here
-
         // init buttons w/ listeners
         pauseButton.addActionListener(this);
 

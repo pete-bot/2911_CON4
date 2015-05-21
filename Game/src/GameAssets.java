@@ -14,32 +14,13 @@ import javax.swing.ImageIcon;
  *
  */
 public class GameAssets {
-    String runningDir;
+    private String runningDir;
     private Path assetsLocation;
+
     private HashMap<String, ImageIcon> assets = new HashMap<String, ImageIcon>();
-    private ImageIcon blankTokenIcon;
-    private ImageIcon glowingTokenIcon;
-    private ImageIcon redTokenIcon;
-    private ImageIcon yellowTokenIcon;
-    private ImageIcon winTokenIcon;
-    private ImageIcon spaceIcon;
-    private ImageIcon pvCPUIcon;
-    private ImageIcon pvpIcon;
-    private ImageIcon optionsIcon;
-    private ImageIcon spacerIcon;
-    private ImageIcon quitIcon;
-    private ImageIcon resumeIcon;
-    private ImageIcon restartIcon;
-    private ImageIcon exitIcon;
-    private ImageIcon menuIcon;
 
     public GameAssets() {
-        runningDir = System.getProperty("user.dir");
-        // One of two places we could be running the code, under src or from
-        // eclipse (in the main project tree)
-        assetsLocation = Paths.get(runningDir.matches(".*src") ? runningDir
-                .replaceFirst("src", "") + "assets/" : runningDir + "/assets");
-        addAssets();
+        initAssets();
     }
 
     private void addAssets() {
@@ -60,5 +41,19 @@ public class GameAssets {
 
     public ImageIcon getAsset(String filename) {
         return assets.get(filename);
+    }
+
+    public Path getAssetsDir() {
+        System.out.println(assetsLocation.toString());
+        return assetsLocation;
+    }
+
+    private void initAssets() {
+        runningDir = System.getProperty("user.dir");
+        // One of two places we could be running the code, under src or from
+        // eclipse (in the main project tree)
+        assetsLocation = Paths.get(runningDir.matches(".*src") ? runningDir
+                .replaceFirst("src", "") + "assets/" : runningDir + "/assets");
+        addAssets();
     }
 }
