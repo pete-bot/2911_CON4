@@ -5,12 +5,18 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
+import javax.swing.AbstractAction;
 //import javafx.scene.layout.Border;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.border.Border;
+
+import com.sun.glass.events.KeyEvent;
 
 import java.awt.Dimension;
 
@@ -34,17 +40,47 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     private ImageIcon restartIcon;
     private ImageIcon exitIcon;
     private GameAssets assets;
-    private Window window;
+    private Window mainWindow;
     private Color defaultColor = new Color(127, 127, 127, 127);
+    
 
+    // KEY BINDING
+    // MAY NOT BE THE BEST PLACE FOR THIS
+    // for key binding
+    private static final int IFW = JComponent.WHEN_IN_FOCUSED_WINDOW;
+    private static final KeyStroke escapeStroke = 
+    	    KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
+    
+    // for escape sequence (esc loads menu)
+    public AbstractAction escapeAction = new AbstractAction() { 
+		private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent event) { 
+            if(mainWindow.paused == false){
+            	System.out.println("Pausing.");
+            	mainWindow.pauseGame();
+            }else if (mainWindow.paused == true){
+            	System.out.println("un-Pausing.");
+            	mainWindow.resumeGame();
+            }
+        } 
+    };
+
+    
+    
     public MainMenuPanel(Window mainWindow, GameAssets assets) {
         this.assets = assets;
-        this.window = mainWindow;
+        this.mainWindow = mainWindow;
         setLayout(new GridBagLayout());
         setBackground(defaultColor);
         setSize(new Dimension(100,100));
         initIcons();
         addMainMenuItems();
+        
+        
+        // init key bindings
+        getInputMap(IFW).put(escapeStroke, "escapeSequence");
+        getActionMap().put( "escapeSequence", escapeAction );
     }
 
     @Override
@@ -52,11 +88,11 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         JButton buttonPressed = (JButton) e.getSource();
 
         if (buttonPressed.equals(pvCPUButton)) {
-            window.startNewGame();
+            mainWindow.startNewGame();
         } else if (buttonPressed.equals(resumeButton)) {
-            window.resumeGame();
+            mainWindow.resumeGame();
         } else if (buttonPressed.equals(restartButton)) {
-            window.resetWindow();
+            mainWindow.resetWindow();
         } else if (buttonPressed.equals(exitButton)) {
             System.exit(0);
         }
@@ -136,10 +172,18 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         remove(exitButton);
     }
 
+    public void initWinMessage(){
+        removeMainMenuItems();
+    	
+    	restartButton.addActionListener(this);
+        exitButton.addActionListener(this);
+
+    }
+    
     public void showPauseMenu() {
         // Clear the panel of older items
         removeMainMenuItems();
-
+        
         resumeButton.addActionListener(this);
         restartButton.addActionListener(this);
         exitButton.addActionListener(this);

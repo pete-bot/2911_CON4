@@ -4,10 +4,15 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
+
+import com.sun.glass.events.KeyEvent;
 
 public class PauseButton extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -15,12 +20,43 @@ public class PauseButton extends JPanel implements ActionListener {
     private GameAssets assets = new GameAssets();
     private Window window;
 
+    
+    // KEY BINDING
+    // MAY NOT BE THE BEST PLACE FOR THIS
+    // for key binding
+    private static final int IFW = JComponent.WHEN_IN_FOCUSED_WINDOW;
+    private static final KeyStroke escapeStroke = 
+    	    KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
+    
+    // for escape sequence (esc loads menu)
+    public AbstractAction escapeAction = new AbstractAction() { 
+		private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent event) { 
+            if(window.paused == false){
+            	System.out.println("Pausing.");
+            	window.pauseGame();
+            }else if (window.paused == true){
+            	System.out.println("un-Pausing.");
+            	window.resumeGame();
+            }
+        } 
+    };
+    
+    
+    
     // constructor
     public PauseButton(Window mainWindow) {
 
+    	
         // init buttons w/ listeners
         pauseButton.addActionListener(this);
-
+        
+        // init key bindings
+        getInputMap(IFW).put(escapeStroke, "escapeSequence");
+        getActionMap().put( "escapeSequence", escapeAction );
+        
+        
         // create GridBagLayout et al
         setLayout(new GridBagLayout());
         // this.setSize(new Dimension(1024, 768));

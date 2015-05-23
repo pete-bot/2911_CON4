@@ -4,15 +4,26 @@ import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
 
+import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
+
+import com.sun.glass.events.KeyEvent;
+
 import java.awt.Color;
+import java.awt.event.ActionEvent;
 
 public class Window extends JFrame {
-    private static final long serialVersionUID = 1L;
 
+	private static final long serialVersionUID = 1L;
+	
+	
+	
+    
     private FrontEndBoard frontEndBoard;
     private BackendBoard backendBoard;
     private Dimension defaultSize = new Dimension(1024, 900);
@@ -21,9 +32,11 @@ public class Window extends JFrame {
     private MainMenuPanel menuPanel = new MainMenuPanel(this, this.assets);
     private JPanel titlePane;
     private BackgroundPanel background;
+    
+    public boolean paused = false;
 
     public Window(BackendBoard newBoard) {
-        super("Generic tile-themed sequence pattern based fun simulator.");
+        super("wob wob wob wob wob wob wob wob - kee");
         initFrontendBoard(newBoard);
         initWindow(newBoard);
     }
@@ -71,11 +84,16 @@ public class Window extends JFrame {
 
     private void initTitle() {
         titlePane = new JPanel();
+        
         titlePane.setSize(new Dimension(420, 200));
         ImageIcon titleIcon = assets.getAsset("sample_title.png");
         JLabel gameTitle = new JLabel();
         gameTitle.setIcon(titleIcon);
         titlePane.add(gameTitle);
+        
+        // white
+        //titlePane.setBackground(new Color(255, 255, 235, 200));
+        // gray
         titlePane.setBackground(new Color(127, 127, 127, 127));
     }
 
@@ -110,11 +128,22 @@ public class Window extends JFrame {
     }
 
     public void pauseGame() {
-        frontEndBoard.turnOff();
+    	paused = true;
+    	frontEndBoard.turnOff();
         titlePane.setVisible(true);
         menuPanel.showPauseMenu();
+        
     }
 
+    public void endGame(int winner){
+    	// expect winner ==1, 2
+    	frontEndBoard.hidePause();
+    	
+    	// display win message and offer restart and quit
+    	// maybe difficulty select?
+    }
+    
+    
     public void resetWindow() {
         titlePane.setVisible(false);
         menuPanel.setVisible(false);
@@ -124,9 +153,11 @@ public class Window extends JFrame {
     }
 
     public void resumeGame() {
-        frontEndBoard.turnOn();
+    	paused = false;
+    	frontEndBoard.turnOn();
         titlePane.setVisible(false);
         menuPanel.setVisible(false);
+        
     }
 
     private void showTerminalBoard() {
@@ -139,4 +170,8 @@ public class Window extends JFrame {
         frontEndBoard.turnOn();
     }
 
+    
+    
+    
+    
 }

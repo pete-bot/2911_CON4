@@ -15,8 +15,10 @@ import java.util.Iterator;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.border.Border;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
@@ -24,17 +26,21 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-/*
- * This is the main grid of tokens
- */
+import com.sun.glass.events.KeyEvent;
+
+
+
 public class FrontEndBoard extends JPanel implements MouseListener,
 MouseMotionListener, ActionListener {
 
     private static final long serialVersionUID = 1L;
+    
+
+    
     // TODO our colours, should be updated to match the palette
-    //private Color gridColor = new Color(60, 58, 232, 255);
+    // private Color gridColor = new Color(60, 58, 232, 255);
     private Color gridColor = new Color(127, 127, 127, 127);
-    private Dimension gridSize = new Dimension(700, 700);
+    private Dimension gridSize = new Dimension(750, 650);
     private Token[] gameTokens = new Token[42];
     private BackendBoard backendBoard; // Should be 'backendBoard'
     private final int rows = 6;
@@ -61,11 +67,39 @@ MouseMotionListener, ActionListener {
     private ImageIcon yellowTokenIcon;
     private ImageIcon winTokenIcon;
     private ImageIcon spaceIcon;
+    
+    // KEY BINDING
+    // MAY NOT BE THE BEST PLACE FOR THIS
+    // for key binding
+    private static final int IFW = JComponent.WHEN_IN_FOCUSED_WINDOW;
+    private static final KeyStroke escapeStroke = 
+    	    KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
+    
+    // for escape sequence (esc loads menu)
+    public AbstractAction escapeAction = new AbstractAction() { 
+		private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent event) { 
+            System.out.println("esc in");
+			
+			if(mainWindow.paused == false){
+            	//System.out.println("Pausing.");
+            	mainWindow.pauseGame();
+            }else if (mainWindow.paused == true){
+            	//System.out.println("un-Pausing.");
+            	mainWindow.resumeGame();
+            }
+        } 
+    };
 
     public FrontEndBoard(BackendBoard backendBoard, Window mainWindow) {
         super();
         initIcons();
 
+        // init key bindings
+        getInputMap(IFW).put(escapeStroke, "escapeSequence");
+        getActionMap().put( "escapeSequence", escapeAction );
+        
         pauseButton = new PauseButton(mainWindow);
         pauseButton.setOpaque(false);
 
@@ -370,6 +404,23 @@ MouseMotionListener, ActionListener {
         }
     }
 
+    public void hidePause(){
+    	pauseButton.setVisible(false);
+    }
+    
+    public void showPause(){
+    	pauseButton.setVisible(true);
+    }
+    
+    
+    
+    
+    public void endGame(){
+    	// need to turn off menu button
+    	// need to present window - "Player 1 wins, better luck next time player 2"
+    	//offer to restart the game or quit
+    }
+    
     // Updates the board with the next _legal_ move
     // xPos is the column, refactor later.
     public void updateBoardWithMove(int xPos) {
