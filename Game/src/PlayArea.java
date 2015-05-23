@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
@@ -17,9 +18,9 @@ public class PlayArea extends JLabel {
     private Color defaultColor = new Color(127, 127, 127, 127);
 
     public PlayArea(Color color, Dimension dimension, ImageIcon blankTokenIcon) {
-        setBackground(new Color(127, 127, 127, 127));
-        setOpaque(true);
-        setBorder(BorderFactory.createLineBorder(Color.black));
+    	setOpaque(false);
+    	setBackground( new Color(127, 127, 127, 127) );
+    	setBorder(BorderFactory.createLineBorder(Color.black));
         setLayout(new GridLayout(rows,cols));
         minSize = dimension;
         this.blankTokenIcon = blankTokenIcon;
@@ -51,5 +52,11 @@ public class PlayArea extends JLabel {
                 i++;
             }
         }
+    }
+    
+    protected void paintComponent(Graphics g){
+    	g.setColor( getBackground() );
+        g.fillRect(0, 0, getWidth(), getHeight());
+        super.paintComponent(g);
     }
 }
