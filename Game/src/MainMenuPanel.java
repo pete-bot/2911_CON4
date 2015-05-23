@@ -1,10 +1,10 @@
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 
 import javax.swing.AbstractAction;
 //import javafx.scene.layout.Border;
@@ -16,9 +16,16 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.border.Border;
 
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
+
 import com.sun.glass.events.KeyEvent;
 
 import java.awt.Dimension;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class MainMenuPanel extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -43,7 +50,12 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     private Window mainWindow;
     private Color defaultColor = new Color(127, 127, 127, 127);
     
-
+    // music controller
+    private boolean music = false;
+    String soundFile = "../assets/Tetris.mid";
+    InputStream in;
+    AudioStream audioStream;
+    
     // KEY BINDING
     // MAY NOT BE THE BEST PLACE FOR THIS
     // for key binding
@@ -73,7 +85,11 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         this.assets = assets;
         this.mainWindow = mainWindow;
         setLayout(new GridBagLayout());
-        setBackground(defaultColor);
+        
+    	setOpaque(false);
+    	setBackground( new Color(127, 127, 127, 127) );
+    	
+        
         setSize(new Dimension(100,100));
         initIcons();
         addMainMenuItems();
@@ -95,6 +111,12 @@ public class MainMenuPanel extends JPanel implements ActionListener {
             mainWindow.resumeGame();
         } else if (buttonPressed.equals(restartButton)) {
             mainWindow.resetWindow();
+        }else if (buttonPressed.equals(optionsButton)){
+        	try {
+				this.musicToggle();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
         } else if (buttonPressed.equals(exitButton)) {
             System.exit(0);
         }
@@ -182,6 +204,30 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
     }
     
+    @SuppressWarnings("deprecation")
+	public void musicToggle() throws Exception{
+    	if(in ==null){
+    		in = new FileInputStream(soundFile);
+    	}
+    	if(audioStream == null){
+    		audioStream = new AudioStream(in);
+    	}
+    	
+        
+    	if(music == false){
+    		System.out.println("playin' tunes!");
+    		
+    		
+            AudioPlayer.player.start(audioStream);
+            music = true;
+    	}else{
+    		System.out.println("stoppin tunes :(");
+    		AudioPlayer.player.stop(audioStream);
+    		music = false;
+    	}
+    }
+    
+    
     public void showPauseMenu() {
         // Clear the panel of older items
         removeMainMenuItems();
@@ -218,6 +264,13 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         gbc.gridwidth = 2;
 
         setVisible(true);
+    }
+    
+    // fix tranparent panel issue
+    protected void paintComponent(Graphics g){
+    	g.setColor( getBackground() );
+        g.fillRect(0, 0, getWidth(), getHeight());
+        super.paintComponent(g);
     }
 
 }

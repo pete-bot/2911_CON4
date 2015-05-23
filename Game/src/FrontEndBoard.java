@@ -409,7 +409,7 @@ MouseMotionListener, ActionListener {
     }
     
     public void showPause(){
-    	pauseButton.setVisible(true);    	
+    	pauseButton.setVisible(true);	    	
     }
     
     

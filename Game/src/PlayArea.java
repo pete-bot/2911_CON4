@@ -18,8 +18,11 @@ public class PlayArea extends JLabel {
     private Color defaultColor = new Color(127, 127, 127, 127);
 
     public PlayArea(Color color, Dimension dimension, ImageIcon blankTokenIcon) {
+    	
+    	// board transparency settings - may need to change depending on colour prefs
     	setOpaque(false);
     	setBackground( new Color(127, 127, 127, 127) );
+    	
     	setBorder(BorderFactory.createLineBorder(Color.black));
         setLayout(new GridLayout(rows,cols));
         minSize = dimension;
@@ -54,6 +57,7 @@ public class PlayArea extends JLabel {
         }
     }
     
+    // fix tranparent panel issue
     protected void paintComponent(Graphics g){
     	g.setColor( getBackground() );
         g.fillRect(0, 0, getWidth(), getHeight());
