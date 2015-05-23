@@ -80,7 +80,7 @@ MouseMotionListener, ActionListener {
 		private static final long serialVersionUID = 1L;
 
 		public void actionPerformed(ActionEvent event) { 
-            System.out.println("esc in");
+            System.out.println("frontend-esc");
 			
 			if(mainWindow.paused == false){
             	//System.out.println("Pausing.");
@@ -97,7 +97,7 @@ MouseMotionListener, ActionListener {
         initIcons();
 
         // init key bindings
-        getInputMap(IFW).put(escapeStroke, "escapeSequence");
+        getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeStroke, "escapeSequence");
         getActionMap().put( "escapeSequence", escapeAction );
         
         pauseButton = new PauseButton(mainWindow);
@@ -409,7 +409,7 @@ MouseMotionListener, ActionListener {
     }
     
     public void showPause(){
-    	pauseButton.setVisible(true);
+    	pauseButton.setVisible(true);    	
     }
     
     

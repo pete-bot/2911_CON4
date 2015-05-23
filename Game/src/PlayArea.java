@@ -14,9 +14,11 @@ public class PlayArea extends JLabel {
     private final int cols = 7;
     private final Token[] gameTokens = new Token[42];
     private ImageIcon blankTokenIcon;
+    private Color defaultColor = new Color(127, 127, 127, 127);
 
     public PlayArea(Color color, Dimension dimension, ImageIcon blankTokenIcon) {
-        setBackground(color);
+        setBackground(new Color(127, 127, 127, 127));
+        setOpaque(true);
         setBorder(BorderFactory.createLineBorder(Color.black));
         setLayout(new GridLayout(rows,cols));
         minSize = dimension;

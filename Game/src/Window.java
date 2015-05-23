@@ -130,7 +130,7 @@ public class Window extends JFrame {
     public void pauseGame() {
     	paused = true;
     	frontEndBoard.turnOff();
-        titlePane.setVisible(true);
+        titlePane.setVisible(false);
         menuPanel.showPauseMenu();
         
     }

@@ -56,7 +56,8 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 		private static final long serialVersionUID = 1L;
 
 		public void actionPerformed(ActionEvent event) { 
-            if(mainWindow.paused == false){
+            System.out.println("mainMenu-esc");
+			if(mainWindow.paused == false){
             	System.out.println("Pausing.");
             	mainWindow.pauseGame();
             }else if (mainWindow.paused == true){
@@ -79,6 +80,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         
         
         // init key bindings
+        setFocusable(true);
         getInputMap(IFW).put(escapeStroke, "escapeSequence");
         getActionMap().put( "escapeSequence", escapeAction );
     }
@@ -183,6 +185,8 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     public void showPauseMenu() {
         // Clear the panel of older items
         removeMainMenuItems();
+        
+        
         
         resumeButton.addActionListener(this);
         restartButton.addActionListener(this);

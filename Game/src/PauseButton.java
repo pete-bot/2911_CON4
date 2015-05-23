@@ -33,7 +33,9 @@ public class PauseButton extends JPanel implements ActionListener {
 		private static final long serialVersionUID = 1L;
 
 		public void actionPerformed(ActionEvent event) { 
-            if(window.paused == false){
+            
+			System.out.println("paused-esc");
+			if(window.paused == false){
             	System.out.println("Pausing.");
             	window.pauseGame();
             }else if (window.paused == true){
@@ -47,11 +49,10 @@ public class PauseButton extends JPanel implements ActionListener {
     
     // constructor
     public PauseButton(Window mainWindow) {
-
+    	
     	
         // init buttons w/ listeners
         pauseButton.addActionListener(this);
-        
         // init key bindings
         getInputMap(IFW).put(escapeStroke, "escapeSequence");
         getActionMap().put( "escapeSequence", escapeAction );
