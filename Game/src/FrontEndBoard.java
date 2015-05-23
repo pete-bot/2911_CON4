@@ -1,10 +1,13 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -13,28 +16,30 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import javax.swing.BorderFactory;
+import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 /*
  * This is the main grid of tokens
  */
 public class FrontEndBoard extends JPanel implements MouseListener,
-        MouseMotionListener {
+        MouseMotionListener, ActionListener {
 
     private static final long serialVersionUID = 1L;
     // our colours, should be updated to match the palette
     private Color gridColor = new Color(60, 58, 232, 255);
 
     Dimension gridSize = new Dimension(700, 700);
-    private Token[] gameTokens = new Token[42];
+   
+    
     private BackendBoard backendBoard; // Should be 'backendBoard'
     private final int rows = 6;
     private final int cols = 7;
     private final int tilesOnBoard = 42;
+    private Token[] gameTokens = new Token[tilesOnBoard];
     private Window mainWindow;
     private MechanicalTurk newTurk;
     private PlayArea playArea;
@@ -42,6 +47,13 @@ public class FrontEndBoard extends JPanel implements MouseListener,
 
     private PauseButton pausePanel;
 
+    // ANIMATING HIGHLIGHTED WIN:
+    private ArrayList<Point> winList = new ArrayList<Point>();
+    private int animationBeat = 0;
+    private final int blinkTime = 600;
+    Timer clock = new Timer(600,this);
+    
+    // PATHS
     Path assetsLocation;
     private ImageIcon blankTokenIcon;
     private ImageIcon glowingTokenIcon;
@@ -49,8 +61,6 @@ public class FrontEndBoard extends JPanel implements MouseListener,
     private ImageIcon yellowTokenIcon;
     private ImageIcon winTokenIcon;
 
-    private JButton spacer = new JButton("");
-    
     public FrontEndBoard(BackendBoard backendBoard, Window mainWindow) {
         super();
         setUpPaths();
@@ -77,24 +87,9 @@ public class FrontEndBoard extends JPanel implements MouseListener,
         gbc.weightx = 0;
         gbc.weighty = 0;
 
-        //gbc.anchor = GridBagConstraints.SOUTH;
-        
-        
-        
-        javax.swing.border.Border empty = BorderFactory.createEmptyBorder();
-        Path spacerIcon = Paths.get(assetsLocation + "/half_spacer.png");
-        ImageIcon space_Icon = new ImageIcon(spacerIcon.toString());
-        
-        spacer.setIcon(space_Icon);
-        spacer.setOpaque(false);
-        spacer.setContentAreaFilled(false);
-        spacer.setBorderPainted(false);
-        spacer.setBorder(empty);
-        
-        add(spacer, gbc);
-        gbc.gridy++;
-        
-        
+        gbc.anchor = GridBagConstraints.SOUTH;
+        gbc.fill = GridBagConstraints.BOTH;
+
 
         setSize(gridSize);
 
@@ -105,8 +100,6 @@ public class FrontEndBoard extends JPanel implements MouseListener,
         playArea.addMouseListener(this);
         playArea.addMouseMotionListener(this);
         playArea.setLayout(frontEndBoardLayout);
-        playArea.setBorder(empty);
-        
         add(playArea, gbc);
 
         int i = 0, currY = 0, currX = 0;
@@ -114,7 +107,8 @@ public class FrontEndBoard extends JPanel implements MouseListener,
             for(currX = 0; currX<7; currX++){
             	Token token = new Token(currX, currY, blankTokenIcon);
                 token.setOpaque(false);
-                Dimension iconSize = new Dimension(100,100);
+                Dimension iconSize = new Dimension(blankTokenIcon.getIconHeight(),
+                        blankTokenIcon.getIconWidth());
                 token.setPreferredSize(iconSize);
                 playArea.add(token);
                 gameTokens[i] = token;
@@ -123,25 +117,39 @@ public class FrontEndBoard extends JPanel implements MouseListener,
             }
             gbc.gridy++;
         }
-        
+
+
+
+
+        // BACKUP
+//        for (int i = 0; i < 42; i++) {
+//            int currX = i % 7;
+//            int currY = 5 - ((int) Math.ceil(i / 7));
+//            Token token = new Token(currX, currY, blankTokenIcon);
+//            token.setOpaque(false);
+//            Dimension iconSize = new Dimension(blankTokenIcon.getIconHeight(),
+//                    blankTokenIcon.getIconWidth());
+//            token.setPreferredSize(iconSize);
+//            playArea.add(token);
+//            gameTokens[i] = token;
+//        }
+
         gbc.gridy++;
 
-        gbc.fill = GridBagConstraints.BOTH;
-        
-        
         // disable opacity on the
         setOpaque(false);
 
         // adjust position of menu button
-        gbc.gridx = 25;
+        gbc.gridx = 40;
         add(pausePanel, gbc);
         
+
     }
 
     private void setUpPaths() {
         String runningDir = System.getProperty("user.dir");
         assetsLocation = Paths.get( runningDir.matches(".*src") ? runningDir.replaceFirst("src", "") + "assets/" : runningDir + "/assets");
-        Path blankTokenPath = Paths.get(assetsLocation + "/circle101.png");
+        Path blankTokenPath = Paths.get(assetsLocation + "/circle101.jpg");
         Path glowingTokenPath = Paths.get(assetsLocation + "/glow.png");
         Path redTokenPath = Paths.get(assetsLocation + "/circle101_RED.png");
         Path yellowTokenPath = Paths.get(assetsLocation + "/circle101_YELLOW.png");
@@ -177,17 +185,61 @@ public class FrontEndBoard extends JPanel implements MouseListener,
         }
     }
 
-    // this highlights the win
-    public void highlightWin(ArrayList<Point> winList) {
-        Iterator<Point> winIterator = winList.iterator();
+    
+	@Override
+	// (replaces 'highlightWin' function)
+	public void actionPerformed(ActionEvent e) {
+		 Iterator<Point> winIterator = this.winList.iterator();
+	        while (winIterator.hasNext()) {
+	            Point winCoords = winIterator.next();
+	            
+	            // converts 2-D (x,y) point to 1-D index in array. 
+	            int indexToGet = (winCoords.x) * (cols) + (cols - winCoords.y);
+	            Token t = gameTokens[42 - indexToGet];
+	            
+	            // determines who's turn it is. 1 = red, 
+	            boolean playerTurn = backendBoard.getTurn() % 2 == 0;
+	            
+	            // based off 'beats'
+	            // -> we are checking the field 'animationBeat' in this class. it can either be: 0 or 1.
+	            // at every iteration the 'actionPerformed' is called, animation beat is incremented 1
+	            //    but quickly reset to 0 if it beat == 2.
+	            // so animationBeat = 0,1,0,1,0,1...
+	            if (animationBeat % 2 == 0) {
+	            	// beat = 0;
+	            	t.setIcon(this.winTokenIcon);
+	            } else {
+	            	// beat = 1;
+	            	t.setIcon(playerTurn ? redTokenIcon : yellowTokenIcon);
+	            }
+	        }
+	        
+	        animationBeat++; // increment beat by 1.
+	        
+	        // resets the animation 'counter' to 0.
+	        if (animationBeat == 2) {
+	        	animationBeat = 0;
+	        }
+	        
+	        // required to update icons on board
+	        revalidate();
+	}
+
+    public void setToPlayerToken() {
+        Iterator<Point> winIterator = this.winList.iterator();
         while (winIterator.hasNext()) {
             Point winCoords = winIterator.next();
-            System.out.println("winCoords = " + winCoords.toString());
+            //System.out.println("winCoords = " + winCoords.toString());
             int indexToGet = (winCoords.x) * (cols) + (cols - winCoords.y);
             Token t = gameTokens[42 - indexToGet];
-            t.setIcon(winTokenIcon);
+            boolean playerTurn = backendBoard.getTurn() % 2 == 0;
+            t.setIcon(playerTurn ? redTokenIcon : yellowTokenIcon);
         }
     }
+
+    
+
+    
 
     // TODO
     // implement player choice (go first or second)
@@ -202,11 +254,12 @@ public class FrontEndBoard extends JPanel implements MouseListener,
             backendBoard.makeMove(newAction);
             backendBoard.showTerminalBoard();
 
-            ArrayList<Point> winList = backendBoard.checkWinState(newAction);
+            this.winList = backendBoard.checkWinState(newAction);
 
             // Game win found?
             if (!winList.isEmpty()) {
-                highlightWin(winList);
+            	clock.restart();
+                //highlightBlinkingWin(this.winList);
                 if (backendBoard.getTurn() % 2 == 0) {
                     System.out.println("PLAYER_1, you WIN!");
                     JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
@@ -214,6 +267,8 @@ public class FrontEndBoard extends JPanel implements MouseListener,
                     System.out.println("PLAYER_2, you WIN!");
                     JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
                 }
+                clock.stop();
+                winList.clear();
                 return;
             }
 
@@ -247,10 +302,10 @@ public class FrontEndBoard extends JPanel implements MouseListener,
         backendBoard.showTerminalBoard();
         updateBoardWithMove(turkMove.getColumn());
 
-        ArrayList<Point> winList = backendBoard.checkWinState(turkMove);
+        this.winList = backendBoard.checkWinState(turkMove);
         
         if (!winList.isEmpty()) {
-        	highlightWin(winList);
+        	clock.restart();
             if (backendBoard.getTurn() % 2 == 0) {
                 System.out.println("PLAYER_1, you WIN!");
                 JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
@@ -258,6 +313,8 @@ public class FrontEndBoard extends JPanel implements MouseListener,
                 System.out.println("PLAYER_2, you WIN!");
                 JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
             }
+            clock.stop();
+            winList.clear();
             mainWindow.resetWindow();
             return;
         }
@@ -371,5 +428,6 @@ public class FrontEndBoard extends JPanel implements MouseListener,
         setVisible(true);
         setEnabled(true);
     }
+
 
 }
