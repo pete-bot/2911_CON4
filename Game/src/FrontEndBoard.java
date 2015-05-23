@@ -4,6 +4,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -16,12 +18,17 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
+import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.Timer;
 
 /*
  * This is the main grid of tokens
  */
 public class FrontEndBoard extends JPanel implements MouseListener,
-MouseMotionListener {
+MouseMotionListener, ActionListener {
 
     private static final long serialVersionUID = 1L;
     // TODO our colours, should be updated to match the palette
@@ -41,6 +48,13 @@ MouseMotionListener {
     private Border emptyBorder = BorderFactory.createEmptyBorder();
     private GameAssets assets = new GameAssets();
 
+    // ANIMATING HIGHLIGHTED WIN:
+    private ArrayList<Point> winList = new ArrayList<Point>();
+    private int animationBeat = 0;
+    private final int blinkTime = 600;
+    Timer clock = new Timer(600,this);
+    
+    // PATHS
     private ImageIcon blankTokenIcon;
     private ImageIcon glowingTokenIcon;
     private ImageIcon redTokenIcon;
@@ -129,11 +143,11 @@ MouseMotionListener {
             backendBoard.makeMove(newAction);
             backendBoard.showTerminalBoard();
 
-            ArrayList<Point> winList = backendBoard.checkWinState(newAction);
+            this.winList = backendBoard.checkWinState(newAction);
 
             // Game win found?
             if (!winList.isEmpty()) {
-                highlightWin(winList);
+            	clock.restart();
                 if (backendBoard.getTurn() % 2 == 0) {
                     System.out.println("PLAYER_1, you WIN!");
                     JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
@@ -142,6 +156,8 @@ MouseMotionListener {
                     JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
                 }
                 resetBoard();
+                clock.stop();
+                winList.clear();
                 return;
             }
 
@@ -185,17 +201,45 @@ MouseMotionListener {
         }
     }
 
-    // this highlights the win
-    public void highlightWin(ArrayList<Point> winList) {
-        Iterator<Point> winIterator = winList.iterator();
-        while (winIterator.hasNext()) {
-            Point winCoords = winIterator.next();
-            System.out.println("winCoords = " + winCoords.toString());
-            int indexToGet = winCoords.x * cols + cols - winCoords.y;
-            Token t = gameTokens[42 - indexToGet];
-            t.setIcon(winTokenIcon);
-        }
-    }
+
+	@Override
+	// (replaces 'highlightWin' function)
+	public void actionPerformed(ActionEvent e) {
+		 Iterator<Point> winIterator = this.winList.iterator();
+	        while (winIterator.hasNext()) {
+	            Point winCoords = winIterator.next();
+	            
+	            // converts 2-D (x,y) point to 1-D index in array. 
+	            int indexToGet = (winCoords.x) * (cols) + (cols - winCoords.y);
+	            Token t = gameTokens[42 - indexToGet];
+	            
+	            // determines who's turn it is. 1 = red, 
+	            boolean playerTurn = backendBoard.getTurn() % 2 == 0;
+	            
+	            // based off 'beats'
+	            // -> we are checking the field 'animationBeat' in this class. it can either be: 0 or 1.
+	            // at every iteration the 'actionPerformed' is called, animation beat is incremented 1
+	            //    but quickly reset to 0 if it beat == 2.
+	            // so animationBeat = 0,1,0,1,0,1...
+	            if (animationBeat % 2 == 0) {
+	            	// beat = 0;
+	            	t.setIcon(this.winTokenIcon);
+	            } else {
+	            	// beat = 1;
+	            	t.setIcon(playerTurn ? redTokenIcon : yellowTokenIcon);
+	            }
+	        }
+	        
+	        animationBeat++; // increment beat by 1.
+	        
+	        // resets the animation 'counter' to 0.
+	        if (animationBeat == 2) {
+	        	animationBeat = 0;
+	        }
+	        
+	        // required to update icons on board
+	        revalidate();
+	}
 
     private void initIcons() {
         blankTokenIcon = assets.getAsset("sample_token.png");
@@ -288,10 +332,10 @@ MouseMotionListener {
         backendBoard.showTerminalBoard();
         updateBoardWithMove(turkMove.getColumn());
 
-        ArrayList<Point> winList = backendBoard.checkWinState(turkMove);
+        this.winList = backendBoard.checkWinState(turkMove);
 
         if (!winList.isEmpty()) {
-            highlightWin(winList);
+        	clock.restart();
             if (backendBoard.getTurn() % 2 == 0) {
                 System.out.println("PLAYER_1, you WIN!");
                 JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
@@ -300,6 +344,8 @@ MouseMotionListener {
                 JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
             }
             mainWindow.resetWindow();
+            clock.stop();
+            winList.clear();
             return;
         }
 
