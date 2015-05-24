@@ -24,14 +24,10 @@ import javax.swing.Timer;
 import javax.swing.border.Border;
 
 public class FrontEndBoard extends JLayeredPane implements MouseListener,
-MouseMotionListener, ActionListener {
+        MouseMotionListener, ActionListener {
 
     private static final long serialVersionUID = 1L;
 
-    // KEY BINDING
-    // MAY NOT BE THE BEST PLACE FOR THIS
-    // for key binding
-    @SuppressWarnings("unused")
     private static final int InFocusWindow = JComponent.WHEN_IN_FOCUSED_WINDOW;
     private static final KeyStroke escapeStroke = KeyStroke.getKeyStroke(
             KeyEvent.VK_ESCAPE, 0);
@@ -67,24 +63,6 @@ MouseMotionListener, ActionListener {
 
     private ImageIcon winTokenIcon;
     private ImageIcon spaceIcon;
-
-    // for escape sequence (esc loads menu)
-    // public AbstractAction escapeAction = new AbstractAction() {
-    // private static final long serialVersionUID = 1L;
-    //
-    // @Override
-    // public void actionPerformed(ActionEvent event) {
-    // System.out.println("frontend-esc");
-    //
-    // if (mainWindow.paused == false) {
-    // // System.out.println("Pausing.");
-    // mainWindow.pauseGame();
-    // } else if (mainWindow.paused == true) {
-    // // System.out.println("un-Pausing.");
-    // mainWindow.resumeGame();
-    // }
-    // }
-    // };
 
     public FrontEndBoard(BackendBoard backendBoard, Window mainWindow) {
         super();
@@ -252,7 +230,7 @@ MouseMotionListener, ActionListener {
             turkMove(backendBoard);
         } else {
             System.out
-            .println("You have entered an invalid move, please try again.");
+                    .println("You have entered an invalid move, please try again.");
         }
     }
 

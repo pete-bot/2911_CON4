@@ -25,9 +25,6 @@ import sun.audio.AudioStream;
 public class MainMenuPanel extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
 
-    // KEY BINDING
-    // MAY NOT BE THE BEST PLACE FOR THIS
-    // for key binding
     private static final int InFocusWindow = JComponent.WHEN_IN_FOCUSED_WINDOW;
     private static final KeyStroke escapeStroke = KeyStroke.getKeyStroke(
             KeyEvent.VK_ESCAPE, 0);
@@ -61,23 +58,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
     InputStream in;
     AudioStream audioStream;
-
-    // for escape sequence (esc loads menu)
-    // public AbstractAction escapeAction = new AbstractAction() {
-    // private static final long serialVersionUID = 1L;
-    //
-    // @Override
-    // public void actionPerformed(ActionEvent event) {
-    // System.out.println("mainMenu-esc");
-    // if (mainWindow.paused == false) {
-    // System.out.println("Pausing.");
-    // mainWindow.pauseGame();
-    // } else if (mainWindow.paused == true) {
-    // System.out.println("un-Pausing.");
-    // mainWindow.resumeGame();
-    // }
-    // }
-    // };
 
     public MainMenuPanel(Window mainWindow, GameAssets assets) {
         this.assets = assets;

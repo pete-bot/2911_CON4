@@ -5,28 +5,17 @@ import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.KeyStroke;
 
 public class Window extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
-    // KEY BINDING
-    // MAY NOT BE THE BEST PLACE FOR THIS
-    // for key binding
-    @SuppressWarnings("unused")
-    private static final int InFocusWindow = JComponent.WHEN_IN_FOCUSED_WINDOW;
-    @SuppressWarnings("unused")
-    private static final KeyStroke escapeStroke = KeyStroke.getKeyStroke(
-            KeyEvent.VK_ESCAPE, 0);
     private FrontEndBoard frontEndBoard;
     private BackendBoard backendBoard;
     private Dimension defaultSize = new Dimension(1024, 900);
@@ -37,10 +26,9 @@ public class Window extends JFrame {
     private JPanel titlePane;
 
     private BackgroundPanel background;
-    public boolean paused = false;
     public boolean inMainMenu = true;
 
-    // Public lambda for escape behavior.
+    // Provides escape behavior
     public AbstractAction escapeAction = new AbstractAction() {
         private static final long serialVersionUID = 1L;
         private boolean paused = true;
