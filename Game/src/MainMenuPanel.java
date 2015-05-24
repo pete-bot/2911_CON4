@@ -5,6 +5,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
 //import javafx.scene.layout.Border;
@@ -19,7 +20,8 @@ import javax.swing.border.Border;
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 
-import com.sun.glass.events.KeyEvent;
+
+
 
 import java.awt.Dimension;
 import java.io.File;
@@ -52,7 +54,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     
     // music controller
     private boolean music = false;
-    String soundFile = "../assets/Tetris.mid";
+    String soundFile = "../assets/taylor_swift-shake_it_off.mid";
     InputStream in;
     AudioStream audioStream;
     
@@ -79,7 +81,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         } 
     };
 
-    
     
     public MainMenuPanel(Window mainWindow, GameAssets assets) {
         this.assets = assets;
@@ -196,32 +197,49 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         remove(exitButton);
     }
 
-    public void initWinMessage(){
+    public void showWinMessage(){
         removeMainMenuItems();
     	
+    	// set glassy pane behind win message
+    	setOpaque(false);
+    	setBackground( new Color(127, 127, 127, 127) );
+    	
+    	
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(2, 2, 2, 2);
+        
+        initButton(restartButton);
+        restartButton.setIcon(restartIcon);
+        add(restartButton, gbc);
+        gbc.gridy++;
+
+        initButton(exitButton);
+        exitButton.setIcon(quitIcon);
+        add(exitButton, gbc);
+        
     	restartButton.addActionListener(this);
         exitButton.addActionListener(this);
-
+        
+        
+        requestFocus();
+        setVisible(true);
+        
     }
     
-    @SuppressWarnings("deprecation")
-	public void musicToggle() throws Exception{
-    	if(in ==null){
+    public void musicToggle() throws Exception{
+    	if(in ==null && audioStream == null ){
     		in = new FileInputStream(soundFile);
-    	}
-    	if(audioStream == null){
     		audioStream = new AudioStream(in);
     	}
     	
-        
     	if(music == false){
     		System.out.println("playin' tunes!");
-    		
-    		
-            AudioPlayer.player.start(audioStream);
+    		AudioPlayer.player.start(audioStream);
             music = true;
     	}else{
-    		System.out.println("stoppin tunes :(");
+    		System.out.println("stoppin' tunes :(");
     		AudioPlayer.player.stop(audioStream);
     		music = false;
     	}
@@ -231,8 +249,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     public void showPauseMenu() {
         // Clear the panel of older items
         removeMainMenuItems();
-        
-        
         
         resumeButton.addActionListener(this);
         restartButton.addActionListener(this);

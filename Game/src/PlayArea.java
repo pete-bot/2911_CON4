@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 
 public class PlayArea extends JLabel {
 
@@ -50,12 +51,13 @@ public class PlayArea extends JLabel {
                 token.setOpaque(false);
                 Dimension iconSize = new Dimension(100,100);
                 token.setPreferredSize(iconSize);
-                add(token);
+                add(token, new Integer(2));
                 gameTokens[i] = token;
                 i++;
             }
         }
     }
+
     
     // fix tranparent panel issue
     protected void paintComponent(Graphics g){

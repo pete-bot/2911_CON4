@@ -6,6 +6,7 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -16,6 +17,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
@@ -26,11 +28,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import com.sun.glass.events.KeyEvent;
 
 
-
-public class FrontEndBoard extends JPanel implements MouseListener,
+public class FrontEndBoard extends JLayeredPane implements MouseListener,
 MouseMotionListener, ActionListener {
 
     private static final long serialVersionUID = 1L;
@@ -164,11 +164,7 @@ MouseMotionListener, ActionListener {
         return -1; // No column found.
     }
 
-    // TODO
-    // implement player choice (go first or second)
-    // this will be pulled from the intro menu
-    // this is essentially the 'primary function through which the game is
-    // played'
+
     public void getUserMove(Action newAction) {
         if (backendBoard.isLegal(newAction)) {
 
@@ -184,10 +180,12 @@ MouseMotionListener, ActionListener {
             	clock.restart();
                 if (backendBoard.getTurn() % 2 == 0) {
                     System.out.println("PLAYER_1, you WIN!");
-                    JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
+                    //JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
+                    endGame(1);
                 } else {
                     System.out.println("PLAYER_2, you WIN!");
-                    JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
+                    //JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
+                    endGame(2);
                 }
                 resetBoard();
                 clock.stop();
@@ -287,8 +285,6 @@ MouseMotionListener, ActionListener {
     // MOUSELISTENER AND MOUSEMOTIONLISTENER OVERRIDES
     @Override
     public void mouseClicked(MouseEvent e) {
-        // FIXME Testing
-        // Package the appropriate column the mouse is on into an Action
         int col = getColumn(e.getX());
         Action newMove = new Action(1, col);
         System.out.printf("Column %d chosen.\n", col);
@@ -409,16 +405,14 @@ MouseMotionListener, ActionListener {
     }
     
     public void showPause(){
-    	pauseButton.setVisible(true);	    	
+    	pauseButton.setVisible(true);
+    	pauseButton.requestFocusInWindow();
     }
     
     
-    
-    
-    public void endGame(){
-    	// need to turn off menu button
-    	// need to present window - "Player 1 wins, better luck next time player 2"
-    	//offer to restart the game or quit
+    // need to fix design of this
+    public void endGame(int winner){
+    	mainWindow.endGame(winner);
     }
     
     // Updates the board with the next _legal_ move

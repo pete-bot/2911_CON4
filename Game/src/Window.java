@@ -21,9 +21,6 @@ public class Window extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	
-	
-	
-    
     private FrontEndBoard frontEndBoard;
     private BackendBoard backendBoard;
     private Dimension defaultSize = new Dimension(1024, 900);
@@ -137,18 +134,22 @@ public class Window extends JFrame {
 
     public void endGame(int winner){
     	// expect winner ==1, 2
+    	frontEndBoard.turnOff();
     	frontEndBoard.hidePause();
+    	menuPanel.showWinMessage();
+    	System.out.println("congratulations, player "+winner);
     	
+    	frontEndBoard.turnOn();
     	// display win message and offer restart and quit
     	// maybe difficulty select?
     }
-    
-    
+     
     public void resetWindow() {
         titlePane.setVisible(false);
         menuPanel.setVisible(false);
         frontEndBoard.turnOn();
         frontEndBoard.resetBoard();
+        frontEndBoard.showPause();
         showTerminalBoard();
     }
 

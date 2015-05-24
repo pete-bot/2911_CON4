@@ -1,3 +1,5 @@
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -58,6 +60,10 @@ public class PauseButton extends JPanel implements ActionListener {
         getActionMap().put( "escapeSequence", escapeAction );
         
         
+        // board transparency settings - may need to change depending on colour prefs
+    	setOpaque(false);
+    	setBackground( new Color(127, 127, 127, 127) );
+        
         // create GridBagLayout et al
         setLayout(new GridBagLayout());
         // this.setSize(new Dimension(1024, 768));
@@ -87,5 +93,12 @@ public class PauseButton extends JPanel implements ActionListener {
         if (buttonPressed.equals(pauseButton)) {
             window.pauseGame();
         }
+    }
+    
+    // fix tranparent panel issue
+    protected void paintComponent(Graphics g){
+    	g.setColor( getBackground() );
+        g.fillRect(0, 0, getWidth(), getHeight());
+        super.paintComponent(g);
     }
 }

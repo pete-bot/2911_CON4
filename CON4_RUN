@@ -2,4 +2,4 @@
 
 cd Game/src/
 rm *.class
-javac -Xlint *.java && java Game
+javac -Xlint -XDignore.symbol.file *.java && java Game
