@@ -54,7 +54,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     
     // music controller
     private boolean music = false;
-    String soundFile = "../assets/taylor_swift-shake_it_off.mid";
+    String soundFile = "../assets/shakira-hips_dont_lie.mid";
     InputStream in;
     AudioStream audioStream;
     
@@ -200,9 +200,15 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     public void showWinMessage(){
         removeMainMenuItems();
     	
-    	// set glassy pane behind win message
-    	setOpaque(false);
-    	setBackground( new Color(127, 127, 127, 127) );
+        
+        final JPanel glass = (JPanel) mainWindow.getGlassPane();
+        glass.setVisible(true);
+        glass.setLayout(new GridBagLayout());
+    	
+        // set glassy pane behind win message
+    	glass.setOpaque(false);
+    	glass.setBackground( new Color(127, 127, 127, 127) );
+        
     	
     	
         GridBagConstraints gbc = new GridBagConstraints();
@@ -212,19 +218,19 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         
         initButton(restartButton);
         restartButton.setIcon(restartIcon);
-        add(restartButton, gbc);
+        glass.add(restartButton, gbc);
         gbc.gridy++;
 
         initButton(exitButton);
         exitButton.setIcon(quitIcon);
-        add(exitButton, gbc);
+        glass.add(exitButton, gbc);
         
     	restartButton.addActionListener(this);
         exitButton.addActionListener(this);
         
         
-        requestFocus();
-        setVisible(true);
+        glass.requestFocus();
+        glass.setVisible(true);
         
     }
     
@@ -249,6 +255,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     public void showPauseMenu() {
         // Clear the panel of older items
         removeMainMenuItems();
+
         
         resumeButton.addActionListener(this);
         restartButton.addActionListener(this);

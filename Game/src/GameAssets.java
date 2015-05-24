@@ -32,7 +32,7 @@ public class GameAssets {
                 ImageIcon newAsset = new ImageIcon(assetsLocation + "/"
                         + filename);
                 assets.put(filename, newAsset);
-                System.out.println("Adding asset " + filename);
+                //System.out.println("Adding asset " + filename);
             } else { // All assets must be at the top level
                 continue;
             }
@@ -44,7 +44,7 @@ public class GameAssets {
     }
 
     public Path getAssetsDir() {
-        System.out.println(assetsLocation.toString());
+        //System.out.println(assetsLocation.toString());
         return assetsLocation;
     }
 

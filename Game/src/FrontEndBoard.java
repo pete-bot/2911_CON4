@@ -104,7 +104,7 @@ MouseMotionListener, ActionListener {
         pauseButton.setOpaque(false);
 
         // XXX Remove all instances of AI code from FrontEndBoard when we can
-        // The gameplan is: create a strategy pattern way of
+        // The game plan is: create a strategy pattern way of
         int terrifiedChildAI = 0;
         setupAI(terrifiedChildAI);
 
@@ -116,6 +116,11 @@ MouseMotionListener, ActionListener {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(2, 2, 2, 2);
+        
+        gbc.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+        gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+
+        gbc.weightx = 1.0;
 
         // these values change the way the resizing modifies spacing
         // distribution on the tokens
@@ -187,7 +192,7 @@ MouseMotionListener, ActionListener {
                     //JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
                     endGame(2);
                 }
-                resetBoard();
+                //resetBoard();
                 clock.stop();
                 winList.clear();
                 return;
@@ -406,7 +411,6 @@ MouseMotionListener, ActionListener {
     
     public void showPause(){
     	pauseButton.setVisible(true);
-    	pauseButton.requestFocusInWindow();
     }
     
     

@@ -36,6 +36,7 @@ public class Window extends JFrame {
         super("wob wob wob wob wob wob wob wob - kee");
         initFrontendBoard(newBoard);
         initWindow(newBoard);
+        pack();
     }
 
     public void displayMenu() {
@@ -134,12 +135,12 @@ public class Window extends JFrame {
 
     public void endGame(int winner){
     	// expect winner ==1, 2
-    	frontEndBoard.turnOff();
-    	frontEndBoard.hidePause();
+    	//frontEndBoard.turnOff();
+    	//frontEndBoard.hidePause();
     	menuPanel.showWinMessage();
     	System.out.println("congratulations, player "+winner);
     	
-    	frontEndBoard.turnOn();
+    	//frontEndBoard.turnOn();
     	// display win message and offer restart and quit
     	// maybe difficulty select?
     }
