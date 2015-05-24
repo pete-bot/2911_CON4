@@ -238,6 +238,10 @@ public class FrontEndBoard extends JLayeredPane implements MouseListener,
         pauseButton.setVisible(false);
     }
 
+    private void hidePauseButton() {
+        pauseButton.setVisible(false);
+    }
+
     // this highlights the column
     public void highlightColumn(MouseEvent cursor) {
         // Change the icons of the tokens that are in the rows for the given
@@ -337,7 +341,7 @@ public class FrontEndBoard extends JLayeredPane implements MouseListener,
         spacer.setBorder(emptyBorder);
     }
 
-    public void showPause() {
+    private void showPauseButton() {
         pauseButton.setVisible(true);
     }
 
@@ -381,7 +385,9 @@ public class FrontEndBoard extends JLayeredPane implements MouseListener,
         setEnabled(false);
         for (Token b : gameTokens) {
             b.setEnabled(false);
+            b.setVisible(false);
         }
+        hidePauseButton();
     }
 
     public void turnOn() {
@@ -389,8 +395,9 @@ public class FrontEndBoard extends JLayeredPane implements MouseListener,
         setEnabled(true);
         for (Token b : gameTokens) {
             b.setEnabled(true);
-            // b.setVisible(true);
+            b.setVisible(true);
         }
+        showPauseButton();
     }
 
     // Updates the board with the next _legal_ move

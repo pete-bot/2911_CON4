@@ -73,7 +73,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
         // init glass
         glass = (JPanel) mainWindow.getGlassPane();
-
     }
 
     @Override
@@ -90,7 +89,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
             try {
                 this.musicToggle();
             } catch (Exception e1) {
-                e1.printStackTrace();
+                System.out.println("Music not loading, check your paths.");
             }
         } else if (buttonPressed.equals(exitButton)) {
             System.exit(0);

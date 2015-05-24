@@ -26,7 +26,6 @@ public class Window extends JFrame {
     private JPanel titlePane;
 
     private BackgroundPanel background;
-    public boolean inMainMenu = true;
 
     // Provides escape behavior
     public AbstractAction escapeAction = new AbstractAction() {
@@ -58,7 +57,6 @@ public class Window extends JFrame {
     }
 
     public void displayMenu() {
-        inMainMenu = true;
         titlePane.setVisible(true);
         menuPanel.setVisible(true);
     }
@@ -157,12 +155,11 @@ public class Window extends JFrame {
 
     public void resetWindow() {
         menuPanel.hideGlass();
-
+        menuPanel.hideMainMenu();
+        menuPanel.hidePauseMenu();
         titlePane.setVisible(false);
-        menuPanel.setVisible(false);
         frontEndBoard.turnOn();
         frontEndBoard.resetBoard();
-        frontEndBoard.showPause();
         showTerminalBoard();
     }
 
@@ -176,7 +173,6 @@ public class Window extends JFrame {
     }
 
     public void startNewGame() {
-        inMainMenu = false;
         hideMainMenu();
         showTerminalBoard();
         frontEndBoard.turnOn();
