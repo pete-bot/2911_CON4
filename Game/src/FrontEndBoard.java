@@ -13,83 +13,78 @@ import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.KeyStroke;
-import javax.swing.border.Border;
-import javax.swing.AbstractAction;
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.Timer;
-
-
+import javax.swing.border.Border;
 
 public class FrontEndBoard extends JLayeredPane implements MouseListener,
-MouseMotionListener, ActionListener {
+        MouseMotionListener, ActionListener {
 
     private static final long serialVersionUID = 1L;
-    
 
-    
+    // KEY BINDING
+    // MAY NOT BE THE BEST PLACE FOR THIS
+    // for key binding
+    @SuppressWarnings("unused")
+    private static final int InFocusWindow = JComponent.WHEN_IN_FOCUSED_WINDOW;
+    private static final KeyStroke escapeStroke = KeyStroke.getKeyStroke(
+            KeyEvent.VK_ESCAPE, 0);
     // TODO our colours, should be updated to match the palette
     // private Color gridColor = new Color(60, 58, 232, 255);
     private Color gridColor = new Color(127, 127, 127, 127);
     private Dimension gridSize = new Dimension(750, 650);
-    private Token[] gameTokens = new Token[42];
     private BackendBoard backendBoard; // Should be 'backendBoard'
     private final int rows = 6;
     private final int cols = 7;
-    private final int tilesOnBoard = 42;
+    private final int tilesOnBoard = rows * cols;
+    private Token[] gameTokens = new Token[tilesOnBoard];
     private Window mainWindow;
     private MechanicalTurkInterface newTurk;
     private PlayArea playArea;
     private PauseButton pauseButton;
     private JButton spacer = new JButton("");
+
     private Border emptyBorder = BorderFactory.createEmptyBorder();
     private GameAssets assets = new GameAssets();
-
     // ANIMATING HIGHLIGHTED WIN:
     private ArrayList<Point> winList = new ArrayList<Point>();
     private int animationBeat = 0;
+
+    @SuppressWarnings("unused")
     private final int blinkTime = 600;
-    Timer clock = new Timer(600,this);
-    
+    Timer clock = new Timer(600, this);
     // PATHS
     private ImageIcon blankTokenIcon;
     private ImageIcon glowingTokenIcon;
     private ImageIcon redTokenIcon;
     private ImageIcon yellowTokenIcon;
+
     private ImageIcon winTokenIcon;
     private ImageIcon spaceIcon;
-    
-    // KEY BINDING
-    // MAY NOT BE THE BEST PLACE FOR THIS
-    // for key binding
-    private static final int IFW = JComponent.WHEN_IN_FOCUSED_WINDOW;
-    private static final KeyStroke escapeStroke = 
-    	    KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
-    
-    // for escape sequence (esc loads menu)
-    public AbstractAction escapeAction = new AbstractAction() { 
-		private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent event) { 
+    // for escape sequence (esc loads menu)
+    public AbstractAction escapeAction = new AbstractAction() {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public void actionPerformed(ActionEvent event) {
             System.out.println("frontend-esc");
-			
-			if(mainWindow.paused == false){
-            	//System.out.println("Pausing.");
-            	mainWindow.pauseGame();
-            }else if (mainWindow.paused == true){
-            	//System.out.println("un-Pausing.");
-            	mainWindow.resumeGame();
+
+            if (mainWindow.paused == false) {
+                // System.out.println("Pausing.");
+                mainWindow.pauseGame();
+            } else if (mainWindow.paused == true) {
+                // System.out.println("un-Pausing.");
+                mainWindow.resumeGame();
             }
-        } 
+        }
     };
 
     public FrontEndBoard(BackendBoard backendBoard, Window mainWindow) {
@@ -97,9 +92,10 @@ MouseMotionListener, ActionListener {
         initIcons();
 
         // init key bindings
-        getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeStroke, "escapeSequence");
-        getActionMap().put( "escapeSequence", escapeAction );
-        
+        getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeStroke,
+                "escapeSequence");
+        getActionMap().put("escapeSequence", escapeAction);
+
         pauseButton = new PauseButton(mainWindow);
         pauseButton.setOpaque(false);
 
@@ -116,7 +112,7 @@ MouseMotionListener, ActionListener {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(2, 2, 2, 2);
-        
+
         gbc.gridwidth = java.awt.GridBagConstraints.RELATIVE;
         gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
 
@@ -151,6 +147,52 @@ MouseMotionListener, ActionListener {
         add(pauseButton, gbc);
     }
 
+    @Override
+    // (replaces 'highlightWin' function)
+    public void actionPerformed(ActionEvent e) {
+        Iterator<Point> winIterator = this.winList.iterator();
+        while (winIterator.hasNext()) {
+            Point winCoords = winIterator.next();
+
+            // converts 2-D (x,y) point to 1-D index in array.
+            int indexToGet = winCoords.x * cols + cols - winCoords.y;
+            Token t = gameTokens[42 - indexToGet];
+
+            // determines who's turn it is. 1 = red,
+            boolean playerTurn = backendBoard.getTurn() % 2 == 0;
+
+            // based off 'beats'
+            // -> we are checking the field 'animationBeat' in this class. it
+            // can either be: 0 or 1.
+            // at every iteration the 'actionPerformed' is called, animation
+            // beat is incremented 1
+            // but quickly reset to 0 if it beat == 2.
+            // so animationBeat = 0,1,0,1,0,1...
+            if (animationBeat % 2 == 0) {
+                // beat = 0;
+                t.setIcon(this.winTokenIcon);
+            } else {
+                // beat = 1;
+                t.setIcon(playerTurn ? redTokenIcon : yellowTokenIcon);
+            }
+        }
+
+        animationBeat++; // increment beat by 1.
+
+        // resets the animation 'counter' to 0.
+        if (animationBeat == 2) {
+            animationBeat = 0;
+        }
+
+        // required to update icons on board
+        revalidate();
+    }
+
+    // need to fix design of this
+    public void endGame(int winner) {
+        mainWindow.endGame(winner);
+    }
+
     // Get a column from a given x coordinate
     // FIXME should throw an exception
     private int getColumn(int x) {
@@ -169,7 +211,6 @@ MouseMotionListener, ActionListener {
         return -1; // No column found.
     }
 
-
     public void getUserMove(Action newAction) {
         if (backendBoard.isLegal(newAction)) {
 
@@ -182,17 +223,19 @@ MouseMotionListener, ActionListener {
 
             // Game win found?
             if (!winList.isEmpty()) {
-            	clock.restart();
+                clock.restart();
                 if (backendBoard.getTurn() % 2 == 0) {
                     System.out.println("PLAYER_1, you WIN!");
-                    //JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
+                    // JOptionPane.showMessageDialog(null,
+                    // "PLAYER 1, you WIN!");
                     endGame(1);
                 } else {
                     System.out.println("PLAYER_2, you WIN!");
-                    //JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
+                    // JOptionPane.showMessageDialog(null,
+                    // "PLAYER 2, you WIN!");
                     endGame(2);
                 }
-                //resetBoard();
+                // resetBoard();
                 clock.stop();
                 winList.clear();
                 return;
@@ -211,8 +254,12 @@ MouseMotionListener, ActionListener {
             turkMove(backendBoard);
         } else {
             System.out
-            .println("You have entered an invalid move, please try again.");
+                    .println("You have entered an invalid move, please try again.");
         }
+    }
+
+    public void hidePause() {
+        pauseButton.setVisible(false);
     }
 
     // this highlights the column
@@ -237,46 +284,6 @@ MouseMotionListener, ActionListener {
             }
         }
     }
-
-
-	@Override
-	// (replaces 'highlightWin' function)
-	public void actionPerformed(ActionEvent e) {
-		 Iterator<Point> winIterator = this.winList.iterator();
-	        while (winIterator.hasNext()) {
-	            Point winCoords = winIterator.next();
-	            
-	            // converts 2-D (x,y) point to 1-D index in array. 
-	            int indexToGet = (winCoords.x) * (cols) + (cols - winCoords.y);
-	            Token t = gameTokens[42 - indexToGet];
-	            
-	            // determines who's turn it is. 1 = red, 
-	            boolean playerTurn = backendBoard.getTurn() % 2 == 0;
-	            
-	            // based off 'beats'
-	            // -> we are checking the field 'animationBeat' in this class. it can either be: 0 or 1.
-	            // at every iteration the 'actionPerformed' is called, animation beat is incremented 1
-	            //    but quickly reset to 0 if it beat == 2.
-	            // so animationBeat = 0,1,0,1,0,1...
-	            if (animationBeat % 2 == 0) {
-	            	// beat = 0;
-	            	t.setIcon(this.winTokenIcon);
-	            } else {
-	            	// beat = 1;
-	            	t.setIcon(playerTurn ? redTokenIcon : yellowTokenIcon);
-	            }
-	        }
-	        
-	        animationBeat++; // increment beat by 1.
-	        
-	        // resets the animation 'counter' to 0.
-	        if (animationBeat == 2) {
-	        	animationBeat = 0;
-	        }
-	        
-	        // required to update icons on board
-	        revalidate();
-	}
 
     private void initIcons() {
         blankTokenIcon = assets.getAsset("sample_token.png");
@@ -342,7 +349,7 @@ MouseMotionListener, ActionListener {
     // working.
     private void setupAI(int classRank) {
         // AIclass is a simple way of passing in which AI that the user may want
-        //int AIclass = classRank;
+        // int AIclass = classRank;
         newTurk = new AB_1D();
     }
 
@@ -352,6 +359,10 @@ MouseMotionListener, ActionListener {
         spacer.setContentAreaFilled(false);
         spacer.setBorderPainted(false);
         spacer.setBorder(emptyBorder);
+    }
+
+    public void showPause() {
+        pauseButton.setVisible(true);
     }
 
     // FIXME
@@ -370,7 +381,7 @@ MouseMotionListener, ActionListener {
         this.winList = backendBoard.checkWinState(turkMove);
 
         if (!winList.isEmpty()) {
-        	clock.restart();
+            clock.restart();
             if (backendBoard.getTurn() % 2 == 0) {
                 System.out.println("PLAYER_1, you WIN!");
                 JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
@@ -405,20 +416,6 @@ MouseMotionListener, ActionListener {
         }
     }
 
-    public void hidePause(){
-    	pauseButton.setVisible(false);
-    }
-    
-    public void showPause(){
-    	pauseButton.setVisible(true);
-    }
-    
-    
-    // need to fix design of this
-    public void endGame(int winner){
-    	mainWindow.endGame(winner);
-    }
-    
     // Updates the board with the next _legal_ move
     // xPos is the column, refactor later.
     public void updateBoardWithMove(int xPos) {

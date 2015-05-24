@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -6,6 +7,8 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.FileInputStream;
+import java.io.InputStream;
 
 import javax.swing.AbstractAction;
 //import javafx.scene.layout.Border;
@@ -20,93 +23,82 @@ import javax.swing.border.Border;
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 
-
-
-
-import java.awt.Dimension;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 public class MainMenuPanel extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
 
+    // KEY BINDING
+    // MAY NOT BE THE BEST PLACE FOR THIS
+    // for key binding
+    private static final int IFW = JComponent.WHEN_IN_FOCUSED_WINDOW;
+    private static final KeyStroke escapeStroke = KeyStroke.getKeyStroke(
+            KeyEvent.VK_ESCAPE, 0);
     private JButton pvCPUButton = new JButton();
     private JButton restartButton = new JButton();
     private JButton exitButton = new JButton();
     private JButton pvpButton = new JButton();
     private JButton resumeButton = new JButton();
     private JButton optionsButton = new JButton();
+    @SuppressWarnings("unused")
     private JButton spacer = new JButton();
     private Border emptyBorder = BorderFactory.createEmptyBorder();
     private ImageIcon pvCPUIcon;
     private ImageIcon pvpIcon;
     private ImageIcon optionsIcon;
+    @SuppressWarnings("unused")
     private ImageIcon spacerIcon;
     private ImageIcon quitIcon;
     private ImageIcon resumeIcon;
     private ImageIcon restartIcon;
-    private ImageIcon exitIcon;
     private GameAssets assets;
+
     private Window mainWindow;
-    private Color defaultColor = new Color(127, 127, 127, 127);
-    
-    
+
+    private Color defaultColor = new Color(255, 255, 235, 200);
     // glass panel
     final JPanel glass;
-    
     // music controller
     private boolean music = false;
     String soundFile = "../assets/mark_ronson-uptown_funk_ft_bruno_mars.mid";
+
     InputStream in;
     AudioStream audioStream;
-    
-    // KEY BINDING
-    // MAY NOT BE THE BEST PLACE FOR THIS
-    // for key binding
-    private static final int IFW = JComponent.WHEN_IN_FOCUSED_WINDOW;
-    private static final KeyStroke escapeStroke = 
-    	    KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
-    
-    // for escape sequence (esc loads menu)
-    public AbstractAction escapeAction = new AbstractAction() { 
-		private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent event) { 
+    // for escape sequence (esc loads menu)
+    public AbstractAction escapeAction = new AbstractAction() {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public void actionPerformed(ActionEvent event) {
             System.out.println("mainMenu-esc");
-			if(mainWindow.paused == false){
-            	System.out.println("Pausing.");
-            	mainWindow.pauseGame();
-            }else if (mainWindow.paused == true){
-            	System.out.println("un-Pausing.");
-            	mainWindow.resumeGame();
+            if (mainWindow.paused == false) {
+                System.out.println("Pausing.");
+                mainWindow.pauseGame();
+            } else if (mainWindow.paused == true) {
+                System.out.println("un-Pausing.");
+                mainWindow.resumeGame();
             }
-        } 
+        }
     };
 
-    
     public MainMenuPanel(Window mainWindow, GameAssets assets) {
         this.assets = assets;
         this.mainWindow = mainWindow;
         setLayout(new GridBagLayout());
-        
-    	setOpaque(false);
-    	setBackground( new Color(127, 127, 127, 127) );
-    	
-        
-        setSize(new Dimension(100,100));
+
+        setOpaque(false);
+        setBackground(defaultColor);
+
+        setSize(new Dimension(100, 100));
         initIcons();
         addMainMenuItems();
-        
-        
+
         // init glass
         glass = (JPanel) mainWindow.getGlassPane();
-        
+
         // init key bindings
         setFocusable(true);
         getInputMap(IFW).put(escapeStroke, "escapeSequence");
-        getActionMap().put( "escapeSequence", escapeAction );
+        getActionMap().put("escapeSequence", escapeAction);
     }
 
     @Override
@@ -119,12 +111,12 @@ public class MainMenuPanel extends JPanel implements ActionListener {
             mainWindow.resumeGame();
         } else if (buttonPressed.equals(restartButton)) {
             mainWindow.resetWindow();
-        }else if (buttonPressed.equals(optionsButton)){
-        	try {
-				this.musicToggle();
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
+        } else if (buttonPressed.equals(optionsButton)) {
+            try {
+                this.musicToggle();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
         } else if (buttonPressed.equals(exitButton)) {
             System.exit(0);
         }
@@ -138,13 +130,13 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         gbc.insets = new Insets(10, 10, 10, 10);
 
         initIcons();
-        //spacer.setIcon(spacerIcon);
+        // spacer.setIcon(spacerIcon);
         pvCPUButton.setIcon(pvCPUIcon);
         pvpButton.setIcon(pvpIcon);
         optionsButton.setIcon(optionsIcon);
         exitButton.setIcon(quitIcon);
 
-        //initButton(spacer);
+        // initButton(spacer);
         initButton(pvCPUButton);
         initButton(pvpButton);
         initButton(optionsButton);
@@ -155,8 +147,8 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         optionsButton.addActionListener(this);
         exitButton.addActionListener(this);
 
-        //add(spacer, gbc);
-        //gbc.gridy++;
+        // add(spacer, gbc);
+        // gbc.gridy++;
 
         // TODO: change button icons here to suit aesthetic.
 
@@ -178,6 +170,10 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         gbc.gridwidth = 1;
     }
 
+    public void hideGlass() {
+        glass.setVisible(false);
+    }
+
     private void initButton(JButton b) {
         b.setOpaque(false);
         b.setContentAreaFilled(false);
@@ -188,13 +184,39 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
     // This must be called before buttons can add icons
     private void initIcons() {
-        //spacerIcon = assets.getAsset("spacer.png"); //Thought: why do we need a transparent image?
+        // spacerIcon = assets.getAsset("spacer.png"); //Thought: why do we need
+        // a transparent image?
         pvCPUIcon = assets.getAsset("new_game_button.png");
         pvpIcon = assets.getAsset("passnplay_button.png");
         optionsIcon = assets.getAsset("options_button.png");
         quitIcon = assets.getAsset("quit_button.png");
         resumeIcon = assets.getAsset("resume_game_button.png");
         restartIcon = assets.getAsset("restart_button.png");
+    }
+
+    public void musicToggle() throws Exception {
+        if (in == null && audioStream == null) {
+            in = new FileInputStream(soundFile);
+            audioStream = new AudioStream(in);
+        }
+
+        if (music == false) {
+            System.out.println("playin' tunes!");
+            AudioPlayer.player.start(audioStream);
+            music = true;
+        } else {
+            System.out.println("stoppin' tunes :(");
+            AudioPlayer.player.stop(audioStream);
+            music = false;
+        }
+    }
+
+    // fix tranparent panel issue
+    @Override
+    protected void paintComponent(Graphics g) {
+        g.setColor(getBackground());
+        g.fillRect(0, 0, getWidth(), getHeight());
+        super.paintComponent(g);
     }
 
     private void removeMainMenuItems() {
@@ -204,69 +226,10 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         remove(exitButton);
     }
 
-    public void showWinMessage(){
-        removeMainMenuItems();
-    	
-        glass.setVisible(true);
-        glass.setLayout(new GridBagLayout());
-    	
-        // set glassy pane behind win message
-    	glass.setOpaque(false);
-    	glass.setBackground( new Color(127, 127, 127, 127) );
-        
-    	
-    	
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.insets = new Insets(2, 2, 2, 2);
-        
-        initButton(restartButton);
-        restartButton.setIcon(restartIcon);
-        glass.add(restartButton, gbc);
-        gbc.gridy++;
-
-        initButton(exitButton);
-        exitButton.setIcon(quitIcon);
-        glass.add(exitButton, gbc);
-        
-    	restartButton.addActionListener(this);
-        exitButton.addActionListener(this);
-        
-        
-        glass.requestFocus();
-        glass.setVisible(true);
-        setVisible(true);
-        
-    }
-    
-    public void hideGlass(){
-    	glass.setVisible(false);
-    }
-    
-    public void musicToggle() throws Exception{
-    	if(in ==null && audioStream == null ){
-    		in = new FileInputStream(soundFile);
-    		audioStream = new AudioStream(in);
-    	}
-    	
-    	if(music == false){
-    		System.out.println("playin' tunes!");
-    		AudioPlayer.player.start(audioStream);
-            music = true;
-    	}else{
-    		System.out.println("stoppin' tunes :(");
-    		AudioPlayer.player.stop(audioStream);
-    		music = false;
-    	}
-    }
-    
-    
     public void showPauseMenu() {
         // Clear the panel of older items
         removeMainMenuItems();
 
-        
         resumeButton.addActionListener(this);
         restartButton.addActionListener(this);
         exitButton.addActionListener(this);
@@ -298,12 +261,38 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
         setVisible(true);
     }
-    
-    // fix tranparent panel issue
-    protected void paintComponent(Graphics g){
-    	g.setColor( getBackground() );
-        g.fillRect(0, 0, getWidth(), getHeight());
-        super.paintComponent(g);
+
+    public void showWinMessage() {
+        removeMainMenuItems();
+
+        glass.setVisible(true);
+        glass.setLayout(new GridBagLayout());
+
+        // set glassy pane behind win message
+        glass.setOpaque(false);
+        glass.setBackground(defaultColor);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(2, 2, 2, 2);
+
+        initButton(restartButton);
+        restartButton.setIcon(restartIcon);
+        glass.add(restartButton, gbc);
+        gbc.gridy++;
+
+        initButton(exitButton);
+        exitButton.setIcon(quitIcon);
+        glass.add(exitButton, gbc);
+
+        restartButton.addActionListener(this);
+        exitButton.addActionListener(this);
+
+        glass.requestFocus();
+        glass.setVisible(true);
+        setVisible(true);
+
     }
 
 }

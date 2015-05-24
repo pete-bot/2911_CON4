@@ -22,7 +22,9 @@ public class Window extends JFrame {
     // KEY BINDING
     // MAY NOT BE THE BEST PLACE FOR THIS
     // for key binding
-    private static final int IFW = JComponent.WHEN_IN_FOCUSED_WINDOW;
+    @SuppressWarnings("unused")
+    private static final int InFocusWindow = JComponent.WHEN_IN_FOCUSED_WINDOW;
+    @SuppressWarnings("unused")
     private static final KeyStroke escapeStroke = KeyStroke.getKeyStroke(
             KeyEvent.VK_ESCAPE, 0);
     private FrontEndBoard frontEndBoard;
@@ -131,9 +133,9 @@ public class Window extends JFrame {
         titlePane.add(gameTitle);
 
         // white
-        // titlePane.setBackground(new Color(255, 255, 235, 200));
+        titlePane.setBackground(new Color(255, 255, 235, 200));
         // gray
-        titlePane.setBackground(new Color(127, 127, 127, 127));
+        // titlePane.setBackground(new Color(127, 127, 127, 127));
     }
 
     private void initWindow(BackendBoard newBoard) {
