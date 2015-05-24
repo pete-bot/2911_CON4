@@ -16,7 +16,7 @@ public class PauseButton extends JPanel implements ActionListener {
     private JButton pauseButton = new JButton("");
     private GameAssets assets = new GameAssets();
     private Window window;
-    private Color defaultColor = new Color(255, 255, 235, 200);
+    private Color defaultColor = new Color(255, 255, 235, 100);
 
     public PauseButton(Window mainWindow) {
 
