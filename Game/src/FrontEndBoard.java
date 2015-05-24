@@ -47,7 +47,7 @@ MouseMotionListener, ActionListener {
     private final int cols = 7;
     private final int tilesOnBoard = 42;
     private Window mainWindow;
-    private MechanicalTurk newTurk;
+    private MechanicalTurkInterface newTurk;
     private PlayArea playArea;
     private PauseButton pauseButton;
     private JButton spacer = new JButton("");
@@ -105,8 +105,8 @@ MouseMotionListener, ActionListener {
 
         // XXX Remove all instances of AI code from FrontEndBoard when we can
         // The game plan is: create a strategy pattern way of
-        int terrifiedChildAI = 0;
-        setupAI(terrifiedChildAI);
+        int AI_CLASS = 0;
+        setupAI(AI_CLASS);
 
         this.backendBoard = backendBoard;
         this.mainWindow = mainWindow;
@@ -342,8 +342,8 @@ MouseMotionListener, ActionListener {
     // working.
     private void setupAI(int classRank) {
         // AIclass is a simple way of passing in which AI that the user may want
-        int AIclass = classRank;
-        newTurk = new MechanicalTurk(AIclass);
+        //int AIclass = classRank;
+        newTurk = new AB_1D();
     }
 
     private void setupSpacer(GridBagConstraints gbc) {

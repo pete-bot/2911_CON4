@@ -32,8 +32,42 @@ public class Window extends JFrame {
     
     public boolean paused = false;
 
+    
+    // KEY BINDING
+    // MAY NOT BE THE BEST PLACE FOR THIS
+    // for key binding
+    private static final int IFW = JComponent.WHEN_IN_FOCUSED_WINDOW;
+    private static final KeyStroke escapeStroke = 
+    	    KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
+    
+    // for escape sequence (esc loads menu)
+    public AbstractAction escapeAction = new AbstractAction() { 
+		private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent event) { 
+            System.out.println("window-esc");
+			
+			if(paused == false){
+            	//System.out.println("Pausing.");
+            	pauseGame();
+            }else if (paused == true){
+            	//System.out.println("un-Pausing.");
+            	resumeGame();
+            }
+        } 
+    };
+
+    
+    
+    
+    
     public Window(BackendBoard newBoard) {
         super("wob wob wob wob wob wob wob wob - kee");
+        
+        // init key bindings
+//        getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeStroke, "escapeSequence");
+//        getActionMap().put( "escapeSequence", escapeAction );
+        
         initFrontendBoard(newBoard);
         initWindow(newBoard);
         pack();
