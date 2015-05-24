@@ -13,7 +13,6 @@ import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -25,7 +24,7 @@ import javax.swing.Timer;
 import javax.swing.border.Border;
 
 public class FrontEndBoard extends JLayeredPane implements MouseListener,
-        MouseMotionListener, ActionListener {
+MouseMotionListener, ActionListener {
 
     private static final long serialVersionUID = 1L;
 
@@ -70,31 +69,30 @@ public class FrontEndBoard extends JLayeredPane implements MouseListener,
     private ImageIcon spaceIcon;
 
     // for escape sequence (esc loads menu)
-    public AbstractAction escapeAction = new AbstractAction() {
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public void actionPerformed(ActionEvent event) {
-            System.out.println("frontend-esc");
-
-            if (mainWindow.paused == false) {
-                // System.out.println("Pausing.");
-                mainWindow.pauseGame();
-            } else if (mainWindow.paused == true) {
-                // System.out.println("un-Pausing.");
-                mainWindow.resumeGame();
-            }
-        }
-    };
+    // public AbstractAction escapeAction = new AbstractAction() {
+    // private static final long serialVersionUID = 1L;
+    //
+    // @Override
+    // public void actionPerformed(ActionEvent event) {
+    // System.out.println("frontend-esc");
+    //
+    // if (mainWindow.paused == false) {
+    // // System.out.println("Pausing.");
+    // mainWindow.pauseGame();
+    // } else if (mainWindow.paused == true) {
+    // // System.out.println("un-Pausing.");
+    // mainWindow.resumeGame();
+    // }
+    // }
+    // };
 
     public FrontEndBoard(BackendBoard backendBoard, Window mainWindow) {
         super();
         initIcons();
 
         // init key bindings
-        getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeStroke,
-                "escapeSequence");
-        getActionMap().put("escapeSequence", escapeAction);
+        getInputMap(InFocusWindow).put(escapeStroke, "escapeSequence");
+        getActionMap().put("escapeSequence", mainWindow.escapeAction);
 
         pauseButton = new PauseButton(mainWindow);
         pauseButton.setOpaque(false);
@@ -254,7 +252,7 @@ public class FrontEndBoard extends JLayeredPane implements MouseListener,
             turkMove(backendBoard);
         } else {
             System.out
-                    .println("You have entered an invalid move, please try again.");
+            .println("You have entered an invalid move, please try again.");
         }
     }
 
@@ -413,6 +411,7 @@ public class FrontEndBoard extends JLayeredPane implements MouseListener,
         setEnabled(true);
         for (Token b : gameTokens) {
             b.setEnabled(true);
+            // b.setVisible(true);
         }
     }
 

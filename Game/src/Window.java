@@ -38,14 +38,18 @@ public class Window extends JFrame {
 
     private BackgroundPanel background;
     public boolean paused = false;
+    public boolean inMainMenu = true;
 
-    // for escape sequence (esc loads menu)
+    // Public lambda for escape behavior.
     public AbstractAction escapeAction = new AbstractAction() {
         private static final long serialVersionUID = 1L;
+        private boolean paused = true;
 
         @Override
         public void actionPerformed(ActionEvent event) {
-            System.out.println("window-esc");
+            paused = !paused;
+
+            System.out.println("window-esc" + "pause state: " + paused);
 
             if (paused == false) {
                 // System.out.println("Pausing.");
@@ -60,30 +64,20 @@ public class Window extends JFrame {
     public Window(BackendBoard newBoard) {
         super("wob wob wob wob wob wob wob wob - kee");
 
-        // init key bindings
-        // getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeStroke,
-        // "escapeSequence");
-        // getActionMap().put( "escapeSequence", escapeAction );
-
         initFrontendBoard(newBoard);
         initWindow(newBoard);
         pack();
     }
 
     public void displayMenu() {
+        inMainMenu = true;
         titlePane.setVisible(true);
         menuPanel.setVisible(true);
     }
 
     public void endGame(int winner) {
-        // expect winner ==1, 2
-        // frontEndBoard.turnOff();
-        // frontEndBoard.hidePause();
         menuPanel.showWinMessage();
         System.out.println("congratulations, player " + winner);
-
-        // frontEndBoard.turnOn();
-        // display win message and offer restart and quit
         // maybe difficulty select?
     }
 
@@ -159,7 +153,6 @@ public class Window extends JFrame {
         // gbc.gridx = 0;
         // gbc.gridy = 0;
 
-        // GridBagConstraints gbc_diff = new GridBagConstraints();
         gbc.fill = GridBagConstraints.CENTER;
 
         add(menuPanel, gbc);
@@ -169,11 +162,9 @@ public class Window extends JFrame {
     }
 
     public void pauseGame() {
-        paused = true;
         frontEndBoard.turnOff();
-        titlePane.setVisible(false);
+        // titlePane.setVisible(false);
         menuPanel.showPauseMenu();
-
     }
 
     public void resetWindow() {
@@ -188,11 +179,9 @@ public class Window extends JFrame {
     }
 
     public void resumeGame() {
-        paused = false;
         frontEndBoard.turnOn();
-        titlePane.setVisible(false);
+        // titlePane.setVisible(false);
         menuPanel.setVisible(false);
-
     }
 
     private void showTerminalBoard() {
@@ -200,6 +189,7 @@ public class Window extends JFrame {
     }
 
     public void startNewGame() {
+        inMainMenu = false;
         hideMainMenu();
         showTerminalBoard();
         frontEndBoard.turnOn();

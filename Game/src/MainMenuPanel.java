@@ -10,7 +10,6 @@ import java.awt.event.KeyEvent;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
-import javax.swing.AbstractAction;
 //import javafx.scene.layout.Border;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -29,7 +28,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     // KEY BINDING
     // MAY NOT BE THE BEST PLACE FOR THIS
     // for key binding
-    private static final int IFW = JComponent.WHEN_IN_FOCUSED_WINDOW;
+    private static final int InFocusWindow = JComponent.WHEN_IN_FOCUSED_WINDOW;
     private static final KeyStroke escapeStroke = KeyStroke.getKeyStroke(
             KeyEvent.VK_ESCAPE, 0);
     private JButton pvCPUButton = new JButton();
@@ -64,21 +63,21 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     AudioStream audioStream;
 
     // for escape sequence (esc loads menu)
-    public AbstractAction escapeAction = new AbstractAction() {
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public void actionPerformed(ActionEvent event) {
-            System.out.println("mainMenu-esc");
-            if (mainWindow.paused == false) {
-                System.out.println("Pausing.");
-                mainWindow.pauseGame();
-            } else if (mainWindow.paused == true) {
-                System.out.println("un-Pausing.");
-                mainWindow.resumeGame();
-            }
-        }
-    };
+    // public AbstractAction escapeAction = new AbstractAction() {
+    // private static final long serialVersionUID = 1L;
+    //
+    // @Override
+    // public void actionPerformed(ActionEvent event) {
+    // System.out.println("mainMenu-esc");
+    // if (mainWindow.paused == false) {
+    // System.out.println("Pausing.");
+    // mainWindow.pauseGame();
+    // } else if (mainWindow.paused == true) {
+    // System.out.println("un-Pausing.");
+    // mainWindow.resumeGame();
+    // }
+    // }
+    // };
 
     public MainMenuPanel(Window mainWindow, GameAssets assets) {
         this.assets = assets;
@@ -95,10 +94,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         // init glass
         glass = (JPanel) mainWindow.getGlassPane();
 
-        // init key bindings
-        setFocusable(true);
-        getInputMap(IFW).put(escapeStroke, "escapeSequence");
-        getActionMap().put("escapeSequence", escapeAction);
     }
 
     @Override
@@ -149,8 +144,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
         // add(spacer, gbc);
         // gbc.gridy++;
-
-        // TODO: change button icons here to suit aesthetic.
 
         add(pvCPUButton, gbc);
         gbc.gridy++;
@@ -258,6 +251,11 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridwidth = 2;
+
+        // init key bindings
+        getInputMap(InFocusWindow).put(escapeStroke, "escapeSequence");
+        getActionMap().put("escapeSequence", mainWindow.escapeAction);
+        setFocusable(true);
 
         setVisible(true);
     }
