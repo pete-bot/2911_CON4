@@ -51,10 +51,10 @@ public class Window extends JFrame {
 
             System.out.println("window-esc" + "pause state: " + paused);
 
-            if (paused == false) {
+            if (!paused) {
                 // System.out.println("Pausing.");
                 pauseGame();
-            } else if (paused == true) {
+            } else {
                 // System.out.println("un-Pausing.");
                 resumeGame();
             }
@@ -82,8 +82,9 @@ public class Window extends JFrame {
     }
 
     private void hideMainMenu() {
-        menuPanel.setEnabled(false);
-        menuPanel.setVisible(false);
+        menuPanel.hideMainMenu();
+        // menuPanel.setEnabled(false);
+        // menuPanel.setVisible(false);
         titlePane.setVisible(false);
     }
 
@@ -163,7 +164,6 @@ public class Window extends JFrame {
 
     public void pauseGame() {
         frontEndBoard.turnOff();
-        // titlePane.setVisible(false);
         menuPanel.showPauseMenu();
     }
 
@@ -180,8 +180,7 @@ public class Window extends JFrame {
 
     public void resumeGame() {
         frontEndBoard.turnOn();
-        // titlePane.setVisible(false);
-        menuPanel.setVisible(false);
+        menuPanel.hidePauseMenu();
     }
 
     private void showTerminalBoard() {

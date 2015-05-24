@@ -167,6 +167,14 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         glass.setVisible(false);
     }
 
+    public void hideMainMenu() {
+        removeMainMenuItems();
+    }
+
+    public void hidePauseMenu() {
+        removePauseMenuItems();
+    }
+
     private void initButton(JButton b) {
         b.setOpaque(false);
         b.setContentAreaFilled(false);
@@ -219,6 +227,13 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         remove(exitButton);
     }
 
+    private void removePauseMenuItems() {
+        remove(resumeButton);
+        remove(optionsButton);
+        remove(restartButton);
+        remove(exitButton);
+    }
+
     public void showPauseMenu() {
         // Clear the panel of older items
         removeMainMenuItems();
@@ -255,7 +270,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         // init key bindings
         getInputMap(InFocusWindow).put(escapeStroke, "escapeSequence");
         getActionMap().put("escapeSequence", mainWindow.escapeAction);
-        setFocusable(true);
 
         setVisible(true);
     }
