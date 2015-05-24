@@ -146,7 +146,9 @@ public class Window extends JFrame {
     }
      
     public void resetWindow() {
-        titlePane.setVisible(false);
+    	menuPanel.hideGlass();
+    	
+    	titlePane.setVisible(false);
         menuPanel.setVisible(false);
         frontEndBoard.turnOn();
         frontEndBoard.resetBoard();

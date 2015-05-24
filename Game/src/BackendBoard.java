@@ -96,6 +96,11 @@ public class BackendBoard {
         return win;
     }
 
+    public int[][] getBoard(){
+    	return board;
+    }
+    
+    
     /*
      * Check horizontal wins Added by Sketch in "Updated win condition patch"
      */

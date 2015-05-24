@@ -52,9 +52,13 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     private Window mainWindow;
     private Color defaultColor = new Color(127, 127, 127, 127);
     
+    
+    // glass panel
+    final JPanel glass;
+    
     // music controller
     private boolean music = false;
-    String soundFile = "../assets/shakira-hips_dont_lie.mid";
+    String soundFile = "../assets/mark_ronson-uptown_funk_ft_bruno_mars.mid";
     InputStream in;
     AudioStream audioStream;
     
@@ -95,6 +99,9 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         initIcons();
         addMainMenuItems();
         
+        
+        // init glass
+        glass = (JPanel) mainWindow.getGlassPane();
         
         // init key bindings
         setFocusable(true);
@@ -200,8 +207,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     public void showWinMessage(){
         removeMainMenuItems();
     	
-        
-        final JPanel glass = (JPanel) mainWindow.getGlassPane();
         glass.setVisible(true);
         glass.setLayout(new GridBagLayout());
     	
@@ -231,7 +236,12 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         
         glass.requestFocus();
         glass.setVisible(true);
+        setVisible(true);
         
+    }
+    
+    public void hideGlass(){
+    	glass.setVisible(false);
     }
     
     public void musicToggle() throws Exception{
