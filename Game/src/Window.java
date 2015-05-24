@@ -1,8 +1,11 @@
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
@@ -12,62 +15,54 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
-import com.sun.glass.events.KeyEvent;
-
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-
 public class Window extends JFrame {
 
-	private static final long serialVersionUID = 1L;
-	
+    private static final long serialVersionUID = 1L;
+
+    // KEY BINDING
+    // MAY NOT BE THE BEST PLACE FOR THIS
+    // for key binding
+    private static final int IFW = JComponent.WHEN_IN_FOCUSED_WINDOW;
+    private static final KeyStroke escapeStroke = KeyStroke.getKeyStroke(
+            KeyEvent.VK_ESCAPE, 0);
     private FrontEndBoard frontEndBoard;
     private BackendBoard backendBoard;
     private Dimension defaultSize = new Dimension(1024, 900);
     private GridBagConstraints gbc;
     private GameAssets assets = new GameAssets();
     private MainMenuPanel menuPanel = new MainMenuPanel(this, this.assets);
+
     private JPanel titlePane;
+
     private BackgroundPanel background;
-    
     public boolean paused = false;
 
-    
-    // KEY BINDING
-    // MAY NOT BE THE BEST PLACE FOR THIS
-    // for key binding
-    private static final int IFW = JComponent.WHEN_IN_FOCUSED_WINDOW;
-    private static final KeyStroke escapeStroke = 
-    	    KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
-    
     // for escape sequence (esc loads menu)
-    public AbstractAction escapeAction = new AbstractAction() { 
-		private static final long serialVersionUID = 1L;
+    public AbstractAction escapeAction = new AbstractAction() {
+        private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent event) { 
+        @Override
+        public void actionPerformed(ActionEvent event) {
             System.out.println("window-esc");
-			
-			if(paused == false){
-            	//System.out.println("Pausing.");
-            	pauseGame();
-            }else if (paused == true){
-            	//System.out.println("un-Pausing.");
-            	resumeGame();
+
+            if (paused == false) {
+                // System.out.println("Pausing.");
+                pauseGame();
+            } else if (paused == true) {
+                // System.out.println("un-Pausing.");
+                resumeGame();
             }
-        } 
+        }
     };
 
-    
-    
-    
-    
     public Window(BackendBoard newBoard) {
         super("wob wob wob wob wob wob wob wob - kee");
-        
+
         // init key bindings
-//        getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeStroke, "escapeSequence");
-//        getActionMap().put( "escapeSequence", escapeAction );
-        
+        // getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeStroke,
+        // "escapeSequence");
+        // getActionMap().put( "escapeSequence", escapeAction );
+
         initFrontendBoard(newBoard);
         initWindow(newBoard);
         pack();
@@ -76,6 +71,18 @@ public class Window extends JFrame {
     public void displayMenu() {
         titlePane.setVisible(true);
         menuPanel.setVisible(true);
+    }
+
+    public void endGame(int winner) {
+        // expect winner ==1, 2
+        // frontEndBoard.turnOff();
+        // frontEndBoard.hidePause();
+        menuPanel.showWinMessage();
+        System.out.println("congratulations, player " + winner);
+
+        // frontEndBoard.turnOn();
+        // display win message and offer restart and quit
+        // maybe difficulty select?
     }
 
     private void hideMainMenu() {
@@ -116,15 +123,15 @@ public class Window extends JFrame {
 
     private void initTitle() {
         titlePane = new JPanel();
-        
+
         titlePane.setSize(new Dimension(420, 200));
         ImageIcon titleIcon = assets.getAsset("sample_title.png");
         JLabel gameTitle = new JLabel();
         gameTitle.setIcon(titleIcon);
         titlePane.add(gameTitle);
-        
+
         // white
-        //titlePane.setBackground(new Color(255, 255, 235, 200));
+        // titlePane.setBackground(new Color(255, 255, 235, 200));
         // gray
         titlePane.setBackground(new Color(127, 127, 127, 127));
     }
@@ -147,10 +154,10 @@ public class Window extends JFrame {
         gbc.gridy += 10;
         add(frontEndBoard, gbc);
 
-        //gbc.gridx = 0;
-        //gbc.gridy = 0;
+        // gbc.gridx = 0;
+        // gbc.gridy = 0;
 
-        //GridBagConstraints gbc_diff = new GridBagConstraints();
+        // GridBagConstraints gbc_diff = new GridBagConstraints();
         gbc.fill = GridBagConstraints.CENTER;
 
         add(menuPanel, gbc);
@@ -160,29 +167,17 @@ public class Window extends JFrame {
     }
 
     public void pauseGame() {
-    	paused = true;
-    	frontEndBoard.turnOff();
+        paused = true;
+        frontEndBoard.turnOff();
         titlePane.setVisible(false);
         menuPanel.showPauseMenu();
-        
+
     }
 
-    public void endGame(int winner){
-    	// expect winner ==1, 2
-    	//frontEndBoard.turnOff();
-    	//frontEndBoard.hidePause();
-    	menuPanel.showWinMessage();
-    	System.out.println("congratulations, player "+winner);
-    	
-    	//frontEndBoard.turnOn();
-    	// display win message and offer restart and quit
-    	// maybe difficulty select?
-    }
-     
     public void resetWindow() {
-    	menuPanel.hideGlass();
-    	
-    	titlePane.setVisible(false);
+        menuPanel.hideGlass();
+
+        titlePane.setVisible(false);
         menuPanel.setVisible(false);
         frontEndBoard.turnOn();
         frontEndBoard.resetBoard();
@@ -191,11 +186,11 @@ public class Window extends JFrame {
     }
 
     public void resumeGame() {
-    	paused = false;
-    	frontEndBoard.turnOn();
+        paused = false;
+        frontEndBoard.turnOn();
         titlePane.setVisible(false);
         menuPanel.setVisible(false);
-        
+
     }
 
     private void showTerminalBoard() {
@@ -208,8 +203,4 @@ public class Window extends JFrame {
         frontEndBoard.turnOn();
     }
 
-    
-    
-    
-    
 }

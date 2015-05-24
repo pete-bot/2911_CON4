@@ -5,6 +5,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -14,56 +15,51 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
-import com.sun.glass.events.KeyEvent;
-
 public class PauseButton extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
-    private JButton pauseButton = new JButton("");
-    private GameAssets assets = new GameAssets();
-    private Window window;
-
-    
     // KEY BINDING
     // MAY NOT BE THE BEST PLACE FOR THIS
     // for key binding
     private static final int IFW = JComponent.WHEN_IN_FOCUSED_WINDOW;
-    private static final KeyStroke escapeStroke = 
-    	    KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
-    
-    // for escape sequence (esc loads menu)
-    public AbstractAction escapeAction = new AbstractAction() { 
-		private static final long serialVersionUID = 1L;
+    private static final KeyStroke escapeStroke = KeyStroke.getKeyStroke(
+            KeyEvent.VK_ESCAPE, 0);
+    private JButton pauseButton = new JButton("");
 
-		public void actionPerformed(ActionEvent event) { 
-            
-			System.out.println("paused-esc");
-			if(window.paused == false){
-            	System.out.println("Pausing.");
-            	window.pauseGame();
-            }else if (window.paused == true){
-            	System.out.println("un-Pausing.");
-            	window.resumeGame();
+    private GameAssets assets = new GameAssets();
+    private Window window;
+
+    // for escape sequence (esc loads menu)
+    public AbstractAction escapeAction = new AbstractAction() {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public void actionPerformed(ActionEvent event) {
+
+            System.out.println("paused-esc");
+            if (window.paused == false) {
+                System.out.println("Pausing.");
+                window.pauseGame();
+            } else if (window.paused == true) {
+                System.out.println("un-Pausing.");
+                window.resumeGame();
             }
-        } 
+        }
     };
-    
-    
-    
+
     // constructor
     public PauseButton(Window mainWindow) {
-    	
-    	
+
         // init buttons w/ listeners
         pauseButton.addActionListener(this);
         // init key bindings
         getInputMap(IFW).put(escapeStroke, "escapeSequence");
-        getActionMap().put( "escapeSequence", escapeAction );
-        
-        
-        // board transparency settings - may need to change depending on colour prefs
-    	setOpaque(false);
-    	setBackground( new Color(127, 127, 127, 127) );
-        
+        getActionMap().put("escapeSequence", escapeAction);
+
+        // board transparency settings - may need to change depending on colour
+        // prefs
+        setOpaque(false);
+        setBackground(new Color(127, 127, 127, 127));
+
         // create GridBagLayout et al
         setLayout(new GridBagLayout());
         // this.setSize(new Dimension(1024, 768));
@@ -94,10 +90,11 @@ public class PauseButton extends JPanel implements ActionListener {
             window.pauseGame();
         }
     }
-    
+
     // fix tranparent panel issue
-    protected void paintComponent(Graphics g){
-    	g.setColor( getBackground() );
+    @Override
+    protected void paintComponent(Graphics g) {
+        g.setColor(getBackground());
         g.fillRect(0, 0, getWidth(), getHeight());
         super.paintComponent(g);
     }
