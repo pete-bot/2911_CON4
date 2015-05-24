@@ -15,6 +15,9 @@ public class AB_1D implements MechanicalTurkInterface{
 		}
 		
 		s = q.poll();
+		
+		
+		
 	
 		return s.getAction();
 	}

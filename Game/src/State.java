@@ -34,7 +34,7 @@ public class State implements Comparable<State> {
 	}
 
 	public int compareTo(State o) {
-		return getHValue()-o.getHValue();
+		return o.getHValue()-getHValue();
 	}
 
 	private int getHValue() {
@@ -48,26 +48,12 @@ public class State implements Comparable<State> {
 	public int generateScore(int column){
 		int[][] board = this.boardRep.getBoard();
 				
-		//get p1 scores
-		int horz1 = checkHorizontal(board, column, 1);
-		int vertScore1 = checkVertical(board, column, 1);
+		int vertScore = checkVertical(board, column);
+		int hortScore1 = checkHorizontal(board, column, 1);
+		int hortScore2 = checkHorizontal(board, column, 2);
 		
-		//get ai's scores
-		int horz2 = checkHorizontal(board, column, 2);
-		int vertScore2 = checkVertical(board, column, 2);
-		
-		//tally them
-		int maxp1 = horz2 + vertScore2;		
-		int maxp2 = horz1 + vertScore1;
-		
-		//return win move for AI
-		if (maxp2 >= 4){
-			return maxp2;
-		}
-		
-		//else return a blocking move~?
-		return (maxp1 > maxp2) ? maxp1 : maxp2;
-		
+		int maxhorz = (hortScore1 > hortScore2) ? hortScore1 : hortScore2;
+		return (vertScore > hortScore1) ? vertScore : hortScore1;
 	}
 
 	private int checkHorizontal(int[][] board, int column, int lastPlayer) {
@@ -79,16 +65,17 @@ public class State implements Comparable<State> {
         int rightColIndex = column + 1;
         
         int lastRow = 5;
-        while (lastRow != 0){
+        
+        //check if slots are full (illegal move)
+		if (board[5][column] == 1 || board[5][column] == 2){
+			return -100;
+		}
+		
+        while (lastRow >= 0){
         	if (board[lastRow][column] == 1 || board[lastRow][column] == 2){
         		break;
         	}
         	lastRow--;
-        }
-        
-        //return if row is full
-        if (lastRow == 5){
-        	return 0;
         }
         
         //increment to the spot above the first tile
@@ -100,8 +87,7 @@ public class State implements Comparable<State> {
 
             // Left iteration from last placed node, checking if tile is owned
             // by player
-            while (leftColIndex >= 0
-                    && board[lastRow][leftColIndex] == lastPlayer) {
+            while (leftColIndex >= 0 && board[lastRow][leftColIndex] == lastPlayer) {
                 leftadjacentTiles++;
                 leftColIndex--;
             }
@@ -109,8 +95,7 @@ public class State implements Comparable<State> {
             // If we haven't won already
             if (leftadjacentTiles < 4) {
                 // Right iteration
-                while (rightColIndex < 6
-                        && board[lastRow][rightColIndex] == lastPlayer) {
+                while (rightColIndex < 6 && board[lastRow][rightColIndex] == lastPlayer) {
                     rightadjacentTiles++;
                     rightColIndex++;
                 }
@@ -121,15 +106,27 @@ public class State implements Comparable<State> {
         return (leftadjacentTiles > rightadjacentTiles) ? leftadjacentTiles : rightadjacentTiles;
 	}
 
-	private int checkVertical(int[][] board, int column, int player) {
+	private int checkVertical(int[][] board, int column) {
 		int x = 0;
 		int row = 5;
 		
-		while (row != 0){
+		if (board[5][column] == 1 || board[5][column] == 2){
+			return -100;
+		}
+		
+		int player =0;
+		
+		while (row >= 0){
+			if (board[row][column] != 0){
+				player = board[row][column];
+				break;
+			}
+			row--;
+		}
+		
+		while (row >= 0){
 			if (board[row][column] == player){
 				x++;
-			} else if (board[row][column] == '0'){
-				//do nothing
 			} else if (board[row][column] != player){
 				break;
 			}
