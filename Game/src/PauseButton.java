@@ -14,7 +14,6 @@ import javax.swing.JPanel;
 public class PauseButton extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
     private JButton pauseButton = new JButton("");
-
     private GameAssets assets = new GameAssets();
     private Window window;
     private Color defaultColor = new Color(255, 255, 235, 200);
