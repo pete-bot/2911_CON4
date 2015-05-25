@@ -50,7 +50,9 @@ public class Window extends JFrame {
 
     public Window(BackendBoard newBoard) {
         super("wob wob wob wob wob wob wob wob - kee");
-
+        
+        this.setMinimumSize(new Dimension(800,820));
+        
         initFrontendBoard(newBoard);
         initWindow(newBoard);
         pack();
