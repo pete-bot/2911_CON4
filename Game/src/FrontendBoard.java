@@ -18,13 +18,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
-import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
 import javax.swing.border.Border;
 
 public class FrontendBoard extends JLayeredPane implements MouseListener,
-        MouseMotionListener, ActionListener {
+MouseMotionListener, ActionListener {
 
     private static final long serialVersionUID = 1L;
 
@@ -59,60 +58,16 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
     private ImageIcon winTokenIcon;
     private ImageIcon spaceIcon;
 
-    private Opponent opponent = new AI(DIFFICULTY.EASY, backendBoard);
+    // private Opponent opponent = new AI(DIFFICULTY.MEDIUM, backendBoard);
+    private Opponent opponent = new HumanOpponent();
 
     public FrontendBoard(BackendBoard backendBoard, Window mainWindow) {
         super();
-        initIcons();
-
-        // init key bindings
-        getInputMap(InFocusWindow).put(escapeStroke, "escapeSequence");
-        getActionMap().put("escapeSequence", mainWindow.escapeAction);
-
-        pauseButton = new PauseButton(mainWindow);
-        pauseButton.setOpaque(false);
-
         this.backendBoard = backendBoard;
         this.mainWindow = mainWindow;
-
-        setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.insets = new Insets(2, 2, 2, 2);
-
-        gbc.gridwidth = java.awt.GridBagConstraints.RELATIVE;
-        gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
-
-        gbc.weightx = 1.0;
-
-        // these values change the way the resizing modifies spacing
-        // distribution on the tokens
-        gbc.weightx = 0;
-        gbc.weighty = 0;
-
-        setupSpacer(gbc);
-        add(spacer, gbc);
-
-        gbc.gridy++;
-
-        setSize(gridSize);
-
-        playArea = new PlayArea(gridColor, gridSize, blankTokenIcon);
-        playArea.addMouseListener(this);
-        playArea.addMouseMotionListener(this);
-        gameTokens = playArea.getTokens();
-        add(playArea, gbc);
-
-        gbc.gridy++;
-        gbc.fill = GridBagConstraints.REMAINDER;
-
-        setOpaque(false);
-
-        // adjust position of menu button
-        gbc.gridx = 0; // Any non-zero value doesn't seem to affect this much
-        gbc.weightx = 1.0;
-        add(pauseButton, gbc);
+        initIcons();
+        initKeyListener();
+        initGraphics();
     }
 
     @Override
@@ -156,9 +111,28 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         revalidate();
     }
 
+    private void checkWin(Action action) {
+        winList = backendBoard.checkWinState(action);
+
+        // Game win found?
+        if (!winList.isEmpty()) {
+            clock.restart();
+            if (backendBoard.getTurn() == 1) {
+                System.out.println("PLAYER_1, you WIN!");
+                endGame(1);
+            } else {
+                System.out.println("PLAYER_2, you WIN!");
+                endGame(2);
+            }
+            // resetBoard();
+            clock.stop();
+            winList.clear();
+        }
+    }
+
     // need to fix design of this
     public void endGame(int winner) {
-        mainWindow.endGame(winner);
+        mainWindow.showEndGame(winner);
     }
 
     // Get a column from a given x coordinate
@@ -178,48 +152,24 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         return -1; // No column found.
     }
 
-    public void getNextMove(Action newAction) {
-        if (backendBoard.isLegal(newAction)) {
-            updateBoardWithMove(newAction.getColumn());
-            backendBoard.makeMove(newAction);
+    public void getNextMove(Action move) {
+        if (backendBoard.isLegal(move)) {
+            updateBoardWithMove(move.getColumn());
+            backendBoard.makeMove(move);
             backendBoard.showTerminalBoard();
 
-            winList = backendBoard.checkWinState(newAction);
-
-            // Game win found?
-            if (!winList.isEmpty()) {
-                clock.restart();
-                if (backendBoard.getTurn() % 2 == 0) {
-                    System.out.println("PLAYER_1, you WIN!");
-                    // JOptionPane.showMessageDialog(null,
-                    // "PLAYER 1, you WIN!");
-                    endGame(1);
-                } else {
-                    System.out.println("PLAYER_2, you WIN!");
-                    // JOptionPane.showMessageDialog(null,
-                    // "PLAYER 2, you WIN!");
-                    endGame(2);
-                }
-                // resetBoard();
-                clock.stop();
-                winList.clear();
-                return;
-            }
-
+            checkWin(move);
             // Otherwise game continues
             if (backendBoard.getTurn() % 2 == 1) {
                 System.out.println("PLAYER_1, please enter your move:");
             } else {
                 System.out.println("PLAYER_2, please enter your move:");
             }
-
             backendBoard.IncrementTurn();
-
-            // call AI here.
             makeOpponentMove();
         } else {
             System.out
-                    .println("You have entered an invalid move, please try again.");
+            .println("You have entered an invalid move, please try again.");
         }
     }
 
@@ -252,6 +202,50 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         }
     }
 
+    private void initGraphics() {
+        pauseButton = new PauseButton(mainWindow);
+        pauseButton.setOpaque(false);
+
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(2, 2, 2, 2);
+
+        gbc.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+        gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+
+        gbc.weightx = 1.0;
+
+        // these values change the way the resizing modifies spacing
+        // distribution on the tokens
+        gbc.weightx = 0;
+        gbc.weighty = 0;
+
+        setupSpacer(gbc);
+        add(spacer, gbc);
+
+        gbc.gridy++;
+
+        setSize(gridSize);
+
+        playArea = new PlayArea(gridColor, gridSize, blankTokenIcon);
+        playArea.addMouseListener(this);
+        playArea.addMouseMotionListener(this);
+        gameTokens = playArea.getTokens();
+        add(playArea, gbc);
+
+        gbc.gridy++;
+        gbc.fill = GridBagConstraints.REMAINDER;
+
+        setOpaque(false);
+
+        // adjust position of menu button
+        gbc.gridx = 0; // Any non-zero value doesn't seem to affect this much
+        gbc.weightx = 1.0;
+        add(pauseButton, gbc);
+    }
+
     private void initIcons() {
         blankTokenIcon = assets.getAsset("sample_token.png");
         glowingTokenIcon = assets.getAsset("sample_token_glow.png");
@@ -261,36 +255,22 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         spaceIcon = assets.getAsset("half_spacer.png");
     }
 
+    private void initKeyListener() {
+        getInputMap(InFocusWindow).put(escapeStroke, "escapeSequence");
+        getActionMap().put("escapeSequence", mainWindow.escapeAction);
+    }
+
     public void makeOpponentMove() {
         if (opponent.isAI()) {
             Action opponentMove = opponent.getMove();
-
             backendBoard.makeMove(opponentMove);
             backendBoard.showTerminalBoard();
             updateBoardWithMove(opponentMove.getColumn());
 
-            winList = backendBoard.checkWinState(opponentMove);
-
-            if (!winList.isEmpty()) {
-                clock.restart();
-                if (backendBoard.getTurn() % 2 == 0) {
-                    System.out.println("PLAYER_1, you WIN!");
-                    JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
-                } else {
-                    System.out.println("PLAYER_2, you WIN!");
-                    JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
-                }
-                mainWindow.resetWindow();
-                clock.stop();
-                winList.clear();
-                return;
-            }
-
+            checkWin(opponentMove);
             backendBoard.IncrementTurn();
-
             System.out.println("Control has returned to the player.");
-        } else
-            return; // Hand control over to Player 2
+        }
     }
 
     // MOUSELISTENER AND MOUSEMOTIONLISTENER OVERRIDES

@@ -61,7 +61,7 @@ public class Window extends JFrame {
         menuPanel.setVisible(true);
     }
 
-    public void endGame(int winner) {
+    public void showEndGame(int winner) {
         menuPanel.showWinMessage();
         System.out.println("congratulations, player " + winner);
         // maybe difficulty select?
