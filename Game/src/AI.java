@@ -9,6 +9,7 @@ public class AI extends Opponent {
         this.backendBoard = backendBoard;
     }
 
+    @Override
     public Action getMove() {
         switch (difficulty) {
             case EASY:
@@ -35,6 +36,11 @@ public class AI extends Opponent {
         s = q.poll();
 
         return s.getAction();
+    }
+
+    @Override
+    public boolean isAI() {
+        return true;
     }
 
     private Action randomMove() {

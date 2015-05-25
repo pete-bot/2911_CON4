@@ -24,7 +24,7 @@ import javax.swing.Timer;
 import javax.swing.border.Border;
 
 public class FrontendBoard extends JLayeredPane implements MouseListener,
-MouseMotionListener, ActionListener {
+        MouseMotionListener, ActionListener {
 
     private static final long serialVersionUID = 1L;
 
@@ -180,9 +180,7 @@ MouseMotionListener, ActionListener {
 
     public void getNextMove(Action newAction) {
         if (backendBoard.isLegal(newAction)) {
-
             updateBoardWithMove(newAction.getColumn());
-            // Update terminal
             backendBoard.makeMove(newAction);
             backendBoard.showTerminalBoard();
 
@@ -221,7 +219,7 @@ MouseMotionListener, ActionListener {
             makeOpponentMove();
         } else {
             System.out
-            .println("You have entered an invalid move, please try again.");
+                    .println("You have entered an invalid move, please try again.");
         }
     }
 
@@ -264,33 +262,35 @@ MouseMotionListener, ActionListener {
     }
 
     public void makeOpponentMove() {
+        if (opponent.isAI()) {
+            Action opponentMove = opponent.getMove();
 
-        Action opponentMove = opponent.getMove();
+            backendBoard.makeMove(opponentMove);
+            backendBoard.showTerminalBoard();
+            updateBoardWithMove(opponentMove.getColumn());
 
-        backendBoard.makeMove(opponentMove);
-        backendBoard.showTerminalBoard();
-        updateBoardWithMove(opponentMove.getColumn());
+            winList = backendBoard.checkWinState(opponentMove);
 
-        winList = backendBoard.checkWinState(opponentMove);
-
-        if (!winList.isEmpty()) {
-            clock.restart();
-            if (backendBoard.getTurn() % 2 == 0) {
-                System.out.println("PLAYER_1, you WIN!");
-                JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
-            } else {
-                System.out.println("PLAYER_2, you WIN!");
-                JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
+            if (!winList.isEmpty()) {
+                clock.restart();
+                if (backendBoard.getTurn() % 2 == 0) {
+                    System.out.println("PLAYER_1, you WIN!");
+                    JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
+                } else {
+                    System.out.println("PLAYER_2, you WIN!");
+                    JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
+                }
+                mainWindow.resetWindow();
+                clock.stop();
+                winList.clear();
+                return;
             }
-            mainWindow.resetWindow();
-            clock.stop();
-            winList.clear();
-            return;
-        }
 
-        backendBoard.IncrementTurn();
+            backendBoard.IncrementTurn();
 
-        System.out.println("Control has returned to the player.");
+            System.out.println("Control has returned to the player.");
+        } else
+            return; // Hand control over to Player 2
     }
 
     // MOUSELISTENER AND MOUSEMOTIONLISTENER OVERRIDES
