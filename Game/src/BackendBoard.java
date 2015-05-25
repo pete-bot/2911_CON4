@@ -6,8 +6,7 @@ public class BackendBoard {
     // this is the board representation - very simple and light
     // we store the position of player_1 as 1, player_2 as 2
     private int[][] board;
-    private int turnNumber = 0;
-    private int currentPlayer;
+    private int currentPlayer = 1;
 
     // need to make these ENUMS
     private int ROWMAX = 6;
@@ -15,7 +14,6 @@ public class BackendBoard {
 
     public BackendBoard() {
         board = new int[ROWMAX][COLMAX];
-        currentPlayer = 1;
     }
 
     /*
@@ -157,18 +155,17 @@ public class BackendBoard {
                 }
             }
         }
-
         return win;
     }
 
     /*
      * Added by Sketch in "Updated Win Row Addition" Returns the win state using
-     * sweet Al Gore rhythms.
-     *
+     * sweet Al Gore rhythms. Assumes it will be called before makeMove();
+     * 
      * @return Game win condition
-     *
+     * 
      * @param lastColumn The column of the last player move
-     *
+     * 
      * @param lastRow Returns the last Row of the player action.
      */
     public ArrayList<Point> checkWinState(Action lastTurn) {
@@ -176,7 +173,7 @@ public class BackendBoard {
         boolean win = false;
         ArrayList<Point> winList = new ArrayList<Point>();
 
-        int lastPlayer = currentPlayer;
+        int lastPlayer = currentPlayer == 1 ? 2 : 1;
         int lastColumn = lastTurn.getColumn();
         int lastRow = getLastRow(lastColumn); // Calculate the last row
 
@@ -221,8 +218,8 @@ public class BackendBoard {
             for (int col = 3; col < COLMAX; col++) {
                 if (board[row][col] != 0
                         && board[row][col] == board[row + 1][col - 1]
-                                && board[row][col] == board[row + 2][col - 2]
-                                        && board[row][col] == board[row + 3][col - 3]) {
+                        && board[row][col] == board[row + 2][col - 2]
+                        && board[row][col] == board[row + 3][col - 3]) {
 
                     winList.add(new Point(row, col));
                     winList.add(new Point(row + 1, col - 1));
@@ -244,8 +241,8 @@ public class BackendBoard {
             for (int col = 0; col < 4; col++) {
                 if (board[row][col] != 0
                         && board[row][col] == board[row + 1][col + 1]
-                                && board[row][col] == board[row + 2][col + 2]
-                                        && board[row][col] == board[row + 3][col + 3]) {
+                        && board[row][col] == board[row + 2][col + 2]
+                        && board[row][col] == board[row + 3][col + 3]) {
                     System.out.println("winState: diag_right");
 
                     winList.add(new Point(row, col));
@@ -269,8 +266,8 @@ public class BackendBoard {
             for (int col = 0; col < 4; col++) {
                 if (board[row][col] != 0
                         && board[row][col] == board[row][col + 1]
-                                && board[row][col] == board[row][col + 2]
-                                        && board[row][col] == board[row][col + 3]) {
+                        && board[row][col] == board[row][col + 2]
+                        && board[row][col] == board[row][col + 3]) {
                     winList.add(new Point(row, col));
                     winList.add(new Point(row, col + 1));
                     winList.add(new Point(row, col + 2));
@@ -288,9 +285,9 @@ public class BackendBoard {
      * Added by Sketch in "Updated win condition patch" Change to public if
      * required outside the scope, however I would advise creating another an
      * interface function unique to the caller to preserve abstraction.
-     *
+     * 
      * @return Row of the top token of any column within the bounds of the game
-     *
+     * 
      * @precondition 0 <= column <= 6
      */
     private int getLastRow(int column) {
@@ -309,11 +306,6 @@ public class BackendBoard {
         return board[row][col];
     }
 
-    // Return the turn number
-    public int getTurn() {
-        return turnNumber;
-    }
-
     private ArrayList<Point> getVerticalWin() {
         ArrayList<Point> winList = new ArrayList<Point>();
 
@@ -322,8 +314,8 @@ public class BackendBoard {
             for (int col = 0; col < COLMAX; col++) {
                 if (board[row][col] != 0
                         && board[row][col] == board[row + 1][col]
-                                && board[row][col] == board[row + 2][col]
-                                        && board[row][col] == board[row + 3][col]) {
+                        && board[row][col] == board[row + 2][col]
+                        && board[row][col] == board[row + 3][col]) {
                     winList.add(new Point(row, col));
                     winList.add(new Point(row + 1, col));
                     winList.add(new Point(row + 2, col));
@@ -335,11 +327,6 @@ public class BackendBoard {
         }
 
         return winList;
-    }
-
-    // set the turn number
-    public void incrementTurn() {
-        turnNumber++;
     }
 
     public boolean isLegal(Action newAction) {
@@ -359,6 +346,7 @@ public class BackendBoard {
 
     // this method assumes that the isLegal method has been called and has been
     public void makeMove(Action newAction) {
+        System.out.println("Player " + currentPlayer + " makes a move!");
         int col;
         for (col = 0; col < ROWMAX; col++) {
             if (board[col][newAction.getColumn()] == 0) {
@@ -366,7 +354,6 @@ public class BackendBoard {
             }
         }
         board[col][newAction.getColumn()] = currentPlayer;
-        incrementTurn();
         switchPlayer();
     }
 
@@ -377,7 +364,6 @@ public class BackendBoard {
                 board[i][j] = empty;
             }
         }
-        turnNumber = 0;
         showTerminalBoard();
     }
 
@@ -401,7 +387,7 @@ public class BackendBoard {
     }
 
     private void switchPlayer() {
-        currentPlayer = turnNumber % 2 + 1;
+        currentPlayer = currentPlayer == 1 ? 2 : 1;
     }
 
 }

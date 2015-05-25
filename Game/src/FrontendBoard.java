@@ -1,7 +1,6 @@
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,7 +21,7 @@ import javax.swing.Timer;
 import javax.swing.border.Border;
 
 public class FrontendBoard extends JLayeredPane implements MouseListener,
-MouseMotionListener, ActionListener {
+        MouseMotionListener, ActionListener {
 
     private static final long serialVersionUID = 1L;
 
@@ -43,7 +42,7 @@ MouseMotionListener, ActionListener {
 
     private Border emptyBorder = BorderFactory.createEmptyBorder();
     private GameAssets assets = new GameAssets();
-    // ANIMATING HIGHLIGHTED WIN:
+
     private ArrayList<Point> winList = new ArrayList<Point>();
     private int animationBeat = 0;
     Timer clock = new Timer(600, this);
@@ -78,9 +77,6 @@ MouseMotionListener, ActionListener {
             int indexToGet = winCoords.x * cols + cols - winCoords.y;
             Token t = gameTokens[42 - indexToGet];
 
-            // determines who's turn it is. 1 = red,
-            boolean playerTurn = backendBoard.getTurn() % 2 == 0;
-
             // based off 'beats'
             // -> we are checking the field 'animationBeat' in this class. it
             // can either be: 0 or 1.
@@ -93,7 +89,8 @@ MouseMotionListener, ActionListener {
                 t.setIcon(winTokenIcon);
             } else {
                 // beat = 1;
-                t.setIcon(playerTurn ? redTokenIcon : yellowTokenIcon);
+                t.setIcon(backendBoard.getPlayer() == 1 ? redTokenIcon
+                        : yellowTokenIcon);
             }
         }
 
@@ -151,10 +148,9 @@ MouseMotionListener, ActionListener {
 
     public void getNextMove(Action move) {
         if (backendBoard.isLegal(move)) {
+            updateVisualBoard(move.getColumn());
             backendBoard.makeMove(move);
             backendBoard.showTerminalBoard();
-            updateBoardWithMove(move.getColumn());
-
             checkWin(move);
             makeOpponentMove();
         } else {
@@ -199,7 +195,7 @@ MouseMotionListener, ActionListener {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.insets = new Insets(2, 2, 2, 2);
+        // gbc.insets = new Insets(2, 2, 2, 2);
 
         gbc.gridwidth = java.awt.GridBagConstraints.RELATIVE;
         gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -212,7 +208,7 @@ MouseMotionListener, ActionListener {
         gbc.weighty = 0;
 
         setupSpacer(gbc);
-        add(spacer, gbc);
+        // add(spacer, gbc);
 
         gbc.gridy++;
 
@@ -255,10 +251,9 @@ MouseMotionListener, ActionListener {
             while (!backendBoard.isLegal(opponentMove)) {
                 opponentMove = opponent.getMove();
             }
+            updateVisualBoard(opponentMove.getColumn());
             backendBoard.makeMove(opponentMove);
             backendBoard.showTerminalBoard();
-            updateBoardWithMove(opponentMove.getColumn());
-
             checkWin(opponentMove);
         }
     }
@@ -343,14 +338,14 @@ MouseMotionListener, ActionListener {
 
     // Updates the board with the next _legal_ move
     // xPos is the column, refactor later.
-    public void updateBoardWithMove(int xPos) {
+    public void updateVisualBoard(int xPos) {
         for (int count = tilesOnBoard - (cols - xPos); count >= 0; count -= 7) {
             Token currentButton = gameTokens[count];
-            if (currentButton.getPlayer() == 0) {
+            if (currentButton.getPlayer() == 0) { // Free spot
                 if (backendBoard.getPlayer() == 1) {
                     currentButton.setPlayer(1);
                     currentButton.setIcon(redTokenIcon);
-                } else {
+                } else if (backendBoard.getPlayer() == 2) {
                     currentButton.setPlayer(2);
                     currentButton.setIcon(yellowTokenIcon);
                 }
