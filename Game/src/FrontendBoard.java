@@ -61,7 +61,7 @@ MouseMotionListener, ActionListener {
         super();
         this.backendBoard = backendBoard;
         this.mainWindow = mainWindow;
-        opponent = new AI(DIFFICULTY.MEDIUM, backendBoard);
+        opponent = new AI(DIFFICULTY.HARD, backendBoard);
         initIcons();
         initKeyListener();
         initGraphics();

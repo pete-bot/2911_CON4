@@ -3,6 +3,7 @@ public class State implements Comparable<State> {
     private int stateRank;
     private Action thisAction;
     private BackendBoard boardRep;
+    private int difficulty;
 
     // starting state constructor
     public State(BackendBoard backendBoard) {
@@ -10,10 +11,11 @@ public class State implements Comparable<State> {
     }
 
     // choice constructor
-    public State(int column, State prevState) {
+    public State(int column, State prevState, int difficulty) {
         boardRep = prevState.getBoard();
         stateRank = generateScore(column);
         thisAction = generateAction(column);
+        this.difficulty = difficulty;
     }
     
     private int checkAscDiagonal(int lastPlayer, int lastColumn, int[][] board) {
@@ -214,9 +216,15 @@ public class State implements Comparable<State> {
 
         int vertScore = checkVertical(board, column);
         int hortScore1 = checkHorizontal(board, column, 1);
+        if(difficulty == 1) {
+        	checkHorizontal(board, column, 2);
+        	return vertScore > hortScore1 ? vertScore : hortScore1;
+        }
         int diagUp = checkDescDiagonal(1, column, board);
         int diagDown = checkAscDiagonal(1, column, board);
         
+
+
         //find best score
         int maxDiag = (diagUp > diagDown) ? diagUp : diagDown;
         int verHorScore = (vertScore > hortScore1) ? vertScore : hortScore1;

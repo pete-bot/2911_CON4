@@ -15,21 +15,21 @@ public class AI extends Opponent {
             case EASY:
                 return randomMove();
             case MEDIUM:
-                return informedMove();
+                return informedMove(1);
             case HARD:
-                return informedMove();
+                return informedMove(2);
             default:
-                return informedMove();
+                return informedMove(1);
         }
     }
 
-    private Action informedMove() {
+    private Action informedMove(int difficulty) {
         PriorityQueue<State> q = new PriorityQueue<State>();
 
         State firstState = new State(backendBoard);
 
         for (int i = 0; i < 7; i++) {
-            State newState = new State(i, firstState);
+            State newState = new State(i, firstState, difficulty);
             q.add(newState);
         }
 
