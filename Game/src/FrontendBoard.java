@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -31,8 +30,6 @@ MouseMotionListener, ActionListener {
     private static final KeyStroke escapeStroke = KeyStroke.getKeyStroke(
             KeyEvent.VK_ESCAPE, 0);
     // TODO our colours, should be updated to match the palette
-    // private Color gridColor = new Color(60, 58, 232, 255);
-    private Color gridColor = new Color(127, 127, 127, 127);
     private Dimension gridSize = new Dimension(750, 650);
     private BackendBoard backendBoard; // Should be 'backendBoard'
     private final int rows = 6;
@@ -58,9 +55,9 @@ MouseMotionListener, ActionListener {
     private ImageIcon winTokenIcon;
     private ImageIcon spaceIcon;
 
-    // private Opponent opponent = new AI(DIFFICULTY.MEDIUM, backendBoard);
+    private Opponent opponent = new AI(DIFFICULTY.EASY, backendBoard);
 
-    private Opponent opponent = new HumanOpponent();
+    // private Opponent opponent = new HumanOpponent();
 
     public FrontendBoard(BackendBoard backendBoard, Window mainWindow) {
         super();
@@ -114,11 +111,12 @@ MouseMotionListener, ActionListener {
 
     private void checkWin(Action action) {
         winList = backendBoard.checkWinState(action);
+        System.out.println(winList);
 
         // Game win found?
         if (!winList.isEmpty()) {
             clock.restart();
-            if (action.getPlayer() == 1) {
+            if (backendBoard.getPlayer() == 1) {
                 System.out.println("PLAYER_1, you WIN!");
                 endGame(1);
             } else {
@@ -155,20 +153,14 @@ MouseMotionListener, ActionListener {
 
     public void getNextMove(Action move) {
         if (backendBoard.isLegal(move)) {
-            updateBoardWithMove(move.getColumn());
             backendBoard.makeMove(move);
             backendBoard.showTerminalBoard();
+            updateBoardWithMove(move.getColumn());
 
             checkWin(move);
-            if (move.getPlayer() == 1) {
-                System.out.println("PLAYER_1, please enter your move:");
-            } else if (move.getPlayer() == 2) {
-                System.out.println("PLAYER_2, please enter your move:");
-            }
             makeOpponentMove();
         } else {
-            System.out
-            .println("You have entered an invalid move, please try again.");
+            System.out.println("Invalid move.");
         }
     }
 
@@ -228,7 +220,7 @@ MouseMotionListener, ActionListener {
 
         setSize(gridSize);
 
-        playArea = new PlayArea(gridColor, gridSize, blankTokenIcon);
+        playArea = new PlayArea(gridSize, blankTokenIcon);
         playArea.addMouseListener(this);
         playArea.addMouseMotionListener(this);
         gameTokens = playArea.getTokens();
@@ -262,13 +254,14 @@ MouseMotionListener, ActionListener {
     public void makeOpponentMove() {
         if (opponent.isAI()) {
             Action opponentMove = opponent.getMove();
+            while (!backendBoard.isLegal(opponentMove)) {
+                opponentMove = opponent.getMove();
+            }
             backendBoard.makeMove(opponentMove);
             backendBoard.showTerminalBoard();
             updateBoardWithMove(opponentMove.getColumn());
 
-            System.out.println("PLAYER_2, please enter your move:");
             checkWin(opponentMove);
-            System.out.println("Control has returned to the player.");
         }
     }
 
@@ -276,9 +269,7 @@ MouseMotionListener, ActionListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         int col = getColumn(e.getX());
-        int playerNum = backendBoard.getTurn() % 2 + 1; // for pass and play
-        System.out.println("player " + playerNum);
-        Action newMove = new Action(playerNum, col);
+        Action newMove = new Action(col);
         System.out.printf("Column %d chosen.\n", col);
         getNextMove(newMove);
     }
@@ -297,8 +288,6 @@ MouseMotionListener, ActionListener {
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        // int col = getColumn(e.getX());
-        // Action newMove = new Action(1, col);
         highlightColumn(e);
         moveGraphicToken(e);
     }
@@ -316,7 +305,6 @@ MouseMotionListener, ActionListener {
 
     public void resetBoard() {
         backendBoard.resetBoard();
-
         for (Token gameToken : gameTokens) {
             gameToken.setIcon(blankTokenIcon);
             gameToken.setPlayer(0);
@@ -361,11 +349,11 @@ MouseMotionListener, ActionListener {
         for (int count = tilesOnBoard - (cols - xPos); count >= 0; count -= 7) {
             Token currentButton = gameTokens[count];
             if (currentButton.getPlayer() == 0) {
-                if (backendBoard.getTurn() % 2 == 0) {
+                if (backendBoard.getPlayer() == 1) {
                     currentButton.setPlayer(1);
                     currentButton.setIcon(redTokenIcon);
                 } else {
-                    currentButton.setPlayer(1);
+                    currentButton.setPlayer(2);
                     currentButton.setIcon(yellowTokenIcon);
                 }
                 break;

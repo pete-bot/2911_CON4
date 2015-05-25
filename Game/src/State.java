@@ -106,8 +106,7 @@ public class State implements Comparable<State> {
     }
 
     private Action generateAction(int column) {
-        final int playerNum = 2;
-        Action a = new Action(playerNum, column);
+        Action a = new Action(column);
         return a;
     }
 

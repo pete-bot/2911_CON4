@@ -17,7 +17,7 @@ public class PlayArea extends JLabel {
     private ImageIcon blankTokenIcon;
     private Color defaultColor = new Color(255, 255, 235, 100);
 
-    public PlayArea(Color color, Dimension dimension, ImageIcon blankTokenIcon) {
+    public PlayArea(Dimension dimension, ImageIcon blankTokenIcon) {
 
         // board transparency settings - may need to change depending on colour
         // prefs

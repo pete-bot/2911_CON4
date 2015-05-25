@@ -7,6 +7,7 @@ public class BackendBoard {
     // we store the position of player_1 as 1, player_2 as 2
     private int[][] board;
     private int turnNumber = 0;
+    private int currentPlayer;
 
     // need to make these ENUMS
     private int ROWMAX = 6;
@@ -14,6 +15,7 @@ public class BackendBoard {
 
     public BackendBoard() {
         board = new int[ROWMAX][COLMAX];
+        currentPlayer = 1;
     }
 
     /*
@@ -174,7 +176,7 @@ public class BackendBoard {
         boolean win = false;
         ArrayList<Point> winList = new ArrayList<Point>();
 
-        int lastPlayer = lastTurn.getPlayer();
+        int lastPlayer = currentPlayer;
         int lastColumn = lastTurn.getColumn();
         int lastRow = getLastRow(lastColumn); // Calculate the last row
 
@@ -293,10 +295,14 @@ public class BackendBoard {
      */
     private int getLastRow(int column) {
         int i;
-        for (i = ROWMAX - 1; board[i][column] == 0; i--) {
+        for (i = ROWMAX - 1; i >= 0 && board[i][column] == 0; i--) {
             ; // Iterates through i until value returns a player
         }
         return i;
+    }
+
+    public int getPlayer() {
+        return currentPlayer;
     }
 
     public int getPosition(int row, int col) {
@@ -337,7 +343,6 @@ public class BackendBoard {
     }
 
     public boolean isLegal(Action newAction) {
-
         // check if tile is out of bounds (pos < 0, pos > 6)
         if (newAction.getColumn() < 0 || newAction.getColumn() > 6)
             return false;
@@ -357,8 +362,9 @@ public class BackendBoard {
                 break;
             }
         }
-        board[col][newAction.getColumn()] = newAction.getPlayer();
+        board[col][newAction.getColumn()] = currentPlayer;
         incrementTurn();
+        switchPlayer();
     }
 
     public void resetBoard() {
@@ -370,6 +376,11 @@ public class BackendBoard {
         }
         turnNumber = 0;
         showTerminalBoard();
+    }
+
+    // To be called from the menu
+    public void setPlayer(int player) {
+        currentPlayer = player;
     }
 
     // render the current board in terminal
@@ -384,6 +395,10 @@ public class BackendBoard {
             System.out.println();
         }
         System.out.println("User, please enter your column choice:");
+    }
+
+    private void switchPlayer() {
+        currentPlayer = turnNumber % 2 + 1;
     }
 
 }
