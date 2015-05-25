@@ -24,7 +24,7 @@ import javax.swing.Timer;
 import javax.swing.border.Border;
 
 public class FrontEndBoard extends JLayeredPane implements MouseListener,
-        MouseMotionListener, ActionListener {
+MouseMotionListener, ActionListener {
 
     private static final long serialVersionUID = 1L;
 
@@ -51,18 +51,16 @@ public class FrontEndBoard extends JLayeredPane implements MouseListener,
     // ANIMATING HIGHLIGHTED WIN:
     private ArrayList<Point> winList = new ArrayList<Point>();
     private int animationBeat = 0;
-
-    @SuppressWarnings("unused")
-    private final int blinkTime = 600;
     Timer clock = new Timer(600, this);
-    // PATHS
+
     private ImageIcon blankTokenIcon;
     private ImageIcon glowingTokenIcon;
     private ImageIcon redTokenIcon;
     private ImageIcon yellowTokenIcon;
-
     private ImageIcon winTokenIcon;
     private ImageIcon spaceIcon;
+
+    private Opponent opponent = new AI(DIFFICULTY.EASY);
 
     public FrontEndBoard(BackendBoard backendBoard, Window mainWindow) {
         super();
@@ -74,11 +72,6 @@ public class FrontEndBoard extends JLayeredPane implements MouseListener,
 
         pauseButton = new PauseButton(mainWindow);
         pauseButton.setOpaque(false);
-
-        // XXX Remove all instances of AI code from FrontEndBoard when we can
-        // The game plan is: create a strategy pattern way of
-        int AI_CLASS = 0;
-        setupAI(AI_CLASS);
 
         this.backendBoard = backendBoard;
         this.mainWindow = mainWindow;
@@ -126,7 +119,7 @@ public class FrontEndBoard extends JLayeredPane implements MouseListener,
     @Override
     // (replaces 'highlightWin' function)
     public void actionPerformed(ActionEvent e) {
-        Iterator<Point> winIterator = this.winList.iterator();
+        Iterator<Point> winIterator = winList.iterator();
         while (winIterator.hasNext()) {
             Point winCoords = winIterator.next();
 
@@ -146,7 +139,7 @@ public class FrontEndBoard extends JLayeredPane implements MouseListener,
             // so animationBeat = 0,1,0,1,0,1...
             if (animationBeat % 2 == 0) {
                 // beat = 0;
-                t.setIcon(this.winTokenIcon);
+                t.setIcon(winTokenIcon);
             } else {
                 // beat = 1;
                 t.setIcon(playerTurn ? redTokenIcon : yellowTokenIcon);
@@ -177,9 +170,8 @@ public class FrontEndBoard extends JLayeredPane implements MouseListener,
         int currentColEnd = columnWidth;
         int currentCol = 0;
         while (currentColEnd <= gridSize.getWidth()) {
-            if (currentColBegin <= x && x <= currentColEnd) {
+            if (currentColBegin <= x && x <= currentColEnd)
                 return currentCol;
-            }
             currentColBegin += columnWidth;
             currentColEnd += columnWidth;
             currentCol++;
@@ -187,7 +179,7 @@ public class FrontEndBoard extends JLayeredPane implements MouseListener,
         return -1; // No column found.
     }
 
-    public void getUserMove(Action newAction) {
+    public void getNextMove(Action newAction) {
         if (backendBoard.isLegal(newAction)) {
 
             updateBoardWithMove(newAction.getColumn());
@@ -195,7 +187,7 @@ public class FrontEndBoard extends JLayeredPane implements MouseListener,
             backendBoard.makeMove(newAction);
             backendBoard.showTerminalBoard();
 
-            this.winList = backendBoard.checkWinState(newAction);
+            winList = backendBoard.checkWinState(newAction);
 
             // Game win found?
             if (!winList.isEmpty()) {
@@ -227,10 +219,10 @@ public class FrontEndBoard extends JLayeredPane implements MouseListener,
             backendBoard.IncrementTurn();
 
             // call AI here.
-            turkMove(backendBoard);
+            makeOpponentMove();
         } else {
             System.out
-                    .println("You have entered an invalid move, please try again.");
+            .println("You have entered an invalid move, please try again.");
         }
     }
 
@@ -246,9 +238,7 @@ public class FrontEndBoard extends JLayeredPane implements MouseListener,
     public void highlightColumn(MouseEvent cursor) {
         // Change the icons of the tokens that are in the rows for the given
         // column
-        for (int i = 0; i < gameTokens.length; i++) {
-            Token token = gameTokens[i];
-
+        for (Token token : gameTokens) {
             // this uses the mouse location to determine which column to
             // highlight
             Point tokenLocation = token.getLocation();
@@ -274,13 +264,43 @@ public class FrontEndBoard extends JLayeredPane implements MouseListener,
         spaceIcon = assets.getAsset("half_spacer.png");
     }
 
+    public void makeOpponentMove() {
+
+        Action opponentMove = opponent.getMove();
+
+        backendBoard.makeMove(opponentMove);
+        backendBoard.showTerminalBoard();
+        updateBoardWithMove(opponentMove.getColumn());
+
+        winList = backendBoard.checkWinState(opponentMove);
+
+        if (!winList.isEmpty()) {
+            clock.restart();
+            if (backendBoard.getTurn() % 2 == 0) {
+                System.out.println("PLAYER_1, you WIN!");
+                JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
+            } else {
+                System.out.println("PLAYER_2, you WIN!");
+                JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
+            }
+            mainWindow.resetWindow();
+            clock.stop();
+            winList.clear();
+            return;
+        }
+
+        backendBoard.IncrementTurn();
+
+        System.out.println("Control has returned to the player.");
+    }
+
     // MOUSELISTENER AND MOUSEMOTIONLISTENER OVERRIDES
     @Override
     public void mouseClicked(MouseEvent e) {
         int col = getColumn(e.getX());
         Action newMove = new Action(1, col);
         System.out.printf("Column %d chosen.\n", col);
-        getUserMove(newMove);
+        getNextMove(newMove);
     }
 
     @Override
@@ -325,14 +345,6 @@ public class FrontEndBoard extends JLayeredPane implements MouseListener,
         }
     }
 
-    // TODO Remove this guy later once the proper interfaces are setup and
-    // working.
-    private void setupAI(int classRank) {
-        // AIclass is a simple way of passing in which AI that the user may want
-        // int AIclass = classRank;
-        newTurk = new AB_1D();
-    }
-
     private void setupSpacer(GridBagConstraints gbc) {
         spacer.setIcon(spaceIcon);
         spacer.setOpaque(false);
@@ -343,41 +355,6 @@ public class FrontEndBoard extends JLayeredPane implements MouseListener,
 
     private void showPauseButton() {
         pauseButton.setVisible(true);
-    }
-
-    // FIXME
-    // AI code should not persist in this class.
-    // Theoretically this should be a 'secondPlayer' or 'competitor' method.
-    // Also, this method should be making calls through getUserMove();
-    public void turkMove(BackendBoard backendBoard) {
-
-        System.out.println("The Turk makes its move...");
-        Action turkMove = newTurk.getTurkMove(backendBoard);
-
-        backendBoard.makeMove(turkMove);
-        backendBoard.showTerminalBoard();
-        updateBoardWithMove(turkMove.getColumn());
-
-        this.winList = backendBoard.checkWinState(turkMove);
-
-        if (!winList.isEmpty()) {
-            clock.restart();
-            if (backendBoard.getTurn() % 2 == 0) {
-                System.out.println("PLAYER_1, you WIN!");
-                JOptionPane.showMessageDialog(null, "PLAYER 1, you WIN!");
-            } else {
-                System.out.println("PLAYER_2, you WIN!");
-                JOptionPane.showMessageDialog(null, "PLAYER 2, you WIN!");
-            }
-            mainWindow.resetWindow();
-            clock.stop();
-            winList.clear();
-            return;
-        }
-
-        backendBoard.IncrementTurn();
-
-        System.out.println("Control has returned to the player.");
     }
 
     public void turnOff() {
