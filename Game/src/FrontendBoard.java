@@ -23,7 +23,7 @@ import javax.swing.KeyStroke;
 import javax.swing.Timer;
 import javax.swing.border.Border;
 
-public class FrontEndBoard extends JLayeredPane implements MouseListener,
+public class FrontendBoard extends JLayeredPane implements MouseListener,
 MouseMotionListener, ActionListener {
 
     private static final long serialVersionUID = 1L;
@@ -41,7 +41,6 @@ MouseMotionListener, ActionListener {
     private final int tilesOnBoard = rows * cols;
     private Token[] gameTokens = new Token[tilesOnBoard];
     private Window mainWindow;
-    private MechanicalTurkInterface newTurk;
     private PlayArea playArea;
     private PauseButton pauseButton;
     private JButton spacer = new JButton("");
@@ -60,9 +59,9 @@ MouseMotionListener, ActionListener {
     private ImageIcon winTokenIcon;
     private ImageIcon spaceIcon;
 
-    private Opponent opponent = new AI(DIFFICULTY.EASY);
+    private Opponent opponent = new AI(DIFFICULTY.EASY, backendBoard);
 
-    public FrontEndBoard(BackendBoard backendBoard, Window mainWindow) {
+    public FrontendBoard(BackendBoard backendBoard, Window mainWindow) {
         super();
         initIcons();
 

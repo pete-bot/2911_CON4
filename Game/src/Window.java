@@ -16,7 +16,7 @@ public class Window extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
-    private FrontEndBoard frontEndBoard;
+    private FrontendBoard frontEndBoard;
     private BackendBoard backendBoard;
     private Dimension defaultSize = new Dimension(1024, 900);
     private GridBagConstraints gbc;
@@ -85,7 +85,7 @@ public class Window extends JFrame {
     private void initFrontendBoard(BackendBoard newBoard) {
         backendBoard = newBoard;
         Window mainWindow = this;
-        frontEndBoard = new FrontEndBoard(backendBoard, mainWindow);
+        frontEndBoard = new FrontendBoard(backendBoard, mainWindow);
         frontEndBoard.setEnabled(false);
         frontEndBoard.setVisible(false);
     }
