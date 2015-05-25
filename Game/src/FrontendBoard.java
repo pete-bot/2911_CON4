@@ -60,7 +60,7 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         super();
         this.backendBoard = backendBoard;
         this.mainWindow = mainWindow;
-        opponent = new AI(DIFFICULTY.HARD, backendBoard);
+        opponent = new AI(DIFFICULTY.MEDIUM, backendBoard);
         initIcons();
         initKeyListener();
         initGraphics();
