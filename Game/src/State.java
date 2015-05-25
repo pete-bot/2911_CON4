@@ -6,16 +6,14 @@ public class State implements Comparable<State> {
 
     // starting state constructor
     public State(BackendBoard backendBoard) {
-        this.stateRank = 0;
-        this.thisAction = null;
-        this.boardRep = backendBoard;
+        boardRep = backendBoard;
     }
 
     // choice constructor
     public State(int column, State prevState) {
-        this.boardRep = prevState.getBoard();
-        this.stateRank = generateScore(column);
-        this.thisAction = generateAction(column);
+        boardRep = prevState.getBoard();
+        stateRank = generateScore(column);
+        thisAction = generateAction(column);
         System.out.println("COLUMN:" + thisAction.getColumn());
         System.out.println("RANK:" + stateRank);
     }
@@ -111,7 +109,7 @@ public class State implements Comparable<State> {
     }
 
     public int generateScore(int column) {
-        int[][] board = this.boardRep.getBoard();
+        int[][] board = boardRep.getBoard();
 
         int vertScore = checkVertical(board, column);
         int hortScore1 = checkHorizontal(board, column, 1);

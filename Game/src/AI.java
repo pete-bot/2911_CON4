@@ -26,16 +26,16 @@ public class AI extends Opponent {
     private Action informedMove() {
         PriorityQueue<State> q = new PriorityQueue<State>();
 
-        State s = new State(backendBoard);
+        State firstState = new State(backendBoard);
 
         for (int i = 0; i < 7; i++) {
-            State newState = new State(i, s);
+            State newState = new State(i, firstState);
             q.add(newState);
         }
 
-        s = q.poll();
+        State finalState = q.poll();
 
-        return s.getAction();
+        return finalState.getAction();
     }
 
     @Override

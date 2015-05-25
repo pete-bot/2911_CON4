@@ -55,14 +55,13 @@ MouseMotionListener, ActionListener {
     private ImageIcon winTokenIcon;
     private ImageIcon spaceIcon;
 
-    private Opponent opponent = new AI(DIFFICULTY.EASY, backendBoard);
-
-    // private Opponent opponent = new HumanOpponent();
+    private Opponent opponent;
 
     public FrontendBoard(BackendBoard backendBoard, Window mainWindow) {
         super();
         this.backendBoard = backendBoard;
         this.mainWindow = mainWindow;
+        opponent = new AI(DIFFICULTY.MEDIUM, backendBoard);
         initIcons();
         initKeyListener();
         initGraphics();
@@ -111,7 +110,6 @@ MouseMotionListener, ActionListener {
 
     private void checkWin(Action action) {
         winList = backendBoard.checkWinState(action);
-        System.out.println(winList);
 
         // Game win found?
         if (!winList.isEmpty()) {
