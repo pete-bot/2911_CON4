@@ -6,8 +6,7 @@ public class BackendBoard {
     // this is the board representation - very simple and light
     // we store the position of player_1 as 1, player_2 as 2
     private int[][] board;
-    private int turnNumber = 0;
-    private int currentPlayer;
+    private int currentPlayer = 1;
 
     // need to make these ENUMS
     private int ROWMAX = 6;
@@ -15,7 +14,6 @@ public class BackendBoard {
 
     public BackendBoard() {
         board = new int[ROWMAX][COLMAX];
-        currentPlayer = 1;
     }
 
     /*
@@ -157,7 +155,6 @@ public class BackendBoard {
                 }
             }
         }
-
         return win;
     }
 
@@ -206,7 +203,7 @@ public class BackendBoard {
         if (win)
             return getDiagonalLeftWin();
 
-        winList.clear();
+        // winList.clear();
         return winList;
     }
 
@@ -309,11 +306,6 @@ public class BackendBoard {
         return board[row][col];
     }
 
-    // Return the turn number
-    public int getTurn() {
-        return turnNumber;
-    }
-
     private ArrayList<Point> getVerticalWin() {
         ArrayList<Point> winList = new ArrayList<Point>();
 
@@ -337,11 +329,6 @@ public class BackendBoard {
         return winList;
     }
 
-    // set the turn number
-    public void incrementTurn() {
-        turnNumber++;
-    }
-
     public boolean isLegal(Action newAction) {
         if (newAction != null) {
             // check if tile is out of bounds (pos < 0, pos > 6)
@@ -359,6 +346,7 @@ public class BackendBoard {
 
     // this method assumes that the isLegal method has been called and has been
     public void makeMove(Action newAction) {
+        System.out.println("Player " + currentPlayer + " makes a move!");
         int col;
         for (col = 0; col < ROWMAX; col++) {
             if (board[col][newAction.getColumn()] == 0) {
@@ -366,7 +354,6 @@ public class BackendBoard {
             }
         }
         board[col][newAction.getColumn()] = currentPlayer;
-        incrementTurn();
         switchPlayer();
     }
 
@@ -377,7 +364,6 @@ public class BackendBoard {
                 board[i][j] = empty;
             }
         }
-        turnNumber = 0;
         showTerminalBoard();
     }
 
@@ -401,7 +387,7 @@ public class BackendBoard {
     }
 
     private void switchPlayer() {
-        currentPlayer = turnNumber % 2 + 1;
+        currentPlayer = currentPlayer == 1 ? 2 : 1;
     }
 
 }

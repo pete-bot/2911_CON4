@@ -19,7 +19,7 @@ public class AI extends Opponent {
             case HARD:
                 return informedMove();
             default:
-                return informedMove();
+                return randomMove();
         }
     }
 
