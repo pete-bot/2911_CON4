@@ -60,12 +60,23 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         super();
         this.backendBoard = backendBoard;
         this.mainWindow = mainWindow;
-        opponent = new AI(DIFFICULTY.MEDIUM, backendBoard);
+        
+        
         initIcons();
         initKeyListener();
         initGraphics();
     }
 
+    public void setAI(int AIclass){
+    	if(AIclass == 1){
+    		opponent = new AI(DIFFICULTY.EASY, backendBoard);
+    	}else if(AIclass == 2){
+    		opponent = new AI(DIFFICULTY.MEDIUM, backendBoard);
+    	}else if(AIclass == 3){
+    		opponent = new AI(DIFFICULTY.HARD, backendBoard);
+    	}
+    }
+    
     @Override
     // (replaces 'highlightWin' function)
     public void actionPerformed(ActionEvent e) {

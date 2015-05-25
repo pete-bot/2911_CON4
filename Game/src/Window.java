@@ -49,7 +49,7 @@ public class Window extends JFrame {
     };
 
     public Window(BackendBoard newBoard) {
-        super("wob wob wob wob wob wob wob wob - kee");
+        super("Prepare yourself, Wobke is coming.");
         
         this.setMinimumSize(new Dimension(800,820));
         
@@ -59,7 +59,8 @@ public class Window extends JFrame {
     }
 
     public void displayMenu() {
-        titlePane.setVisible(true);
+        
+    	titlePane.setVisible(true);
         menuPanel.setVisible(true);
     }
 
@@ -156,7 +157,6 @@ public class Window extends JFrame {
     }
 
     public void resetWindow() {
-        menuPanel.hideGlass();
         menuPanel.hideMainMenu();
         menuPanel.hidePauseMenu();
         titlePane.setVisible(false);
@@ -174,6 +174,16 @@ public class Window extends JFrame {
         backendBoard.showTerminalBoard();
     }
 
+    public void selectDifficulty(){
+    	hideMainMenu();
+    	titlePane.setVisible(false);
+    	menuPanel.showDifficultyPanel();
+    }
+    
+    public void setDifficulty(int AIclass){
+    	frontEndBoard.setAI(AIclass);
+    }
+    
     public void startNewGame() {
         hideMainMenu();
         showTerminalBoard();

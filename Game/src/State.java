@@ -217,6 +217,8 @@ public class State implements Comparable<State> {
 
         int vertScore = checkVertical(board, column);
         int hortScore1 = checkHorizontal(board, column, 1);
+        
+        // THIS NEEDS TO BE FIXED
         if(this.difficulty == 1) {
         	System.out.println("MEDIUM DIFFICULTY MOVE");
         	checkHorizontal(board, column, 2);
