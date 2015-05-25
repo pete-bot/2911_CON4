@@ -14,9 +14,110 @@ public class State implements Comparable<State> {
         boardRep = prevState.getBoard();
         stateRank = generateScore(column);
         thisAction = generateAction(column);
-        System.out.println("COLUMN:" + thisAction.getColumn());
-        System.out.println("RANK:" + stateRank);
     }
+    
+    private int checkAscDiagonal(int lastPlayer, int lastColumn, int[][] board) {
+
+    	// check if slots are full (illegal move)
+        if (board[5][lastColumn] == 1 || board[5][lastColumn] == 2)
+            return -100;
+    	
+        int lastRow = 5;
+    	//find lastRow
+        while (lastRow >= 0) {
+            if (board[lastRow][lastColumn] == 1 || board[lastRow][lastColumn] == 2) {
+                break;
+            }
+            lastRow--;
+        }
+
+        // increment to the spot above the first tile
+        lastRow++;
+    	
+    	
+        int adjacentTiles = 1;
+        int leftColIndex = lastColumn - 1;
+        int leftRowIndex = lastRow - 1;
+
+        int rightColIndex = lastColumn + 1;
+        int rightRowIndex = lastRow + 1;
+        
+        
+
+        // Left iteration from last node, checking if tile is owned by player
+        while (leftColIndex >= 0 && leftRowIndex >= 0
+                && board[leftRowIndex][leftColIndex] == lastPlayer) {
+            adjacentTiles++;
+            leftColIndex--;
+            leftRowIndex--;
+        }
+
+        // If we haven't won already
+        if (adjacentTiles < 4) {
+            // Right iteration
+            while (rightColIndex < 7 && rightRowIndex < 6
+                    && board[rightRowIndex][rightColIndex] == lastPlayer) {
+                adjacentTiles++;
+                rightColIndex++;
+                rightRowIndex++;
+            }
+        }
+
+        return adjacentTiles;
+    }
+
+    /*
+     * Check descending diagonal wins Added by Sketch in
+     * "Updated win condition patch"
+     */
+    private int checkDescDiagonal(int lastPlayer, int lastColumn, int[][] board) {
+    	// check if slots are full (illegal move)
+        
+    	if (board[5][lastColumn] == 1 || board[5][lastColumn] == 2)
+            return -100;
+    	
+        int lastRow = 5;
+    	//find lastRow
+        while (lastRow >= 0) {
+            if (board[lastRow][lastColumn] == 1 || board[lastRow][lastColumn] == 2) {
+                break;
+            }
+            lastRow--;
+        }
+
+        // increment to the spot above the first tile
+        lastRow++;
+    	
+    	
+
+        int adjacentTiles = 1;
+        int leftColIndex = lastColumn - 1;
+        int leftRowIndex = lastRow + 1;
+
+        int rightColIndex = lastColumn + 1;
+        int rightRowIndex = lastRow - 1;
+
+        // Left iteration from last node, checking if tile is owned by player
+        while (leftColIndex >= 0 && leftRowIndex < 6
+                && board[leftRowIndex][leftColIndex] == lastPlayer) {
+            adjacentTiles++;
+            leftColIndex--;
+            leftRowIndex++;
+        }
+
+        // If we haven't won already
+        if (adjacentTiles < 4) {
+            // Right iteration
+            while (rightColIndex < 7 && rightRowIndex >= 0
+                    && board[rightRowIndex][rightColIndex] == lastPlayer) {
+                adjacentTiles++;
+                rightColIndex++;
+                rightRowIndex--;
+            }
+        }
+        return adjacentTiles;
+    }
+
 
     private int checkHorizontal(int[][] board, int column, int lastPlayer) {
 
@@ -113,9 +214,17 @@ public class State implements Comparable<State> {
 
         int vertScore = checkVertical(board, column);
         int hortScore1 = checkHorizontal(board, column, 1);
-        checkHorizontal(board, column, 2);
-
-        return vertScore > hortScore1 ? vertScore : hortScore1;
+        int diagUp = checkDescDiagonal(1, column, board);
+        int diagDown = checkAscDiagonal(1, column, board);
+        
+        //find best score
+        int maxDiag = (diagUp > diagDown) ? diagUp : diagDown;
+        int verHorScore = (vertScore > hortScore1) ? vertScore : hortScore1;
+//        System.out.println("diagUP:"+diagUp);
+//        System.out.println("diagDOWN:"+diagDown);
+       
+        //return best score
+        return maxDiag > verHorScore ? maxDiag : verHorScore;
     }
 
     public Action getAction() {
