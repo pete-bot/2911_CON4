@@ -1,7 +1,6 @@
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,7 +21,7 @@ import javax.swing.Timer;
 import javax.swing.border.Border;
 
 public class FrontendBoard extends JLayeredPane implements MouseListener,
-MouseMotionListener, ActionListener {
+        MouseMotionListener, ActionListener {
 
     private static final long serialVersionUID = 1L;
 
@@ -61,7 +60,7 @@ MouseMotionListener, ActionListener {
         super();
         this.backendBoard = backendBoard;
         this.mainWindow = mainWindow;
-        opponent = new AI(DIFFICULTY.EASY, backendBoard);
+        opponent = new AI(DIFFICULTY.HARD, backendBoard);
         initIcons();
         initKeyListener();
         initGraphics();
@@ -196,7 +195,7 @@ MouseMotionListener, ActionListener {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.insets = new Insets(2, 2, 2, 2);
+        // gbc.insets = new Insets(2, 2, 2, 2);
 
         gbc.gridwidth = java.awt.GridBagConstraints.RELATIVE;
         gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
