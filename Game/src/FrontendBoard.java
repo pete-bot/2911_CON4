@@ -59,6 +59,7 @@ MouseMotionListener, ActionListener {
     private ImageIcon spaceIcon;
 
     // private Opponent opponent = new AI(DIFFICULTY.MEDIUM, backendBoard);
+
     private Opponent opponent = new HumanOpponent();
 
     public FrontendBoard(BackendBoard backendBoard, Window mainWindow) {
@@ -117,7 +118,7 @@ MouseMotionListener, ActionListener {
         // Game win found?
         if (!winList.isEmpty()) {
             clock.restart();
-            if (backendBoard.getTurn() == 1) {
+            if (action.getPlayer() == 1) {
                 System.out.println("PLAYER_1, you WIN!");
                 endGame(1);
             } else {
@@ -159,13 +160,11 @@ MouseMotionListener, ActionListener {
             backendBoard.showTerminalBoard();
 
             checkWin(move);
-            // Otherwise game continues
-            if (backendBoard.getTurn() % 2 == 1) {
+            if (move.getPlayer() == 1) {
                 System.out.println("PLAYER_1, please enter your move:");
-            } else {
+            } else if (move.getPlayer() == 2) {
                 System.out.println("PLAYER_2, please enter your move:");
             }
-            backendBoard.IncrementTurn();
             makeOpponentMove();
         } else {
             System.out
@@ -267,8 +266,8 @@ MouseMotionListener, ActionListener {
             backendBoard.showTerminalBoard();
             updateBoardWithMove(opponentMove.getColumn());
 
+            System.out.println("PLAYER_2, please enter your move:");
             checkWin(opponentMove);
-            backendBoard.IncrementTurn();
             System.out.println("Control has returned to the player.");
         }
     }
@@ -277,7 +276,9 @@ MouseMotionListener, ActionListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         int col = getColumn(e.getX());
-        Action newMove = new Action(1, col);
+        int playerNum = backendBoard.getTurn() % 2 + 1; // for pass and play
+        System.out.println("player " + playerNum);
+        Action newMove = new Action(playerNum, col);
         System.out.printf("Column %d chosen.\n", col);
         getNextMove(newMove);
     }
@@ -311,8 +312,6 @@ MouseMotionListener, ActionListener {
     }
 
     private void moveGraphicToken(MouseEvent e) {
-
-        return;
     }
 
     public void resetBoard() {

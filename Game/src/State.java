@@ -31,9 +31,8 @@ public class State implements Comparable<State> {
         int lastRow = 5;
 
         // check if slots are full (illegal move)
-        if (board[5][column] == 1 || board[5][column] == 2) {
+        if (board[5][column] == 1 || board[5][column] == 2)
             return -100;
-        }
 
         while (lastRow >= 0) {
             if (board[lastRow][column] == 1 || board[lastRow][column] == 2) {
@@ -76,9 +75,8 @@ public class State implements Comparable<State> {
         int x = 0;
         int row = 5;
 
-        if (board[5][column] == 1 || board[5][column] == 2) {
+        if (board[5][column] == 1 || board[5][column] == 2)
             return -100;
-        }
 
         int player = 0;
 
@@ -108,7 +106,8 @@ public class State implements Comparable<State> {
     }
 
     private Action generateAction(int column) {
-        Action a = new Action(2, column);
+        final int playerNum = 2;
+        Action a = new Action(playerNum, column);
         return a;
     }
 
@@ -117,11 +116,8 @@ public class State implements Comparable<State> {
 
         int vertScore = checkVertical(board, column);
         int hortScore1 = checkHorizontal(board, column, 1);
-        int hortScore2 = checkHorizontal(board, column, 2);
+        checkHorizontal(board, column, 2);
 
-        // Max horz in da house?
-        @SuppressWarnings("unused")
-        int maxhorz = hortScore1 > hortScore2 ? hortScore1 : hortScore2;
         return vertScore > hortScore1 ? vertScore : hortScore1;
     }
 

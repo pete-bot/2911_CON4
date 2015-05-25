@@ -96,11 +96,6 @@ public class BackendBoard {
         return win;
     }
 
-    public int[][] getBoard(){
-    	return board;
-    }
-    
-    
     /*
      * Check horizontal wins Added by Sketch in "Updated win condition patch"
      */
@@ -167,11 +162,11 @@ public class BackendBoard {
     /*
      * Added by Sketch in "Updated Win Row Addition" Returns the win state using
      * sweet Al Gore rhythms.
-     * 
+     *
      * @return Game win condition
-     * 
+     *
      * @param lastColumn The column of the last player move
-     * 
+     *
      * @param lastRow Returns the last Row of the player action.
      */
     public ArrayList<Point> checkWinState(Action lastTurn) {
@@ -185,36 +180,36 @@ public class BackendBoard {
 
         // Check vertical wins
         win = checkVertical(lastPlayer, lastColumn, lastRow);
-        if (win) {
+        if (win)
             return getVerticalWin();
-        }
 
         // Check horizontal wins
         if (!win) {
             win = checkHorizontal(lastPlayer, lastColumn, lastRow);
         }
-        if (win) {
+        if (win)
             return getHorizontalWin();
-        }
 
         // Check ascending diagonal wins
         if (!win) {
             win = checkAscDiagonal(lastPlayer, lastColumn, lastRow);
         }
-        if (win) {
+        if (win)
             return getDiagonalRightWin();
-        }
 
         // check descending diagonal wins
         if (!win) {
             win = checkDescDiagonal(lastPlayer, lastColumn, lastRow);
         }
-        if (win) {
+        if (win)
             return getDiagonalLeftWin();
-        }
 
         winList.clear();
         return winList;
+    }
+
+    public int[][] getBoard() {
+        return board;
     }
 
     private ArrayList<Point> getDiagonalLeftWin() {
@@ -224,8 +219,8 @@ public class BackendBoard {
             for (int col = 3; col < COLMAX; col++) {
                 if (board[row][col] != 0
                         && board[row][col] == board[row + 1][col - 1]
-                                && board[row][col] == board[row + 2][col - 2]
-                                        && board[row][col] == board[row + 3][col - 3]) {
+                        && board[row][col] == board[row + 2][col - 2]
+                        && board[row][col] == board[row + 3][col - 3]) {
 
                     winList.add(new Point(row, col));
                     winList.add(new Point(row + 1, col - 1));
@@ -247,8 +242,8 @@ public class BackendBoard {
             for (int col = 0; col < 4; col++) {
                 if (board[row][col] != 0
                         && board[row][col] == board[row + 1][col + 1]
-                                && board[row][col] == board[row + 2][col + 2]
-                                        && board[row][col] == board[row + 3][col + 3]) {
+                        && board[row][col] == board[row + 2][col + 2]
+                        && board[row][col] == board[row + 3][col + 3]) {
                     System.out.println("winState: diag_right");
 
                     winList.add(new Point(row, col));
@@ -272,8 +267,8 @@ public class BackendBoard {
             for (int col = 0; col < 4; col++) {
                 if (board[row][col] != 0
                         && board[row][col] == board[row][col + 1]
-                                && board[row][col] == board[row][col + 2]
-                                        && board[row][col] == board[row][col + 3]) {
+                        && board[row][col] == board[row][col + 2]
+                        && board[row][col] == board[row][col + 3]) {
                     winList.add(new Point(row, col));
                     winList.add(new Point(row, col + 1));
                     winList.add(new Point(row, col + 2));
@@ -291,15 +286,16 @@ public class BackendBoard {
      * Added by Sketch in "Updated win condition patch" Change to public if
      * required outside the scope, however I would advise creating another an
      * interface function unique to the caller to preserve abstraction.
-     * 
+     *
      * @return Row of the top token of any column within the bounds of the game
-     * 
+     *
      * @precondition 0 <= column <= 6
      */
     private int getLastRow(int column) {
         int i;
-        for (i = ROWMAX - 1; board[i][column] == 0; i--)
+        for (i = ROWMAX - 1; board[i][column] == 0; i--) {
             ; // Iterates through i until value returns a player
+        }
         return i;
     }
 
@@ -320,8 +316,8 @@ public class BackendBoard {
             for (int col = 0; col < COLMAX; col++) {
                 if (board[row][col] != 0
                         && board[row][col] == board[row + 1][col]
-                                && board[row][col] == board[row + 2][col]
-                                        && board[row][col] == board[row + 3][col]) {
+                        && board[row][col] == board[row + 2][col]
+                        && board[row][col] == board[row + 3][col]) {
                     winList.add(new Point(row, col));
                     winList.add(new Point(row + 1, col));
                     winList.add(new Point(row + 2, col));
@@ -336,21 +332,19 @@ public class BackendBoard {
     }
 
     // set the turn number
-    public void IncrementTurn() {
+    public void incrementTurn() {
         turnNumber++;
     }
 
     public boolean isLegal(Action newAction) {
 
         // check if tile is out of bounds (pos < 0, pos > 6)
-        if (newAction.getColumn() < 0 || newAction.getColumn() > 6) {
+        if (newAction.getColumn() < 0 || newAction.getColumn() > 6)
             return false;
-        }
 
         // check if the tile will 'overflow' the board
-        if (board[5][newAction.getColumn()] != 0) {
+        if (board[5][newAction.getColumn()] != 0)
             return false;
-        }
 
         return true;
     }
@@ -364,6 +358,7 @@ public class BackendBoard {
             }
         }
         board[col][newAction.getColumn()] = newAction.getPlayer();
+        incrementTurn();
     }
 
     public void resetBoard() {
@@ -384,7 +379,7 @@ public class BackendBoard {
         System.out.println("Initial Game State:");
         for (int row = ROWMAX - 1; row >= 0; row--) {
             for (int col = 0; col < COLMAX; col++) {
-                System.out.print("[" + this.getPosition(row, col) + "]");
+                System.out.print("[" + getPosition(row, col) + "]");
             }
             System.out.println();
         }
