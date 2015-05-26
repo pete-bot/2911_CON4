@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
+
 //import javafx.scene.layout.Border;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -68,7 +69,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     private Color defaultColor = new Color(255, 255, 235, 200);
     // music controller
     private boolean music = false;
-    String soundFile = "../assets/bonnie_tyler-total_eclipse_of_the_heart.mid";
+    String soundFile = "../assets/toto-africa.mid";
 
     InputStream in;
     AudioStream audioStream;
@@ -123,10 +124,17 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         	mainWindow.startNewGame();
         	
         } else if (buttonPressed.equals(back)) {
+        	mainWindow.resetWindow();
+        	mainWindow.hideGameBoard();
         	hideDifficultypanel();
+        	removePauseMenuItems();
         	System.out.println("Going back to menu");
+        	
+        	
+        	// this guy needs to redraw the menu
+        	mainWindow.addMenu();
         	mainWindow.displayMenu();
-            
+        	
             
             
         } else if (buttonPressed.equals(exitButton)) {
@@ -134,7 +142,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         }
     }
 
-    private void addMainMenuItems() {
+    public void addMainMenuItems() {
         GridBagConstraints gbc = new GridBagConstraints();
         // init GridBagConstraints and inset (default spacing on buttons)
         gbc.gridx = 0;
@@ -180,8 +188,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         gbc.gridwidth = 1;
     }
 
-
-
     public void hideMainMenu() {
         removeMainMenuItems();
     }
@@ -204,7 +210,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         // a transparent image?
         pvCPUIcon = assets.getAsset("new_game_button.png");
         pvpIcon = assets.getAsset("passnplay_button.png");
-        optionsIcon = assets.getAsset("options_button.png");
+        optionsIcon = assets.getAsset("music_on.png");
         quitIcon = assets.getAsset("quit_button.png");
         resumeIcon = assets.getAsset("resume_game_button.png");
         restartIcon = assets.getAsset("restart_button.png");
@@ -225,9 +231,11 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         if (music == false) {
             System.out.println("playin' tunes!");
             AudioPlayer.player.start(audioStream);
+            optionsButton.setIcon(assets.getAsset("music_off.png"));
             music = true;
         } else {
             System.out.println("stoppin' tunes :(");
+            optionsButton.setIcon(assets.getAsset("music_on.png"));
             AudioPlayer.player.stop(audioStream);
             music = false;
         }
@@ -252,6 +260,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         remove(resumeButton);
         remove(optionsButton);
         remove(restartButton);
+        remove(back);
         remove(exitButton);
     }
 
@@ -281,6 +290,13 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         add(restartButton, gbc);
         gbc.gridy++;
 
+        
+        initButton(back);
+        back.setIcon(backIcon);
+        add(back, gbc);
+        gbc.gridy++;
+
+        
         initButton(exitButton);
         exitButton.setIcon(quitIcon);
         add(exitButton, gbc);
@@ -334,10 +350,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     	difficultyPanel.setBorder(emptyBorder);
     	difficultyPanel.setBackground(defaultColor);
     	difficultyPanel.setLayout(new GridBagLayout());
-    	
-    	
-    	
-    	
     	
     	GridBagConstraints gbc = new GridBagConstraints();
         // init GridBagConstraints and inset (default spacing on buttons)
@@ -395,5 +407,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     public void hideDifficultypanel(){
     	remove(difficultyPanel);
     }
+    
+    
     
 }

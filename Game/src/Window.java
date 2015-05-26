@@ -66,8 +66,11 @@ public class Window extends JFrame {
 
     public void showEndGame(int winner) {
         menuPanel.showWinMessage();
-        System.out.println("congratulations, player " + winner);
-        // maybe difficulty select?
+        
+        // hide pause menu
+        // replac with restart quit main menu
+        
+        System.out.println("congratulations, player " + winner);   
     }
 
     private void hideMainMenu() {
@@ -75,6 +78,10 @@ public class Window extends JFrame {
         // menuPanel.setEnabled(false);
         // menuPanel.setVisible(false);
         titlePane.setVisible(false);
+    }
+    
+    public void addMenu(){
+    	menuPanel.addMainMenuItems(); 
     }
 
     private void initBackground() {
@@ -190,4 +197,12 @@ public class Window extends JFrame {
         frontEndBoard.turnOn();
     }
 
+    public void resetBackEndBoard(){
+    	backendBoard.resetBoard();
+    }
+    
+    public void hideGameBoard(){
+    	frontEndBoard.turnOff();
+    }
+    
 }

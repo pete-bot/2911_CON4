@@ -16,6 +16,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
 import javax.swing.border.Border;
@@ -38,7 +40,7 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
     private Window mainWindow;
     private PlayArea playArea;
     private PauseButton pauseButton;
-    private JButton spacer = new JButton("");
+    private JButton statusIndicator = new JButton("");
 
     private Border emptyBorder = BorderFactory.createEmptyBorder();
     private GameAssets assets = new GameAssets();
@@ -61,12 +63,15 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         this.backendBoard = backendBoard;
         this.mainWindow = mainWindow;
         
-        
-        initIcons();
+        showMainMenu();
+    }
+
+    public void showMainMenu(){
+    	initIcons();
         initKeyListener();
         initGraphics();
     }
-
+    
     public void setAI(int AIclass){
     	if(AIclass == 1){
     		opponent = new AI(DIFFICULTY.EASY, backendBoard);
@@ -119,17 +124,24 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
     private void checkWin(Action action) {
         winList = backendBoard.checkWinState(action);
 
-        // Game win found?
+        // Game win found!
         if (!winList.isEmpty()) {
             clock.restart();
             if (backendBoard.getPlayer() == 1) {
-                System.out.println("PLAYER_1, you WIN!");
-                endGame(1);
-            } else {
                 System.out.println("PLAYER_2, you WIN!");
-                endGame(2);
+                JOptionPane.showMessageDialog(mainWindow,
+                	    "Player 2 wins.");
+                
+                updateStatusIndicator(1);
+                
+            } else {
+                System.out.println("PLAYER_1, you WIN!");
+                JOptionPane.showMessageDialog(mainWindow,
+                	    "Player 1 wins.");
+                updateStatusIndicator(1);
             }
-            // resetBoard();
+            
+            resetBoard();
             clock.stop();
             winList.clear();
         }
@@ -159,11 +171,13 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
 
     public void getNextMove(Action move) {
         if (backendBoard.isLegal(move)) {
-            updateVisualBoard(move.getColumn());
+        	updateStatusIndicator(0);
+        	updateVisualBoard(move.getColumn());
             backendBoard.makeMove(move);
             backendBoard.showTerminalBoard();
             checkWin(move);
             makeOpponentMove();
+            
         } else {
             System.out.println("Invalid move.");
         }
@@ -198,28 +212,51 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         }
     }
 
+    private void initButton(JButton b) {
+        b.setOpaque(false);
+        b.setContentAreaFilled(false);
+        b.setBorderPainted(false);
+        b.setBorder(emptyBorder);
+        b.setRolloverEnabled(false);
+    }
+    
     private void initGraphics() {
         pauseButton = new PauseButton(mainWindow);
         pauseButton.setOpaque(false);
+        
+        
+        initButton(statusIndicator);
+        updateStatusIndicator(0);
+        add(statusIndicator);
 
+        
+        
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         // gbc.insets = new Insets(2, 2, 2, 2);
 
+        
+        
+        
+
+        
+        
+        
+        
         gbc.gridwidth = java.awt.GridBagConstraints.RELATIVE;
         gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
 
+        
+        
         gbc.weightx = 1.0;
 
         // these values change the way the resizing modifies spacing
         // distribution on the tokens
         gbc.weightx = 0;
-        gbc.weighty = 0;
+        gbc.weighty = 1;
 
-        setupSpacer(gbc);
-        // add(spacer, gbc);
 
         gbc.gridy++;
 
@@ -232,6 +269,8 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         add(playArea, gbc);
 
         gbc.gridy++;
+        gbc.gridy++;
+        gbc.gridy++;
         gbc.fill = GridBagConstraints.REMAINDER;
 
         setOpaque(false);
@@ -239,6 +278,7 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         // adjust position of menu button
         gbc.gridx = 0; // Any non-zero value doesn't seem to affect this much
         gbc.weightx = 1.0;
+        gbc.gridy= 2;
         add(pauseButton, gbc);
     }
 
@@ -258,7 +298,18 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
 
     public void makeOpponentMove() {
         if (opponent.isAI()) {
-            Action opponentMove = opponent.getMove();
+        	updateStatusIndicator(0);
+        	
+        	// timer for AI move
+        	/*
+        	try {
+        	    Thread.sleep(300);                 //1000 milliseconds is one second.
+        	} catch(InterruptedException ex) {
+        	    Thread.currentThread().interrupt();
+        	}
+        	*/
+        	
+        	Action opponentMove = opponent.getMove();
             while (!backendBoard.isLegal(opponentMove)) {
                 opponentMove = opponent.getMove();
             }
@@ -269,58 +320,13 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         }
     }
 
-    // MOUSELISTENER AND MOUSEMOTIONLISTENER OVERRIDES
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        int col = getColumn(e.getX());
-        Action newMove = new Action(col);
-        System.out.printf("Column %d chosen.\n", col);
-        getNextMove(newMove);
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent event) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        highlightColumn(e);
-        moveGraphicToken(e);
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    private void moveGraphicToken(MouseEvent e) {
-    }
-
+   
     public void resetBoard() {
         backendBoard.resetBoard();
         for (Token gameToken : gameTokens) {
             gameToken.setIcon(blankTokenIcon);
             gameToken.setPlayer(0);
         }
-    }
-
-    private void setupSpacer(GridBagConstraints gbc) {
-        spacer.setIcon(spaceIcon);
-        spacer.setOpaque(false);
-        spacer.setContentAreaFilled(false);
-        spacer.setBorderPainted(false);
-        spacer.setBorder(emptyBorder);
     }
 
     private void showPauseButton() {
@@ -365,4 +371,64 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         }
     }
 
+    // MOUSELISTENER AND MOUSEMOTIONLISTENER OVERRIDES
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        int col = getColumn(e.getX());
+        Action newMove = new Action(col);
+        System.out.printf("Column %d chosen.\n", col);
+        getNextMove(newMove);
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent event) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        highlightColumn(e);
+        moveGraphicToken(e);
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    private void moveGraphicToken(MouseEvent e) {
+    }
+
+    private void updateStatusIndicator(int winFlag){
+    	System.out.println("updating status bar");
+    	if(backendBoard.getPlayer() == 1 && winFlag == 0){
+    		statusIndicator.setIcon(assets.getAsset("player_one_turn.png"));
+    	}else if(backendBoard.getPlayer() == 2 && winFlag == 0){
+    		statusIndicator.setIcon(assets.getAsset("player_two_turn.png"));
+    	}
+    	
+    	
+    	if(backendBoard.getPlayer() == 1 && winFlag == 1){
+    		statusIndicator.setIcon(assets.getAsset("player_one_win.png"));
+    	}else if(backendBoard.getPlayer() == 2 && winFlag == 1){
+    		statusIndicator.setIcon(assets.getAsset("player_two_win.png"));
+    	}
+    	
+    	statusIndicator.setVisible(true);
+    
+    } 
+
+    
+    
+    
 }

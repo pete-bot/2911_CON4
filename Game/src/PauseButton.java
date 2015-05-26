@@ -34,6 +34,7 @@ public class PauseButton extends JPanel implements ActionListener {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
+        gbc.weighty = 1;
         gbc.insets = new Insets(2, 2, 2, 2);
 
         javax.swing.border.Border empty = BorderFactory.createEmptyBorder();
@@ -45,7 +46,8 @@ public class PauseButton extends JPanel implements ActionListener {
         pauseButton.setContentAreaFilled(false);
         pauseButton.setBorderPainted(false);
         pauseButton.setBorder(empty);
-
+        
+        gbc.gridy++;
         add(pauseButton, gbc);
         window = mainWindow;
     }

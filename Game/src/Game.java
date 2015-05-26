@@ -9,7 +9,7 @@ public class Game {
     private Window gameWindow = new Window(newBoard);
 
     public void playGame() {
-        System.out.println("Initiating WOBCON4. Standby for de-Wobbification.");
+        System.out.println("Initialsing WOBCON4. Standby for de-Wobbification.");
         gameWindow.displayMenu();
     }
 }
