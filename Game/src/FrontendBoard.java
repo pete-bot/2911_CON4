@@ -222,7 +222,7 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
 
         setSize(gridSize);
 
-        playArea = new PlayArea(gridSize, blankTokenIcon);
+        playArea = new PlayArea(gridSize, blankTokenIcon, mainWindow);
         playArea.addMouseListener(this);
         playArea.addMouseMotionListener(this);
         gameTokens = playArea.getTokens();

@@ -16,8 +16,15 @@ public class PlayArea extends JLabel {
     private final Token[] gameTokens = new Token[42];
     private ImageIcon blankTokenIcon;
     private Color defaultColor = new Color(255, 255, 235, 100);
-
-    public PlayArea(Dimension dimension, ImageIcon blankTokenIcon) {
+    
+    
+    // how PROPORTIONATE the playArea will be
+    // according to the height of the main window.
+    // change to adjust proportionality.
+    private double propPercentage = 0.80;
+    private Window mainWindow;
+    
+    public PlayArea(Dimension dimension, ImageIcon blankTokenIcon, Window mainWindow) {
 
         // board transparency settings - may need to change depending on colour
         // prefs
@@ -28,6 +35,7 @@ public class PlayArea extends JLabel {
         setLayout(new GridLayout(rows, cols));
         minSize = dimension;
         this.blankTokenIcon = blankTokenIcon;
+        this.mainWindow = mainWindow;
         populateWithTokens();
     }
 
@@ -38,7 +46,13 @@ public class PlayArea extends JLabel {
 
     @Override
     public Dimension getPreferredSize() {
-        return minSize;
+    	
+    	// scales with respect to height.
+    	int toReturnDim = (int) Math.round(mainWindow.getHeight() * propPercentage);
+    	
+    	//board is square, so both sides must be same length
+    	
+    	return new Dimension(toReturnDim,toReturnDim);
     }
 
     public Token[] getTokens() {
