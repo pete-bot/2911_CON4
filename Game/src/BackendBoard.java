@@ -354,7 +354,6 @@ public class BackendBoard {
             }
         }
         board[col][newAction.getColumn()] = currentPlayer;
-        switchPlayer();
     }
 
     public void resetBoard() {
@@ -365,6 +364,7 @@ public class BackendBoard {
             }
         }
         showTerminalBoard();
+        setPlayer(1);
     }
 
     // To be called from the menu
@@ -375,8 +375,6 @@ public class BackendBoard {
     // render the current board in terminal
     // Maybe 'showTerminalBoard' is better...
     public void showTerminalBoard() {
-        System.out.println("Welcome to WOBCON4. Enjoy the game.");
-        System.out.println("Initial Game State:");
         for (int row = ROWMAX - 1; row >= 0; row--) {
             for (int col = 0; col < COLMAX; col++) {
                 System.out.print("[" + getPosition(row, col) + "]");
@@ -386,7 +384,7 @@ public class BackendBoard {
         System.out.println("User, please enter your column choice:");
     }
 
-    private void switchPlayer() {
+    public void switchPlayer() {
         currentPlayer = currentPlayer == 1 ? 2 : 1;
     }
 

@@ -50,27 +50,26 @@ public class Window extends JFrame {
 
     public Window(BackendBoard newBoard) {
         super("Prepare yourself, Wobke is coming.");
-        
-        this.setMinimumSize(new Dimension(800,820));
-        
+
+        this.setMinimumSize(new Dimension(800, 820));
+
         initFrontendBoard(newBoard);
         initWindow(newBoard);
         pack();
     }
 
+    public void addMenu() {
+        menuPanel.addMainMenuItems();
+    }
+
     public void displayMenu() {
-        
-    	titlePane.setVisible(true);
+
+        titlePane.setVisible(true);
         menuPanel.setVisible(true);
     }
 
-    public void showEndGame(int winner) {
-        menuPanel.showWinMessage();
-        
-        // hide pause menu
-        // replac with restart quit main menu
-        
-        System.out.println("congratulations, player " + winner);   
+    public void hideGameBoard() {
+        frontEndBoard.turnOff();
     }
 
     private void hideMainMenu() {
@@ -78,10 +77,6 @@ public class Window extends JFrame {
         // menuPanel.setEnabled(false);
         // menuPanel.setVisible(false);
         titlePane.setVisible(false);
-    }
-    
-    public void addMenu(){
-    	menuPanel.addMainMenuItems(); 
     }
 
     private void initBackground() {
@@ -163,13 +158,16 @@ public class Window extends JFrame {
         menuPanel.showPauseMenu();
     }
 
+    public void resetBackEndBoard() {
+        backendBoard.resetBoard();
+    }
+
     public void resetWindow() {
         menuPanel.hideMainMenu();
         menuPanel.hidePauseMenu();
         titlePane.setVisible(false);
         frontEndBoard.turnOn();
         frontEndBoard.resetBoard();
-        showTerminalBoard();
     }
 
     public void resumeGame() {
@@ -177,32 +175,25 @@ public class Window extends JFrame {
         menuPanel.hidePauseMenu();
     }
 
-    private void showTerminalBoard() {
-        backendBoard.showTerminalBoard();
+    public void selectDifficulty() {
+        hideMainMenu();
+        titlePane.setVisible(false);
+        menuPanel.showDifficultyPanel();
     }
 
-    public void selectDifficulty(){
-    	hideMainMenu();
-    	titlePane.setVisible(false);
-    	menuPanel.showDifficultyPanel();
+    public void setDifficulty(int AIclass) {
+        frontEndBoard.setAI(AIclass);
     }
-    
-    public void setDifficulty(int AIclass){
-    	frontEndBoard.setAI(AIclass);
+
+    public void showEndGame(int winner) {
+        menuPanel.showWinMessage();
+        System.out.println("congratulations, player " + winner);
     }
-    
+
     public void startNewGame() {
         hideMainMenu();
-        showTerminalBoard();
+        backendBoard.showTerminalBoard();
         frontEndBoard.turnOn();
     }
 
-    public void resetBackEndBoard(){
-    	backendBoard.resetBoard();
-    }
-    
-    public void hideGameBoard(){
-    	frontEndBoard.turnOff();
-    }
-    
 }

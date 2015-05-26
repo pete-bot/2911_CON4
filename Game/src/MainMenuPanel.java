@@ -10,7 +10,6 @@ import java.awt.event.KeyEvent;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
-
 //import javafx.scene.layout.Border;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -29,9 +28,9 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     private static final int InFocusWindow = JComponent.WHEN_IN_FOCUSED_WINDOW;
     private static final KeyStroke escapeStroke = KeyStroke.getKeyStroke(
             KeyEvent.VK_ESCAPE, 0);
-    
+
     JPanel difficultyPanel = new JPanel();
-    
+
     private JButton pvCPUButton = new JButton();
     private JButton restartButton = new JButton();
     private JButton exitButton = new JButton();
@@ -44,9 +43,9 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     private JButton medium = new JButton();
     private JButton hard = new JButton();
     private JButton back = new JButton();
-    
+
     private Border emptyBorder = BorderFactory.createEmptyBorder();
-    
+
     private ImageIcon pvCPUIcon;
     private ImageIcon pvpIcon;
     private ImageIcon optionsIcon;
@@ -55,15 +54,13 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     private ImageIcon quitIcon;
     private ImageIcon resumeIcon;
     private ImageIcon restartIcon;
-    
+
     private ImageIcon easyIcon;
     private ImageIcon mediumIcon;
     private ImageIcon hardIcon;
     private ImageIcon backIcon;
     private GameAssets assets;
-    
-    
-    
+
     private Window mainWindow;
 
     private Color defaultColor = new Color(255, 255, 235, 200);
@@ -104,39 +101,35 @@ public class MainMenuPanel extends JPanel implements ActionListener {
             } catch (Exception e1) {
                 System.out.println("Music not loading, check your paths.");
             }
-        
-        // DIFFICULTY CHOICE
+
+            // DIFFICULTY CHOICE
         } else if (buttonPressed.equals(easy)) {
-        	System.out.println("Setting Easy AI");
-        	mainWindow.setDifficulty(1);
-        	hideDifficultypanel();
-        	mainWindow.startNewGame();
+            System.out.println("Setting Easy AI");
+            mainWindow.setDifficulty(1);
+            hideDifficultypanel();
+            mainWindow.startNewGame();
         } else if (buttonPressed.equals(medium)) {
-        	System.out.println("Setting medium AI");
-        	hideDifficultypanel();
-        	mainWindow.setDifficulty(1);
-        	mainWindow.startNewGame();
-        	
+            System.out.println("Setting medium AI");
+            hideDifficultypanel();
+            mainWindow.setDifficulty(1);
+            mainWindow.startNewGame();
+
         } else if (buttonPressed.equals(hard)) {
-        	System.out.println("Setting Hard AI");
-        	hideDifficultypanel();
-        	mainWindow.setDifficulty(1);
-        	mainWindow.startNewGame();
-        	
+            System.out.println("Setting Hard AI");
+            hideDifficultypanel();
+            mainWindow.setDifficulty(1);
+            mainWindow.startNewGame();
+
         } else if (buttonPressed.equals(back)) {
-        	mainWindow.resetWindow();
-        	mainWindow.hideGameBoard();
-        	hideDifficultypanel();
-        	removePauseMenuItems();
-        	System.out.println("Going back to menu");
-        	
-        	
-        	// this guy needs to redraw the menu
-        	mainWindow.addMenu();
-        	mainWindow.displayMenu();
-        	
-            
-            
+            mainWindow.resetWindow();
+            mainWindow.hideGameBoard();
+            hideDifficultypanel();
+            removePauseMenuItems();
+            System.out.println("Going back to menu");
+
+            // this guy needs to redraw the menu
+            mainWindow.addMenu();
+            mainWindow.displayMenu();
         } else if (buttonPressed.equals(exitButton)) {
             System.exit(0);
         }
@@ -188,6 +181,10 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         gbc.gridwidth = 1;
     }
 
+    public void hideDifficultypanel() {
+        remove(difficultyPanel);
+    }
+
     public void hideMainMenu() {
         removeMainMenuItems();
     }
@@ -214,12 +211,12 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         quitIcon = assets.getAsset("quit_button.png");
         resumeIcon = assets.getAsset("resume_game_button.png");
         restartIcon = assets.getAsset("restart_button.png");
-        
+
         easyIcon = assets.getAsset("easy.png");
         mediumIcon = assets.getAsset("medium.png");
         hardIcon = assets.getAsset("hard.png");
         backIcon = assets.getAsset("back.png");
-        
+
     }
 
     public void musicToggle() throws Exception {
@@ -264,101 +261,20 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         remove(exitButton);
     }
 
-    public void showPauseMenu() {
-        // Clear the panel of older items
-        removeMainMenuItems();
+    public void showDifficultyPanel() {
 
-        resumeButton.addActionListener(this);
-        restartButton.addActionListener(this);
-        exitButton.addActionListener(this);
+        difficultyPanel.setBorder(emptyBorder);
+        difficultyPanel.setBackground(defaultColor);
+        difficultyPanel.setLayout(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.insets = new Insets(2, 2, 2, 2);
-
-        initButton(resumeButton);
-        resumeButton.setIcon(resumeIcon);
-        add(resumeButton, gbc);
-        gbc.gridy++;
-
-        add(optionsButton, gbc);
-        gbc.gridy++;
-
-        initButton(restartButton);
-        restartButton.setIcon(restartIcon);
-        add(restartButton, gbc);
-        gbc.gridy++;
-
-        
-        initButton(back);
-        back.setIcon(backIcon);
-        add(back, gbc);
-        gbc.gridy++;
-
-        
-        initButton(exitButton);
-        exitButton.setIcon(quitIcon);
-        add(exitButton, gbc);
-
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.gridwidth = 2;
-
-        // init key bindings
-        getInputMap(InFocusWindow).put(escapeStroke, "escapeSequence");
-        getActionMap().put("escapeSequence", mainWindow.escapeAction);
-
-        setVisible(true);
-    }
-
-    public void showWinMessage() {
-        removeMainMenuItems();
-
-//        glass.setVisible(true);
-//        glass.setLayout(new GridBagLayout());
-//
-//        // set glassy pane behind win message
-//        glass.setOpaque(false);
-//        glass.setBackground(defaultColor);
-//
-//        GridBagConstraints gbc = new GridBagConstraints();
-//        gbc.gridx = 0;
-//        gbc.gridy = 0;
-//        gbc.insets = new Insets(2, 2, 2, 2);
-//
-//        initButton(restartButton);
-//        restartButton.setIcon(restartIcon);
-//        glass.add(restartButton, gbc);
-//        gbc.gridy++;
-//
-//        initButton(exitButton);
-//        exitButton.setIcon(quitIcon);
-//        glass.add(exitButton, gbc);
-//
-//        restartButton.addActionListener(this);
-//        exitButton.addActionListener(this);
-//
-//        glass.requestFocus();
-//        glass.setVisible(true);
-//        setVisible(true);
-
-    }
-
-    public void showDifficultyPanel(){
-    	
-    	
-    	difficultyPanel.setBorder(emptyBorder);
-    	difficultyPanel.setBackground(defaultColor);
-    	difficultyPanel.setLayout(new GridBagLayout());
-    	
-    	GridBagConstraints gbc = new GridBagConstraints();
         // init GridBagConstraints and inset (default spacing on buttons)
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.insets = new Insets(10, 10, 10, 10);
 
         initIcons();
-        
+
         easy.setIcon(easyIcon);
         easy.addActionListener(this);
         medium.setIcon(mediumIcon);
@@ -367,7 +283,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         hard.addActionListener(this);
         back.setIcon(backIcon);
         back.addActionListener(this);
-        
+
         // initButton(spacer);
         initButton(easy);
         initButton(medium);
@@ -398,16 +314,88 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridwidth = 1;
-        
+
         difficultyPanel.setVisible(true);
         add(difficultyPanel, gbc);
-        
+
     }
-    
-    public void hideDifficultypanel(){
-    	remove(difficultyPanel);
+
+    public void showPauseMenu() {
+        // Clear the panel of older items
+        removeMainMenuItems();
+
+        resumeButton.addActionListener(this);
+        restartButton.addActionListener(this);
+        exitButton.addActionListener(this);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(2, 2, 2, 2);
+
+        initButton(resumeButton);
+        resumeButton.setIcon(resumeIcon);
+        add(resumeButton, gbc);
+        gbc.gridy++;
+
+        add(optionsButton, gbc);
+        gbc.gridy++;
+
+        initButton(restartButton);
+        restartButton.setIcon(restartIcon);
+        add(restartButton, gbc);
+        gbc.gridy++;
+
+        initButton(back);
+        back.setIcon(backIcon);
+        add(back, gbc);
+        gbc.gridy++;
+
+        initButton(exitButton);
+        exitButton.setIcon(quitIcon);
+        add(exitButton, gbc);
+
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridwidth = 2;
+
+        // init key bindings
+        getInputMap(InFocusWindow).put(escapeStroke, "escapeSequence");
+        getActionMap().put("escapeSequence", mainWindow.escapeAction);
+
+        setVisible(true);
     }
-    
-    
-    
+
+    public void showWinMessage() {
+        removeMainMenuItems();
+
+        // glass.setVisible(true);
+        // glass.setLayout(new GridBagLayout());
+        //
+        // // set glassy pane behind win message
+        // glass.setOpaque(false);
+        // glass.setBackground(defaultColor);
+        //
+        // GridBagConstraints gbc = new GridBagConstraints();
+        // gbc.gridx = 0;
+        // gbc.gridy = 0;
+        // gbc.insets = new Insets(2, 2, 2, 2);
+        //
+        // initButton(restartButton);
+        // restartButton.setIcon(restartIcon);
+        // glass.add(restartButton, gbc);
+        // gbc.gridy++;
+        //
+        // initButton(exitButton);
+        // exitButton.setIcon(quitIcon);
+        // glass.add(exitButton, gbc);
+        //
+        // restartButton.addActionListener(this);
+        // exitButton.addActionListener(this);
+        //
+        // glass.requestFocus();
+        // glass.setVisible(true);
+        // setVisible(true);
+
+    }
+
 }
