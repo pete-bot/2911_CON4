@@ -21,13 +21,10 @@ import javax.swing.Timer;
 import javax.swing.border.Border;
 
 public class FrontendBoard extends JLayeredPane implements MouseListener,
-MouseMotionListener, ActionListener {
+        MouseMotionListener, ActionListener {
 
     private static final long serialVersionUID = 1L;
 
-    private static final int InFocusWindow = JComponent.WHEN_IN_FOCUSED_WINDOW;
-    private static final KeyStroke escapeStroke = KeyStroke.getKeyStroke(
-            KeyEvent.VK_ESCAPE, 0);
     // TODO our colours, should be updated to match the palette
     private Dimension gridSize = new Dimension(750, 650);
     private BackendBoard backendBoard; // Should be 'backendBoard'
@@ -52,7 +49,6 @@ MouseMotionListener, ActionListener {
     private ImageIcon redTokenIcon;
     private ImageIcon yellowTokenIcon;
     private ImageIcon winTokenIcon;
-    private ImageIcon spaceIcon;
 
     private Opponent opponent;
 
@@ -252,10 +248,11 @@ MouseMotionListener, ActionListener {
         redTokenIcon = assets.getAsset("sample_token_red.png");
         yellowTokenIcon = assets.getAsset("sample_token_yellow.png");
         winTokenIcon = assets.getAsset("sample_token_win.png");
-        spaceIcon = assets.getAsset("half_spacer.png");
     }
 
     private void initKeyListener() {
+        int InFocusWindow = JComponent.WHEN_IN_FOCUSED_WINDOW;
+        KeyStroke escapeStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
         getInputMap(InFocusWindow).put(escapeStroke, "escapeSequence");
         getActionMap().put("escapeSequence", mainWindow.escapeAction);
     }

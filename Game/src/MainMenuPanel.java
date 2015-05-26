@@ -39,10 +39,10 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     private JButton optionsButton = new JButton();
     @SuppressWarnings("unused")
     private JButton spacer = new JButton();
-    private JButton easy = new JButton();
-    private JButton medium = new JButton();
-    private JButton hard = new JButton();
-    private JButton back = new JButton();
+    private JButton easyButton = new JButton();
+    private JButton mediumButton = new JButton();
+    private JButton hardButton = new JButton();
+    private JButton backButton = new JButton();
 
     private Border emptyBorder = BorderFactory.createEmptyBorder();
 
@@ -101,33 +101,29 @@ public class MainMenuPanel extends JPanel implements ActionListener {
             } catch (Exception e1) {
                 System.out.println("Music not loading, check your paths.");
             }
+        }
 
-            // DIFFICULTY CHOICE
-        } else if (buttonPressed.equals(easy)) {
+        if (buttonPressed.equals(easyButton)) {
             System.out.println("Setting Easy AI");
             mainWindow.setDifficulty(1);
             hideDifficultypanel();
             mainWindow.startNewGame();
-        } else if (buttonPressed.equals(medium)) {
+        } else if (buttonPressed.equals(mediumButton)) {
             System.out.println("Setting medium AI");
             hideDifficultypanel();
             mainWindow.setDifficulty(1);
             mainWindow.startNewGame();
-
-        } else if (buttonPressed.equals(hard)) {
+        } else if (buttonPressed.equals(hardButton)) {
             System.out.println("Setting Hard AI");
             hideDifficultypanel();
             mainWindow.setDifficulty(1);
             mainWindow.startNewGame();
-
-        } else if (buttonPressed.equals(back)) {
+        } else if (buttonPressed.equals(backButton)) {
             mainWindow.resetWindow();
             mainWindow.hideGameBoard();
             hideDifficultypanel();
             removePauseMenuItems();
             System.out.println("Going back to menu");
-
-            // this guy needs to redraw the menu
             mainWindow.addMenu();
             mainWindow.displayMenu();
         } else if (buttonPressed.equals(exitButton)) {
@@ -182,6 +178,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     }
 
     public void hideDifficultypanel() {
+        removeDifficultyItems();
         remove(difficultyPanel);
     }
 
@@ -246,6 +243,13 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         super.paintComponent(g);
     }
 
+    private void removeDifficultyItems() {
+        remove(easyButton);
+        remove(mediumButton);
+        remove(hardButton);
+        remove(backButton);
+    }
+
     private void removeMainMenuItems() {
         remove(pvCPUButton);
         remove(pvpButton);
@@ -257,7 +261,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         remove(resumeButton);
         remove(optionsButton);
         remove(restartButton);
-        remove(back);
+        remove(backButton);
         remove(exitButton);
     }
 
@@ -275,42 +279,37 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
         initIcons();
 
-        easy.setIcon(easyIcon);
-        easy.addActionListener(this);
-        medium.setIcon(mediumIcon);
-        medium.addActionListener(this);
-        hard.setIcon(hardIcon);
-        hard.addActionListener(this);
-        back.setIcon(backIcon);
-        back.addActionListener(this);
+        easyButton.setIcon(easyIcon);
+        mediumButton.setIcon(mediumIcon);
+        hardButton.setIcon(hardIcon);
+        backButton.setIcon(backIcon);
 
-        // initButton(spacer);
-        initButton(easy);
-        initButton(medium);
-        initButton(hard);
-        initButton(back);
+        initButton(easyButton);
+        initButton(mediumButton);
+        initButton(hardButton);
+        initButton(backButton);
 
-        easy.addActionListener(this);
-        medium.addActionListener(this);
-        hard.addActionListener(this);
-        back.addActionListener(this);
+        easyButton.addActionListener(this);
+        mediumButton.addActionListener(this);
+        hardButton.addActionListener(this);
+        backButton.addActionListener(this);
 
         // add(spacer, gbc);
         // gbc.gridy++;
 
-        difficultyPanel.add(easy, gbc);
+        difficultyPanel.add(easyButton, gbc);
         gbc.gridy++;
         gbc.gridy++;
 
-        difficultyPanel.add(medium, gbc);
+        difficultyPanel.add(mediumButton, gbc);
         gbc.gridy++;
         gbc.gridy++;
 
-        difficultyPanel.add(hard, gbc);
+        difficultyPanel.add(hardButton, gbc);
         gbc.gridy++;
         gbc.gridy++;
 
-        difficultyPanel.add(back, gbc);
+        difficultyPanel.add(backButton, gbc);
 
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridwidth = 1;
@@ -346,9 +345,9 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         add(restartButton, gbc);
         gbc.gridy++;
 
-        initButton(back);
-        back.setIcon(backIcon);
-        add(back, gbc);
+        initButton(backButton);
+        backButton.setIcon(backIcon);
+        add(backButton, gbc);
         gbc.gridy++;
 
         initButton(exitButton);
