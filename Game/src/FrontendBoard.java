@@ -151,17 +151,19 @@ MouseMotionListener, ActionListener {
     }
 
     public void getNextMove(Action move) {
-        if (backendBoard.isLegal(move)) {
+        if (!inWinState) {
             updateStatusIndicator(GameState.NO_WIN);
-            backendBoard.makeMove(move);
-            backendBoard.showTerminalBoard();
-            updateVisualBoard(move.getColumn());
-            checkWin(move); // Wins come before draws.
-            checkDraw();
-            backendBoard.switchPlayer();
-            makeOpponentMove();
-        } else {
-            System.out.println("Invalid move.");
+            if (backendBoard.isLegal(move)) {
+                backendBoard.makeMove(move);
+                backendBoard.showTerminalBoard();
+                updateVisualBoard(move.getColumn());
+                checkWin(move); // Wins come before draws.
+                checkDraw();
+                backendBoard.switchPlayer();
+                makeOpponentMove();
+            } else {
+                System.out.println("Invalid move.");
+            }
         }
     }
 
@@ -266,15 +268,16 @@ MouseMotionListener, ActionListener {
     }
 
     public void makeOpponentMove() {
-        if (opponent.isAI()) {
-            updateStatusIndicator(GameState.NO_WIN);
+        updateStatusIndicator(GameState.NO_WIN);
+        if (opponent.isAI() && !inWinState) {
 
             // timer for AI move
-            /*
-             * try { Thread.sleep(300); //1000 milliseconds is one second. }
-             * catch(InterruptedException ex) {
-             * Thread.currentThread().interrupt(); }
-             */
+            // try {
+            // System.out.println("AI is thinking...");
+            // Thread.sleep(300);
+            // } catch (InterruptedException ex) {
+            // Thread.currentThread().interrupt();
+            // }
 
             Action opponentMove = opponent.getMove();
             while (!backendBoard.isLegal(opponentMove)) {
@@ -335,6 +338,7 @@ MouseMotionListener, ActionListener {
         inWinState = false;
         backendBoard.resetBoard();
         winList.clear();
+        clock.stop();
         for (Token gameToken : gameTokens) {
             gameToken.setIcon(blankTokenIcon);
             gameToken.setPlayer(0);
