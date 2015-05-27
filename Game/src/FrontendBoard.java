@@ -21,7 +21,7 @@ import javax.swing.Timer;
 import javax.swing.border.Border;
 
 public class FrontendBoard extends JLayeredPane implements MouseListener,
-        MouseMotionListener, ActionListener {
+MouseMotionListener, ActionListener {
 
     private static final long serialVersionUID = 1L;
 

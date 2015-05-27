@@ -160,7 +160,9 @@ public class BackendBoard {
 
     /*
      * Added by Sketch in "Updated Win Row Addition" Returns the win state using
-     * sweet Al Gore rhythms. Assumes it will be called before makeMove();
+     * sweet Al Gore rhythms.
+     * 
+     * Assumes it will be called after a succesful legal move has been issued.
      * 
      * @return Game win condition
      * 
@@ -173,9 +175,9 @@ public class BackendBoard {
         boolean win = false;
         ArrayList<Point> winList = new ArrayList<Point>();
 
-        int player = currentPlayer;
+        int player = currentPlayer; // Player to check win for.
         int lastColumn = lastTurn.getColumn();
-        int lastRow = getLastRow(lastColumn); // Calculate the last row
+        int lastRow = getLastRow(lastColumn);
 
         // Check vertical wins
         win = checkVertical(player, lastColumn, lastRow);
