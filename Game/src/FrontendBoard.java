@@ -271,12 +271,6 @@ MouseMotionListener, ActionListener {
 
             // timer for AI move
             System.out.println("AI is thinking...");
-            try {
-                Thread.sleep(250);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
 
             Action opponentMove = opponent.getMove();
             while (!backendBoard.isLegal(opponentMove)) {
@@ -406,7 +400,6 @@ MouseMotionListener, ActionListener {
             // current player does not matter.
             System.out.println("It's a draw!");
         }
-
         // statusIndicator.setVisible(true);
     }
 

@@ -1,8 +1,13 @@
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 /**
@@ -32,7 +37,7 @@ public class GameAssets {
                 ImageIcon newAsset = new ImageIcon(assetsLocation + "/"
                         + filename);
                 assets.put(filename, newAsset);
-                //System.out.println("Adding asset " + filename);
+                // System.out.println("Adding asset " + filename);
             } else { // All assets must be at the top level
                 continue;
             }
@@ -44,8 +49,33 @@ public class GameAssets {
     }
 
     public Path getAssetsDir() {
-        //System.out.println(assetsLocation.toString());
+        // System.out.println(assetsLocation.toString());
         return assetsLocation;
+    }
+
+    /*
+     * Method that resizes token image icons
+     */
+    public ImageIcon getResizedAsset(String filename, int width, int height) {
+        BufferedImage originalImage;
+        BufferedImage resizedImage = new BufferedImage(width / 7, height / 7,
+                BufferedImage.TYPE_4BYTE_ABGR);
+
+        try {
+            originalImage = ImageIO.read(new File(assetsLocation + "/"
+                    + filename));
+            // Create graph
+            Graphics2D g = resizedImage.createGraphics();
+            g.addRenderingHints(new RenderingHints(
+                    RenderingHints.KEY_RENDERING,
+                    RenderingHints.VALUE_RENDER_QUALITY));
+            g.drawImage(originalImage, 0, 0, width / 7, height / 7, null);
+            g.dispose();
+
+        } catch (IOException E) {
+            E.printStackTrace();
+        }
+        return new ImageIcon(resizedImage);
     }
 
     private void initAssets() {
