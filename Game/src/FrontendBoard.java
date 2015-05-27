@@ -21,7 +21,7 @@ import javax.swing.Timer;
 import javax.swing.border.Border;
 
 public class FrontendBoard extends JLayeredPane implements MouseListener,
-        MouseMotionListener, ActionListener {
+MouseMotionListener, ActionListener {
 
     private static final long serialVersionUID = 1L;
 
@@ -101,6 +101,15 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         revalidate();
     }
 
+    private void checkDraw() {
+        if (backendBoard.isFull()) {
+            inWinState = true;
+            updateStatusIndicator(GameState.DRAW);
+        } else {
+            return;
+        }
+    }
+
     private void checkWin(Action action) {
         winList = backendBoard.checkWinState(action);
 
@@ -111,10 +120,10 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
             System.out.println("Player that won: " + backendBoard.getPlayer());
             if (backendBoard.getPlayer() == 1) {
                 System.out.println("PLAYER_1, you WIN!");
-                updateStatusIndicator(1);
+                updateStatusIndicator(GameState.WIN);
             } else {
                 System.out.println("PLAYER_2, you WIN!");
-                updateStatusIndicator(1);
+                updateStatusIndicator(GameState.WIN);
             }
             // clock.stop();
             winList.clear();
@@ -145,11 +154,12 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
 
     public void getNextMove(Action move) {
         if (backendBoard.isLegal(move)) {
-            updateStatusIndicator(0);
+            updateStatusIndicator(GameState.NO_WIN);
             backendBoard.makeMove(move);
             backendBoard.showTerminalBoard();
             updateVisualBoard(move.getColumn());
-            checkWin(move);
+            checkWin(move); // Wins come before draws.
+            checkDraw();
             backendBoard.switchPlayer();
             makeOpponentMove();
         } else {
@@ -199,7 +209,7 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         pauseButton.setOpaque(false);
 
         initButton(statusIndicator);
-        updateStatusIndicator(0);
+        updateStatusIndicator(GameState.NO_WIN);
         add(statusIndicator);
 
         setLayout(new GridBagLayout());
@@ -259,7 +269,7 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
 
     public void makeOpponentMove() {
         if (opponent.isAI()) {
-            updateStatusIndicator(0);
+            updateStatusIndicator(GameState.NO_WIN);
 
             // timer for AI move
             /*
@@ -276,6 +286,7 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
             backendBoard.makeMove(opponentMove);
             backendBoard.showTerminalBoard();
             checkWin(opponentMove);
+            checkDraw();
             backendBoard.switchPlayer();
         }
     }
@@ -371,23 +382,26 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         showPauseButton();
     }
 
-    private void updateStatusIndicator(int winFlag) {
-        // I assume winFlag at 0 is no win
-        if (backendBoard.getPlayer() == 1 && winFlag == 0) {
-            statusIndicator.setIcon(assets.getAsset("player_one_turn.png"));
-        } else if (backendBoard.getPlayer() == 2 && winFlag == 0) {
-            statusIndicator.setIcon(assets.getAsset("player_two_turn.png"));
+    private void updateStatusIndicator(GameState state) {
+        if (GameState.NO_WIN == state) {
+            if (backendBoard.getPlayer() == 1) {
+                statusIndicator.setIcon(assets.getAsset("player_one_turn.png"));
+            } else {
+                statusIndicator.setIcon(assets.getAsset("player_two_turn.png"));
+            }
+        } else if (GameState.WIN == state) {
+            if (backendBoard.getPlayer() == 1) {
+                statusIndicator.setIcon(assets.getAsset("player_one_win.png"));
+            } else {
+                statusIndicator.setIcon(assets.getAsset("player_two_win.png"));
+            }
+        } else if (GameState.DRAW == state) {
+            // Show appropriate graphics
+            // current player does not matter.
+            System.out.println("It's a draw!");
         }
 
-        // I assume winFlag at 1 is that someone has one
-        if (backendBoard.getPlayer() == 1 && winFlag == 1) {
-            statusIndicator.setIcon(assets.getAsset("player_one_win.png"));
-        } else if (backendBoard.getPlayer() == 2 && winFlag == 1) {
-            statusIndicator.setIcon(assets.getAsset("player_two_win.png"));
-        }
-        // And, therefore, I assume winFlag at something like 2 will be a draw.
-
-        statusIndicator.setVisible(true);
+        // statusIndicator.setVisible(true);
     }
 
     // Updates the board with the next _legal_ move

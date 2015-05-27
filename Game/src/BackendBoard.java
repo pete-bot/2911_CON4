@@ -173,32 +173,32 @@ public class BackendBoard {
         boolean win = false;
         ArrayList<Point> winList = new ArrayList<Point>();
 
-        int lastPlayer = currentPlayer == 1 ? 2 : 1;
+        int player = currentPlayer;
         int lastColumn = lastTurn.getColumn();
         int lastRow = getLastRow(lastColumn); // Calculate the last row
 
         // Check vertical wins
-        win = checkVertical(lastPlayer, lastColumn, lastRow);
+        win = checkVertical(player, lastColumn, lastRow);
         if (win)
             return getVerticalWin();
 
         // Check horizontal wins
         if (!win) {
-            win = checkHorizontal(lastPlayer, lastColumn, lastRow);
+            win = checkHorizontal(player, lastColumn, lastRow);
         }
         if (win)
             return getHorizontalWin();
 
         // Check ascending diagonal wins
         if (!win) {
-            win = checkAscDiagonal(lastPlayer, lastColumn, lastRow);
+            win = checkAscDiagonal(player, lastColumn, lastRow);
         }
         if (win)
             return getDiagonalRightWin();
 
         // check descending diagonal wins
         if (!win) {
-            win = checkDescDiagonal(lastPlayer, lastColumn, lastRow);
+            win = checkDescDiagonal(player, lastColumn, lastRow);
         }
         if (win)
             return getDiagonalLeftWin();
@@ -327,6 +327,16 @@ public class BackendBoard {
         }
 
         return winList;
+    }
+
+    public boolean isFull() {
+        for (int row = 0; row < ROWMAX; row++) {
+            for (int col = 0; col < COLMAX; col++) {
+                if (board[row][col] == 0)
+                    return false;
+            }
+        }
+        return true;
     }
 
     public boolean isLegal(Action newAction) {
