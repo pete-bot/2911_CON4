@@ -21,7 +21,7 @@ import javax.swing.Timer;
 import javax.swing.border.Border;
 
 public class FrontendBoard extends JLayeredPane implements MouseListener,
-MouseMotionListener, ActionListener {
+        MouseMotionListener, ActionListener {
 
     private static final long serialVersionUID = 1L;
 
@@ -117,16 +117,14 @@ MouseMotionListener, ActionListener {
         if (!winList.isEmpty()) {
             inWinState = true;
             clock.restart();
-            System.out.println("Player that won: " + backendBoard.getPlayer());
             if (backendBoard.getPlayer() == 1) {
-                System.out.println("PLAYER_1, you WIN!");
                 updateStatusIndicator(GameState.WIN);
-            } else {
-                System.out.println("PLAYER_2, you WIN!");
+            } else if (backendBoard.getPlayer() == 2) {
                 updateStatusIndicator(GameState.WIN);
             }
             // clock.stop();
-            winList.clear();
+            // winList.clear();
+            // SHOULD PAUSE AT THIS POINT.
         }
     }
 
@@ -282,9 +280,9 @@ MouseMotionListener, ActionListener {
             while (!backendBoard.isLegal(opponentMove)) {
                 opponentMove = opponent.getMove();
             }
-            updateVisualBoard(opponentMove.getColumn());
             backendBoard.makeMove(opponentMove);
             backendBoard.showTerminalBoard();
+            updateVisualBoard(opponentMove.getColumn());
             checkWin(opponentMove);
             checkDraw();
             backendBoard.switchPlayer();
@@ -336,6 +334,7 @@ MouseMotionListener, ActionListener {
     public void resetBoard() {
         inWinState = false;
         backendBoard.resetBoard();
+        winList.clear();
         for (Token gameToken : gameTokens) {
             gameToken.setIcon(blankTokenIcon);
             gameToken.setPlayer(0);
@@ -386,14 +385,18 @@ MouseMotionListener, ActionListener {
         if (GameState.NO_WIN == state) {
             if (backendBoard.getPlayer() == 1) {
                 statusIndicator.setIcon(assets.getAsset("player_one_turn.png"));
+                System.out.println("Alright player one, you go...");
             } else {
                 statusIndicator.setIcon(assets.getAsset("player_two_turn.png"));
+                System.out.println("Alright player two, you go...");
             }
         } else if (GameState.WIN == state) {
             if (backendBoard.getPlayer() == 1) {
                 statusIndicator.setIcon(assets.getAsset("player_one_win.png"));
+                System.out.println("PLAYER_1, you WIN!");
             } else {
                 statusIndicator.setIcon(assets.getAsset("player_two_win.png"));
+                System.out.println("PLAYER_2, you WIN!");
             }
         } else if (GameState.DRAW == state) {
             // Show appropriate graphics
