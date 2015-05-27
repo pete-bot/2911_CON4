@@ -10,21 +10,21 @@ import javax.swing.JLabel;
 public class PlayArea extends JLabel {
 
     private static final long serialVersionUID = 1L;
-    private Dimension minSize;
+    private Dimension minSize = new Dimension(750, 650);
+    private Dimension size = new Dimension(750, 650);
     private final int rows = 6;
     private final int cols = 7;
     private final Token[] gameTokens = new Token[42];
     private ImageIcon blankTokenIcon;
     private Color defaultColor = new Color(255, 255, 235, 100);
-    
-    
+
     // how PROPORTIONATE the playArea will be
     // according to the height of the main window.
     // change to adjust proportionality.
     private double propPercentage = 0.80;
     private Window mainWindow;
-    
-    public PlayArea(Dimension dimension, ImageIcon blankTokenIcon, Window mainWindow) {
+
+    public PlayArea(ImageIcon blankTokenIcon, Window mainWindow) {
 
         // board transparency settings - may need to change depending on colour
         // prefs
@@ -33,7 +33,6 @@ public class PlayArea extends JLabel {
 
         setBorder(BorderFactory.createLineBorder(Color.black));
         setLayout(new GridLayout(rows, cols));
-        minSize = dimension;
         this.blankTokenIcon = blankTokenIcon;
         this.mainWindow = mainWindow;
         populateWithTokens();
@@ -46,13 +45,19 @@ public class PlayArea extends JLabel {
 
     @Override
     public Dimension getPreferredSize() {
-    	
-    	// scales with respect to height.
-    	int toReturnDim = (int) Math.round(mainWindow.getHeight() * propPercentage);
-    	
-    	//board is square, so both sides must be same length
-    	
-    	return new Dimension(toReturnDim,toReturnDim);
+
+        // scales with respect to height.
+        int toReturnDim = (int) Math.round(mainWindow.getHeight()
+                * propPercentage);
+
+        // board is square, so both sides must be same length
+        size = new Dimension(toReturnDim, toReturnDim);
+        return size;
+    }
+
+    @Override
+    public Dimension getSize() {
+        return size;
     }
 
     public Token[] getTokens() {

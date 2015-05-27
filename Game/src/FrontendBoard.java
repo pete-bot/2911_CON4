@@ -26,7 +26,6 @@ MouseMotionListener, ActionListener {
     private static final long serialVersionUID = 1L;
 
     // TODO our colours, should be updated to match the palette
-    private Dimension gridSize = new Dimension(750, 650);
     private BackendBoard backendBoard; // Should be 'backendBoard'
     private final int rows = 6;
     private final int cols = 7;
@@ -136,6 +135,7 @@ MouseMotionListener, ActionListener {
     // Get a column from a given x coordinate
     // FIXME should throw an exception
     private int getColumn(int x) {
+        Dimension gridSize = playArea.getSize();
         int columnWidth = (int) gridSize.getWidth() / 7;
         int currentColBegin = 0;
         int currentColEnd = columnWidth;
@@ -230,9 +230,7 @@ MouseMotionListener, ActionListener {
 
         gbc.gridy++;
 
-        setSize(gridSize);
-
-        playArea = new PlayArea(gridSize, blankTokenIcon, mainWindow);
+        playArea = new PlayArea(blankTokenIcon, mainWindow);
         playArea.addMouseListener(this);
         playArea.addMouseMotionListener(this);
         gameTokens = playArea.getTokens();
@@ -268,16 +266,17 @@ MouseMotionListener, ActionListener {
     }
 
     public void makeOpponentMove() {
-        updateStatusIndicator(GameState.NO_WIN);
         if (opponent.isAI() && !inWinState) {
+            updateStatusIndicator(GameState.NO_WIN);
 
             // timer for AI move
-            // try {
-            // System.out.println("AI is thinking...");
-            // Thread.sleep(300);
-            // } catch (InterruptedException ex) {
-            // Thread.currentThread().interrupt();
-            // }
+            System.out.println("AI is thinking...");
+            try {
+                Thread.sleep(250);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
 
             Action opponentMove = opponent.getMove();
             while (!backendBoard.isLegal(opponentMove)) {

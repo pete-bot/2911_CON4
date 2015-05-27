@@ -220,8 +220,8 @@ public class BackendBoard {
             for (int col = 3; col < COLMAX; col++) {
                 if (board[row][col] != 0
                         && board[row][col] == board[row + 1][col - 1]
-                        && board[row][col] == board[row + 2][col - 2]
-                        && board[row][col] == board[row + 3][col - 3]) {
+                                && board[row][col] == board[row + 2][col - 2]
+                                        && board[row][col] == board[row + 3][col - 3]) {
 
                     winList.add(new Point(row, col));
                     winList.add(new Point(row + 1, col - 1));
@@ -243,8 +243,8 @@ public class BackendBoard {
             for (int col = 0; col < 4; col++) {
                 if (board[row][col] != 0
                         && board[row][col] == board[row + 1][col + 1]
-                        && board[row][col] == board[row + 2][col + 2]
-                        && board[row][col] == board[row + 3][col + 3]) {
+                                && board[row][col] == board[row + 2][col + 2]
+                                        && board[row][col] == board[row + 3][col + 3]) {
                     System.out.println("winState: diag_right");
 
                     winList.add(new Point(row, col));
@@ -268,8 +268,8 @@ public class BackendBoard {
             for (int col = 0; col < 4; col++) {
                 if (board[row][col] != 0
                         && board[row][col] == board[row][col + 1]
-                        && board[row][col] == board[row][col + 2]
-                        && board[row][col] == board[row][col + 3]) {
+                                && board[row][col] == board[row][col + 2]
+                                        && board[row][col] == board[row][col + 3]) {
                     winList.add(new Point(row, col));
                     winList.add(new Point(row, col + 1));
                     winList.add(new Point(row, col + 2));
@@ -316,8 +316,8 @@ public class BackendBoard {
             for (int col = 0; col < COLMAX; col++) {
                 if (board[row][col] != 0
                         && board[row][col] == board[row + 1][col]
-                        && board[row][col] == board[row + 2][col]
-                        && board[row][col] == board[row + 3][col]) {
+                                && board[row][col] == board[row + 2][col]
+                                        && board[row][col] == board[row + 3][col]) {
                     winList.add(new Point(row, col));
                     winList.add(new Point(row + 1, col));
                     winList.add(new Point(row + 2, col));
@@ -393,7 +393,6 @@ public class BackendBoard {
             }
             System.out.println();
         }
-        System.out.println("User, please enter your column choice:");
     }
 
     public void switchPlayer() {
