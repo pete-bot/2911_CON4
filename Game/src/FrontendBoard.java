@@ -272,9 +272,9 @@ MouseMotionListener, ActionListener {
 
             // timer for AI move
             for (Token token : gameTokens) {
-                token.repaint(100);
+                token.repaint(250);
             }
-            System.out.println("AI is thinking...");
+            statusIndicator.setIcon(assets.getAsset("ai_think.png"));
             ActionListener listener = new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent event) {
@@ -285,6 +285,7 @@ MouseMotionListener, ActionListener {
                     }
                     backendBoard.makeMove(opponentMove);
                     backendBoard.showTerminalBoard();
+                    updateStatusIndicator(GameState.NO_WIN);
                     updateVisualBoard(opponentMove.getColumn());
                     checkWin(opponentMove);
                     checkDraw();
@@ -346,6 +347,7 @@ MouseMotionListener, ActionListener {
         backendBoard.resetBoard();
         winList.clear();
         clock.stop();
+        statusIndicator.setIcon(assets.getAsset("player_one_turn.png"));
         for (Token gameToken : gameTokens) {
             gameToken.setIcon(blankTokenIcon);
             gameToken.setPlayer(0);
