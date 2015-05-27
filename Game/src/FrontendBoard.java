@@ -52,6 +52,7 @@ MouseMotionListener, ActionListener {
     private Opponent opponent;
 
     private boolean inWinState = false;
+    private boolean aiThinking = false;
 
     public FrontendBoard(BackendBoard backendBoard, Window mainWindow) {
         super();
@@ -270,25 +271,38 @@ MouseMotionListener, ActionListener {
             updateStatusIndicator(GameState.NO_WIN);
 
             // timer for AI move
-            System.out.println("AI is thinking...");
-
-            Action opponentMove = opponent.getMove();
-            while (!backendBoard.isLegal(opponentMove)) {
-                opponentMove = opponent.getMove();
+            for (Token token : gameTokens) {
+                token.repaint(100);
             }
-            backendBoard.makeMove(opponentMove);
-            backendBoard.showTerminalBoard();
-            updateVisualBoard(opponentMove.getColumn());
-            checkWin(opponentMove);
-            checkDraw();
-            backendBoard.switchPlayer();
+            System.out.println("AI is thinking...");
+            ActionListener listener = new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent event) {
+                    System.out.println("Dun thinkin!");
+                    Action opponentMove = opponent.getMove();
+                    while (!backendBoard.isLegal(opponentMove)) {
+                        opponentMove = opponent.getMove();
+                    }
+                    backendBoard.makeMove(opponentMove);
+                    backendBoard.showTerminalBoard();
+                    updateVisualBoard(opponentMove.getColumn());
+                    checkWin(opponentMove);
+                    checkDraw();
+                    backendBoard.switchPlayer();
+                    aiThinking = false;
+                }
+            };
+            Timer aiTimer = new Timer(250, listener);
+            aiTimer.setRepeats(false);
+            aiTimer.start();
+            aiThinking = true;
         }
     }
 
     // MOUSELISTENER AND MOUSEMOTIONLISTENER OVERRIDES
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (inWinState)
+        if (inWinState && !aiThinking)
             return;
         int col = getColumn(e.getX());
         Action newMove = new Action(col);
