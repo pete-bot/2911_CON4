@@ -13,12 +13,17 @@ public class AI extends Opponent {
     public Action getMove() {
         switch (difficulty) {
             case EASY:
-                return randomMove();
+            	System.out.println("easy (random) AI");
+            	return randomMove();
+                
             case MEDIUM:
-                return informedMove(1);
+            	System.out.println("medium AI");
+            	return informedMove(1);
             case HARD:
+            	System.out.println("hard AI");
                 return informedMove(2);
             default:
+            	System.out.println("default (medium) AI");
                 return informedMove(1);
         }
     }
