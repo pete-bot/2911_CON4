@@ -105,18 +105,18 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
         if (buttonPressed.equals(easyButton)) {
             System.out.println("Setting Easy AI");
-            mainWindow.setDifficulty(1);
+            mainWindow.setDifficulty(DIFFICULTY.EASY);
             hideDifficultypanel();
             mainWindow.startNewGame();
         } else if (buttonPressed.equals(mediumButton)) {
             System.out.println("Setting medium AI");
             hideDifficultypanel();
-            mainWindow.setDifficulty(1);
+            mainWindow.setDifficulty(DIFFICULTY.MEDIUM);
             mainWindow.startNewGame();
         } else if (buttonPressed.equals(hardButton)) {
             System.out.println("Setting Hard AI");
             hideDifficultypanel();
-            mainWindow.setDifficulty(1);
+            mainWindow.setDifficulty(DIFFICULTY.HARD);
             mainWindow.startNewGame();
         } else if (buttonPressed.equals(backButton)) {
             mainWindow.resetWindow();

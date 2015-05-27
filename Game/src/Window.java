@@ -181,8 +181,8 @@ public class Window extends JFrame {
         menuPanel.showDifficultyPanel();
     }
 
-    public void setDifficulty(int AIclass) {
-        frontEndBoard.setAI(AIclass);
+    public void setDifficulty(DIFFICULTY difficulty) {
+        frontEndBoard.setAI(difficulty);
     }
 
     public void showEndGame(int winner) {

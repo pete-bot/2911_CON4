@@ -338,14 +338,9 @@ MouseMotionListener, ActionListener {
         }
     }
 
-    public void setAI(int AIclass) {
-        if (AIclass == 1) {
-            opponent = new AI(DIFFICULTY.EASY, backendBoard);
-        } else if (AIclass == 2) {
-            opponent = new AI(DIFFICULTY.MEDIUM, backendBoard);
-        } else if (AIclass == 3) {
-            opponent = new AI(DIFFICULTY.HARD, backendBoard);
-        }
+    public void setAI(DIFFICULTY difficulty) {
+        opponent = new AI(difficulty, backendBoard);
+     
     }
 
     public void showMainMenu() {
