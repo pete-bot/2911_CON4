@@ -61,12 +61,12 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
     private Color defaultColor = new Color(255, 255, 235, 200);
     private boolean music = false;
-    String runningDir = System.getProperty("user.dir");
-    String soundFilePath = runningDir.matches("src") ? runningDir
+    private String runningDir = System.getProperty("user.dir");
+    private String soundFilePath = runningDir.matches("src") ? runningDir
             + "../assets/toto-africa.mid" : "assets/toto-africa.mid";
 
-    InputStream in;
-    AudioStream audioStream;
+    private InputStream in;
+    private AudioStream audioStream;
 
     public MainMenuPanel(Window mainWindow, GameAssets assets) {
         this.assets = assets;
@@ -89,6 +89,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         if (buttonPressed.equals(pvCPUButton)) {
             mainWindow.selectDifficulty();
         } else if (buttonPressed.equals(pvpButton)) {
+        	mainWindow.setBoardToPVP();
             mainWindow.startNewGame();
         } else if (buttonPressed.equals(resumeButton)) {
             mainWindow.resumeGame();

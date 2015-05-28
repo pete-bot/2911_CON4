@@ -64,8 +64,8 @@ public class PauseButton extends JPanel implements ActionListener {
     // fix tranparent panel issue
     @Override
     protected void paintComponent(Graphics g) {
-        g.setColor(getBackground());
-        g.fillRect(0, 0, getWidth(), getHeight());
+        //g.setColor(getBackground());
+        //g.fillRect(0, 0, getWidth(), getHeight());
         super.paintComponent(g);
     }
 }

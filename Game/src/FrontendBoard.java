@@ -49,8 +49,7 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
     private ImageIcon yellowTokenIcon;
     private ImageIcon winTokenIcon;
 
-    private Opponent opponent = new HumanOpponent(); // Human opponent is the
-    // default.
+    private Opponent opponent;
 
     private boolean inWinState = false;
     private boolean aiThinking = false;
@@ -61,6 +60,10 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         this.mainWindow = mainWindow;
 
         showMainMenu();
+    }
+    
+    public void setOpponentToHuman() {
+    	opponent = new HumanOpponent();
     }
 
     @Override

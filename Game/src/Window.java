@@ -47,6 +47,10 @@ public class Window extends JFrame {
             }
         }
     };
+    
+    public void setBoardToPVP() {
+    	frontEndBoard.setOpponentToHuman();
+    }
 
     public Window(BackendBoard newBoard) {
         super("Prepare yourself, Wobke is coming.");
@@ -74,8 +78,6 @@ public class Window extends JFrame {
 
     private void hideMainMenu() {
         menuPanel.hideMainMenu();
-        // menuPanel.setEnabled(false);
-        // menuPanel.setVisible(false);
         titlePane.setVisible(false);
     }
 
