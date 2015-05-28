@@ -10,12 +10,20 @@ import javax.swing.JLabel;
 public class PlayArea extends JLabel {
 
     private static final long serialVersionUID = 1L;
+    
+    /**Dimensions for game panel. Minimum stops resizing to un-supported sizes.*/
     private Dimension minSize = new Dimension(750, 650);
     private Dimension size = new Dimension(750, 650);
+    
+    /**Grid board dimensions (rows, cols) */
     private final int rows = 6;
     private final int cols = 7;
     private final Token[] gameTokens = new Token[42];
+    
+    /**Image icon for blank token */
     private ImageIcon blankTokenIcon;
+    
+    /**Default grid colour. */
     private Color defaultColor = new Color(255, 255, 235, 100);
 
     // how PROPORTIONATE the playArea will be
@@ -24,6 +32,13 @@ public class PlayArea extends JLabel {
     private double propPercentage = 0.80;
     private Window mainWindow;
 
+    /**
+     * Constructor for the playArea - the area where the game drid and tokens are displayed.
+     * @param blankTokenIcon
+     * 		The default token - representing an un-played slot.
+     * @param mainWindow
+     * 		The main window instance.
+     */
     public PlayArea(ImageIcon blankTokenIcon, Window mainWindow) {
 
         // board transparency settings - may need to change depending on colour
@@ -38,11 +53,17 @@ public class PlayArea extends JLabel {
         populateWithTokens();
     }
 
+    /**
+     * Return the minimum dimension for the board.
+     */
     @Override
     public Dimension getMinimumSize() {
         return minSize;
     }
 
+    /**
+     * Return the preferred dimension for the board.
+    */
     @Override
     public Dimension getPreferredSize() {
 
@@ -55,16 +76,28 @@ public class PlayArea extends JLabel {
         return size;
     }
 
+    /**
+     * Return the current size dimension.
+     */
     @Override
     public Dimension getSize() {
         return size;
     }
-
+    
+    /**
+     * Method to get the grid token array.
+     * @return
+     * 		return the token array.
+     */
     public Token[] getTokens() {
         return gameTokens;
     }
 
-    // fix tranparent panel issue
+    /**
+     * Required override to fix issues with the transparency of certain JPanels. Prior to this
+     * override, mousing over a transparent panel would re-render its transparent effect, over the top
+     * of the previous effect. It was very visually unappealing.
+     */
     @Override
     protected void paintComponent(Graphics g) {
         g.setColor(getBackground());
@@ -72,6 +105,9 @@ public class PlayArea extends JLabel {
         super.paintComponent(g);
     }
 
+    /**
+     * A method to populate the grid board with tokens, their spacing and their icon representation.
+     */
     private void populateWithTokens() {
         int i = 0, currY = 0, currX = 0;
         for (currY = 0; currY < rows; currY++) {
