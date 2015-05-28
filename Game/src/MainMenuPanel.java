@@ -89,7 +89,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         if (buttonPressed.equals(pvCPUButton)) {
             mainWindow.selectDifficulty();
         } else if (buttonPressed.equals(pvpButton)) {
-        	mainWindow.setBoardToPVP();
+            mainWindow.setBoardToPVP();
             mainWindow.startNewGame();
         } else if (buttonPressed.equals(resumeButton)) {
             mainWindow.resumeGame();
@@ -268,7 +268,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     public void showDifficultyPanel() {
 
         difficultyPanel.setBorder(emptyBorder);
-        difficultyPanel.setBackground(defaultColor);
+        difficultyPanel.setBackground(new Color(0, 0, 0, 0));
         difficultyPanel.setLayout(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
