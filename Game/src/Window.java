@@ -56,7 +56,9 @@ public class Window extends JFrame {
         super("Prepare yourself, Wobke is coming.");
 
         this.setMinimumSize(new Dimension(800, 820));
-
+        this.setLocationRelativeTo(null);
+        
+        
         initFrontendBoard(newBoard);
         initWindow(newBoard);
         pack();
