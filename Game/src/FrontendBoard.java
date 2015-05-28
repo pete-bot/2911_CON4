@@ -156,7 +156,8 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
                 updateVisualBoard(move.getColumn());
                 checkWin(move); // Wins come before draws.
                 checkDraw();
-                backendBoard.switchPlayer();
+                if (!inWinState)
+                	backendBoard.switchPlayer();
                 makeOpponentMove();
             } else {
                 System.out.println("Invalid move.");
@@ -285,7 +286,8 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
                     updateVisualBoard(opponentMove.getColumn());
                     checkWin(opponentMove);
                     checkDraw();
-                    backendBoard.switchPlayer();
+                    if (!inWinState)
+                    	backendBoard.switchPlayer();
                     aiThinking = false;
                 }
             };
