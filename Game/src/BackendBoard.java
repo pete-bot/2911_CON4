@@ -7,6 +7,7 @@ public class BackendBoard {
     // we store the position of player_1 as 1, player_2 as 2
     private int[][] board;
     private int currentPlayer = 1;
+    private int turnNum = 0;
 
     // need to make these ENUMS
     private int ROWMAX = 6;
@@ -16,6 +17,13 @@ public class BackendBoard {
         board = new int[ROWMAX][COLMAX];
     }
 
+    public void incremementTurn(){
+    	turnNum++;
+    }
+    
+    public int getTurnNum(){
+    	return turnNum;
+    }
     /*
      * Check ascending diagonal wins Added by Sketch in
      * "Updated win condition patch"
@@ -209,8 +217,19 @@ public class BackendBoard {
         return winList;
     }
 
+    /*
+     * If you get the to read this... please read how ridiculous this is.
+     * getBoard.clone() returns a shallow copy. The for loop creates a deep copy.
+     * 
+     * ~Sketch
+     */
     public int[][] getBoard() {
-        return board;
+        int[][] clonedBoard = board.clone();
+        for(int i = 0; i < ROWMAX; i++){
+        	clonedBoard[i] = clonedBoard[i].clone();
+        }
+        
+        return clonedBoard;
     }
 
     private ArrayList<Point> getDiagonalLeftWin() {

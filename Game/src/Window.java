@@ -17,6 +17,7 @@ public class Window extends JFrame {
     private static final long serialVersionUID = 1L;
 
     private FrontendBoard frontEndBoard;
+    private FrontEndStatistics frontEndStatistics;
     private BackendBoard backendBoard;
     private Dimension defaultSize = new Dimension(1024, 700);
     private GridBagConstraints gbc;
@@ -60,6 +61,7 @@ public class Window extends JFrame {
         
         
         initFrontendBoard(newBoard);
+        initFrontendStatistics();
         initWindow(newBoard);
         pack();
     }
@@ -97,6 +99,17 @@ public class Window extends JFrame {
         frontEndBoard = new FrontendBoard(backendBoard, mainWindow);
         frontEndBoard.setEnabled(false);
         frontEndBoard.setVisible(false);
+    }
+    
+    /*
+     * Added by sketch cause statistics are gang
+     * Initialises the statistics component that I spent half a year on. legit.
+     */
+    
+    private void initFrontendStatistics() {
+    	frontEndStatistics = new FrontEndStatistics(assets, this);
+    	frontEndStatistics.setEnabled(false);
+    	frontEndStatistics.setVisible(false);
     }
 
     private void initLayout() {
@@ -142,7 +155,7 @@ public class Window extends JFrame {
 
         gbc.gridy += 10;
         add(frontEndBoard, gbc);
-
+        add(frontEndStatistics, gbc);
         // gbc.gridx = 0;
         // gbc.gridy = 0;
 
@@ -176,6 +189,26 @@ public class Window extends JFrame {
         frontEndBoard.resetBoard();
     }
 
+    /*
+     * Called when the statistics need to be shown (from the button)
+     */
+    public void showStatistics() {
+    	menuPanel.hidePauseMenu();
+    	frontEndStatistics.turnOn();
+    }
+    
+    public void hideStatistics(){
+    	menuPanel.showPauseMenu();
+    	frontEndStatistics.turnOff();
+    }
+    
+    /*
+     * Added by sketch in statistics menu expansion
+     */
+    public void updateStatistics(TurnSummary turn) {
+    	frontEndStatistics.addTurn(turn);
+    }
+    
     public void resumeGame() {
         frontEndBoard.turnOn();
         menuPanel.hidePauseMenu();

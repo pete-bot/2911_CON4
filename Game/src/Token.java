@@ -7,11 +7,10 @@ public class Token extends JLabel {
     private int yPos;
     private int player = 0; // Default player is no player
 
-    public Token(int x, int y, ImageIcon image) {
+    public Token(int x, int y) {
         xPos = x;
         yPos = y;
         player = 0;
-        setIcon(image);
         setHorizontalAlignment(JLabel.CENTER);
         setVerticalAlignment(JLabel.CENTER);
     }

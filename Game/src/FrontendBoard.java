@@ -22,7 +22,7 @@ import javax.swing.border.Border;
 
 public class FrontendBoard extends JLayeredPane implements MouseListener,
         MouseMotionListener, ActionListener {
-
+	
     private static final long serialVersionUID = 1L;
 
     // TODO our colours, should be updated to match the palette
@@ -154,6 +154,11 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
                 backendBoard.makeMove(move);
                 backendBoard.showTerminalBoard();
                 updateVisualBoard(move.getColumn());
+                backendBoard.incremementTurn();
+                //Update statistics
+                mainWindow.updateStatistics(new TurnSummary(backendBoard.getTurnNum(), 
+                		backendBoard.getBoard().clone(), backendBoard.getPlayer(), move));
+                
                 checkWin(move); // Wins come before draws.
                 checkDraw();
                 if (!inWinState)
@@ -228,7 +233,7 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
 
         gbc.gridy++;
 
-        playArea = new PlayArea(blankTokenIcon, mainWindow);
+        playArea = new PlayArea(new Dimension(750, 650), assets, mainWindow);
         playArea.addMouseListener(this);
         playArea.addMouseMotionListener(this);
         gameTokens = playArea.getTokens();
@@ -284,6 +289,12 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
                     backendBoard.showTerminalBoard();
                     updateStatusIndicator(GameState.NO_WIN);
                     updateVisualBoard(opponentMove.getColumn());
+                    backendBoard.incremementTurn();
+
+                    //AI Updates statistics
+                    mainWindow.updateStatistics(new TurnSummary(backendBoard.getTurnNum(), 
+                    		backendBoard.getBoard().clone(), backendBoard.getPlayer(), opponentMove));
+                    
                     checkWin(opponentMove);
                     checkDraw();
                     if (!inWinState)
