@@ -12,23 +12,18 @@ public class AI extends Opponent {
     @Override
     public Action getMove() {
         switch (difficulty) {
-            case EASY:
-            	System.out.println("easy (random) AI");
-            	return randomMove();
-                
-            case MEDIUM:
-            	System.out.println("medium AI");
-            	return informedMove(1);
-            case HARD:
-            	System.out.println("hard AI");
-                return informedMove(2);
-            default:
-            	System.out.println("default (medium) AI");
-                return informedMove(1);
+        case EASY:
+            return randomMove();
+        case MEDIUM:
+            return informedMove(Difficulty.MEDIUM);
+        case HARD:
+            return informedMove(Difficulty.HARD);
+        default:
+            return informedMove(Difficulty.MEDIUM);
         }
     }
 
-    private Action informedMove(int difficulty) {
+    private Action informedMove(Difficulty difficulty) {
         PriorityQueue<State> q = new PriorityQueue<State>();
 
         State firstState = new State(backendBoard);
