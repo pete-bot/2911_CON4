@@ -185,11 +185,6 @@ public class Window extends JFrame {
         frontEndBoard.setAI(difficulty);
     }
 
-    public void showEndGame(int winner) {
-        menuPanel.showWinMessage();
-        System.out.println("congratulations, player " + winner);
-    }
-
     public void startNewGame() {
         hideMainMenu();
         backendBoard.showTerminalBoard();

@@ -25,10 +25,6 @@ import sun.audio.AudioStream;
 public class MainMenuPanel extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
 
-    private static final int InFocusWindow = JComponent.WHEN_IN_FOCUSED_WINDOW;
-    private static final KeyStroke escapeStroke = KeyStroke.getKeyStroke(
-            KeyEvent.VK_ESCAPE, 0);
-
     JPanel difficultyPanel = new JPanel();
 
     private JButton pvCPUButton = new JButton();
@@ -64,9 +60,10 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     private Window mainWindow;
 
     private Color defaultColor = new Color(255, 255, 235, 200);
-    // music controller
     private boolean music = false;
-    String soundFile = "../assets/toto-africa.mid";
+    String runningDir = System.getProperty("user.dir");
+    String soundFilePath = runningDir.matches("src") ? runningDir
+            + "../assets/toto-africa.mid" : "assets/toto-africa.mid";
 
     InputStream in;
     AudioStream audioStream;
@@ -220,7 +217,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
     public void musicToggle() throws Exception {
         if (in == null && audioStream == null) {
-            in = new FileInputStream(soundFile);
+            in = new FileInputStream(soundFilePath);
             audioStream = new AudioStream(in);
         }
 
@@ -360,43 +357,13 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         gbc.gridwidth = 2;
 
         // init key bindings
+        final int InFocusWindow = JComponent.WHEN_IN_FOCUSED_WINDOW;
+        final KeyStroke escapeStroke = KeyStroke.getKeyStroke(
+                KeyEvent.VK_ESCAPE, 0);
         getInputMap(InFocusWindow).put(escapeStroke, "escapeSequence");
         getActionMap().put("escapeSequence", mainWindow.escapeAction);
 
         setVisible(true);
-    }
-
-    public void showWinMessage() {
-        removeMainMenuItems();
-
-        // glass.setVisible(true);
-        // glass.setLayout(new GridBagLayout());
-        //
-        // // set glassy pane behind win message
-        // glass.setOpaque(false);
-        // glass.setBackground(defaultColor);
-        //
-        // GridBagConstraints gbc = new GridBagConstraints();
-        // gbc.gridx = 0;
-        // gbc.gridy = 0;
-        // gbc.insets = new Insets(2, 2, 2, 2);
-        //
-        // initButton(restartButton);
-        // restartButton.setIcon(restartIcon);
-        // glass.add(restartButton, gbc);
-        // gbc.gridy++;
-        //
-        // initButton(exitButton);
-        // exitButton.setIcon(quitIcon);
-        // glass.add(exitButton, gbc);
-        //
-        // restartButton.addActionListener(this);
-        // exitButton.addActionListener(this);
-        //
-        // glass.requestFocus();
-        // glass.setVisible(true);
-        // setVisible(true);
-
     }
 
 }

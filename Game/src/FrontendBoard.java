@@ -21,7 +21,7 @@ import javax.swing.Timer;
 import javax.swing.border.Border;
 
 public class FrontendBoard extends JLayeredPane implements MouseListener,
-MouseMotionListener, ActionListener {
+        MouseMotionListener, ActionListener {
 
     private static final long serialVersionUID = 1L;
 
@@ -50,7 +50,7 @@ MouseMotionListener, ActionListener {
     private ImageIcon winTokenIcon;
 
     private Opponent opponent = new HumanOpponent(); // Human opponent is the
-                                                     // default.
+    // default.
 
     private boolean inWinState = false;
     private boolean aiThinking = false;
@@ -123,15 +123,7 @@ MouseMotionListener, ActionListener {
             } else if (backendBoard.getPlayer() == 2) {
                 updateStatusIndicator(GameState.WIN);
             }
-            // clock.stop();
-            // winList.clear();
-            // SHOULD PAUSE AT THIS POINT.
         }
-    }
-
-    // need to fix design of this
-    public void endGame(int winner) {
-        mainWindow.showEndGame(winner);
     }
 
     // Get a column from a given x coordinate
