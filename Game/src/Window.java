@@ -18,7 +18,7 @@ public class Window extends JFrame {
 
     private FrontendBoard frontEndBoard;
     private BackendBoard backendBoard;
-    private Dimension defaultSize = new Dimension(1024, 900);
+    private Dimension defaultSize = new Dimension(1024, 700);
     private GridBagConstraints gbc;
     private GameAssets assets = new GameAssets();
     private MainMenuPanel menuPanel = new MainMenuPanel(this, this.assets);
@@ -118,10 +118,7 @@ public class Window extends JFrame {
         gameTitle.setIcon(titleIcon);
         titlePane.add(gameTitle);
 
-        // white
         titlePane.setBackground(new Color(255, 255, 235, 200));
-        // gray
-        // titlePane.setBackground(new Color(127, 127, 127, 127));
     }
 
     private void initWindow(BackendBoard newBoard) {
@@ -151,6 +148,11 @@ public class Window extends JFrame {
 
         menuPanel.setVisible(false);
         titlePane.setVisible(false);
+        try {
+            menuPanel.musicToggle();
+        } catch (Exception e) {
+            System.err.println("Cannot play music.");
+        }
     }
 
     public void pauseGame() {
