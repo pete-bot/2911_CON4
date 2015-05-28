@@ -2,9 +2,9 @@ import java.util.PriorityQueue;
 
 public class AI extends Opponent {
     private BackendBoard backendBoard;
-    private DIFFICULTY difficulty;
+    private Difficulty difficulty;
 
-    public AI(DIFFICULTY difficulty, BackendBoard backendBoard) {
+    public AI(Difficulty difficulty, BackendBoard backendBoard) {
         this.difficulty = difficulty;
         this.backendBoard = backendBoard;
     }

@@ -91,6 +91,8 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
         if (buttonPressed.equals(pvCPUButton)) {
             mainWindow.selectDifficulty();
+        } else if (buttonPressed.equals(pvpButton)) {
+            mainWindow.startNewGame();
         } else if (buttonPressed.equals(resumeButton)) {
             mainWindow.resumeGame();
         } else if (buttonPressed.equals(restartButton)) {
@@ -105,18 +107,18 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
         if (buttonPressed.equals(easyButton)) {
             System.out.println("Setting Easy AI");
-            mainWindow.setDifficulty(DIFFICULTY.EASY);
+            mainWindow.setDifficulty(Difficulty.EASY);
             hideDifficultypanel();
             mainWindow.startNewGame();
         } else if (buttonPressed.equals(mediumButton)) {
             System.out.println("Setting medium AI");
             hideDifficultypanel();
-            mainWindow.setDifficulty(DIFFICULTY.MEDIUM);
+            mainWindow.setDifficulty(Difficulty.MEDIUM);
             mainWindow.startNewGame();
         } else if (buttonPressed.equals(hardButton)) {
             System.out.println("Setting Hard AI");
             hideDifficultypanel();
-            mainWindow.setDifficulty(DIFFICULTY.HARD);
+            mainWindow.setDifficulty(Difficulty.HARD);
             mainWindow.startNewGame();
         } else if (buttonPressed.equals(backButton)) {
             mainWindow.resetWindow();

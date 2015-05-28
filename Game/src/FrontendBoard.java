@@ -49,7 +49,8 @@ MouseMotionListener, ActionListener {
     private ImageIcon yellowTokenIcon;
     private ImageIcon winTokenIcon;
 
-    private Opponent opponent;
+    private Opponent opponent = new HumanOpponent(); // Human opponent is the
+                                                     // default.
 
     private boolean inWinState = false;
     private boolean aiThinking = false;
@@ -354,9 +355,8 @@ MouseMotionListener, ActionListener {
         }
     }
 
-    public void setAI(DIFFICULTY difficulty) {
+    public void setAI(Difficulty difficulty) {
         opponent = new AI(difficulty, backendBoard);
-     
     }
 
     public void showMainMenu() {
