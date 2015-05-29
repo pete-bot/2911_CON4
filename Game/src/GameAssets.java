@@ -11,8 +11,8 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 /**
- * This was created to factor out a lot of unecessary paths to asset codes Items
- * are indexed by hash, so calls should be relatively quick. Keys set by
+ * This was created to factor out a lot of unnecessary paths to asset codes
+ * Items are indexed by hash, so calls should be relatively quick. Keys set by
  * filename This is a repository of all items under the assets directory.
  *
  * @author rjs
@@ -58,8 +58,8 @@ public class GameAssets {
      */
     public ImageIcon getResizedAsset(String filename, int width, int height) {
         BufferedImage originalImage;
-        BufferedImage resizedImage = new BufferedImage( (width - 190) / 7, (height - 170) / 6,
-                BufferedImage.TYPE_4BYTE_ABGR);
+        BufferedImage resizedImage = new BufferedImage((width - 190) / 7,
+                (height - 170) / 6, BufferedImage.TYPE_4BYTE_ABGR);
 
         try {
             originalImage = ImageIO.read(new File(assetsLocation + "/"
@@ -69,7 +69,8 @@ public class GameAssets {
             g.addRenderingHints(new RenderingHints(
                     RenderingHints.KEY_RENDERING,
                     RenderingHints.VALUE_RENDER_QUALITY));
-            g.drawImage(originalImage, 0, 0, (width - 190) / 7, (height - 170) / 6 , null);
+            g.drawImage(originalImage, 0, 0, (width - 190) / 7,
+                    (height - 170) / 6, null);
             g.dispose();
 
         } catch (IOException E) {

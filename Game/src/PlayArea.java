@@ -90,36 +90,6 @@ public class PlayArea extends JLabel {
         }
     }
 
-    /*
-     * Method that updates the Token icons based on a new board Beware, this
-     * method is currently broken, in the sense that it colors the tokens in a
-     * flipped geometry board.
-     * 
-     * @precondition newBoard is a int[rows][cols] array
-     */
-    // public void writeBoard( int[][] newBoard ){
-    // int i = 0;
-    // int currY = 0;
-    // int currX = 0;
-    // for(currY = 0; currY < rows; currY++){
-    // for(currX = 0; currX < cols; currX++){
-    // //Logic for determining the token icon
-    // if(newBoard[currY][currX] == 0){ //For Empty Tokens
-    // gameTokens[i].setIcon(assets.getResizedAsset("sample_token.png",
-    // minSize.width, minSize.height));
-    // } else if(newBoard[currY][currX] == 1){ //For Player 1 Tokens
-    // gameTokens[i].setIcon(assets.getResizedAsset("sample_token_red.png",
-    // minSize.width, minSize.height));
-    // } else { //For Player 2 Tokens
-    // gameTokens[i].setIcon(assets.getResizedAsset("sample_token_yellow.png",
-    // minSize.width, minSize.height));
-    // }
-    //
-    // i++;
-    // }
-    // }
-    // }
-
     // render the current board in terminal
     // Maybe 'showTerminalBoard' is better...
     public void writeBoard(int[][] newBoard) {
