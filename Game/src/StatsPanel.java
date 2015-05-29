@@ -10,8 +10,11 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-/*
+/**
  * Class responsible for rendering the lower statistics panel to the window
+ *
+ * @param parent
+ *            Reference to the parent panel so as to control StatsPanel
  */
 public class StatsPanel extends JPanel {
     private static final long serialVersionUID = 1L;
@@ -44,7 +47,14 @@ public class StatsPanel extends JPanel {
         turnTracker.setVisible(true);
     }
 
-    // Add turn to list of elements
+    /**
+     * Adds the turn information to the scrolling list of turns made this game
+     *
+     * @param action
+     *            The action (column) the player of this turn has chosen.
+     * @param player
+     *            The integer value of which player made this choice
+     */
     public void addTurn(Action action, int player) {
         model.addElement(player + "[" + action.getColumn() + "]");
     }
@@ -54,6 +64,11 @@ public class StatsPanel extends JPanel {
         return new Dimension(150, 150);
     }
 
+    /**
+     * Method that initialises the left panel
+     *
+     * @return The panel that stores the move list for this game
+     */
     public JPanel initLeftPanel() {
 
         JPanel leftStats = new JPanel();
@@ -89,6 +104,11 @@ public class StatsPanel extends JPanel {
         return rightStats;
     }
 
+    // Resets the statistics panel panel
+    public void resetStatsPanel() {
+        model.clear();
+    }
+
     /*
      * Updates the left panel
      */
@@ -103,17 +123,22 @@ public class StatsPanel extends JPanel {
      * Method that updates the values of the right panel
      */
     private void updateRightPanel(int turn, int player, Action prevMove) {
-    	// Cap turn and player to avoid going to -1
-    	turn = (turn < 0) ? 0 : turn;
-    	player = (player < 0) ? 0 : player;
-    	int previousMove = (prevMove.getColumn() < 0) ? 0 : prevMove.getColumn();
+        // Cap turn and player to avoid going to -1
+        turn = (turn < 0) ? 0 : turn;
+        player = (player < 0) ? 0 : player;
+        int previousMove = (prevMove.getColumn() < 0) ? 0 : prevMove
+                .getColumn();
         turnNum.setText("Turn: " + String.valueOf(turn));
         currPlayer.setText("Player: " + String.valueOf(player));
         lastMove.setText("Last Move: " + String.valueOf(previousMove));
     }
 
-    /*
-     * Method that updates both the left and the right panel
+    /**
+     * Updates the lower stats panel
+     *
+     * @param turn
+     *            Representation of the turn with its panel values to update the
+     *            lower gui for statistics
      */
     public void updateStats(TurnSummary turn) {
         updateLeftPanel(turn.getTurnNumber(), turn.getCurrPlayer(),

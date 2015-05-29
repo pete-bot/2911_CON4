@@ -34,11 +34,17 @@ public class FrontEndStatistics extends JPanel implements ActionListener {
     private JButton back;
     private JButton prev;
     private JButton next;
-    
+
     GameAssets assets;
 
-    /*
-     * Constructor for Statistics Panel of game Window
+    /**
+     * Handles the generation of the Statistics Panel component
+     *
+     * @param assets
+     *            Passed in reference main assets
+     * @param mainWindow
+     *            Passed in reference to mainWindow
+     *
      */
     public FrontEndStatistics(GameAssets assets, Window mainWindow) {
         super();
@@ -48,8 +54,8 @@ public class FrontEndStatistics extends JPanel implements ActionListener {
 
         // Assign parent window
         parentWindow = mainWindow;
-        
-        this.assets = assets; 
+
+        this.assets = assets;
 
         // Button Inits
         initButtons();
@@ -100,8 +106,8 @@ public class FrontEndStatistics extends JPanel implements ActionListener {
         add(statsPanel, gbc);
 
         // Add the back button;
-        //gbc.gridx = 0;
-        //gbc.gridy = 3;
+        // gbc.gridx = 0;
+        // gbc.gridy = 3;
         gbc.gridy = 5;
         gbc.gridx = 0;
         gbc.fill = GridBagConstraints.BOTH;
@@ -117,7 +123,7 @@ public class FrontEndStatistics extends JPanel implements ActionListener {
 
         // Variable inits
         gameSummary = new ArrayList<TurnSummary>(); // Create a new list of all
-                                                    // turns
+        // turns
 
         // Create a special turn for node 1
         addTurn(new TurnSummary(0, new int[rows][cols], -1, new Action(-1)));
@@ -145,8 +151,9 @@ public class FrontEndStatistics extends JPanel implements ActionListener {
         }
     }
 
-    /*
-     * Method that creates a new turn and adds it to the list of all turns
+    /**
+     * @param turn
+     *            The state of the current turn to be added to the game
      */
     public void addTurn(TurnSummary turn) {
         gameSummary.add(turn);
@@ -174,6 +181,14 @@ public class FrontEndStatistics extends JPanel implements ActionListener {
         prev.setIcon(assets.getAsset("left_arrow.png"));
     }
 
+    public void resetStatistics() {
+        statsPanel.resetStatsPanel();
+        gameSummary.clear();
+        visibleIndex = 0;
+        maximumIndex = -1;
+        addTurn(new TurnSummary(0, new int[rows][cols], -1, new Action(-1)));
+    }
+
     // Make the Statistics inactive
     public void turnOff() {
         back.setEnabled(false);
@@ -195,7 +210,7 @@ public class FrontEndStatistics extends JPanel implements ActionListener {
      */
     public void updateAllStats(TurnSummary turn) {
         turnPreview.writeBoard(turn.getBoardState()); // Write the new board
-                                                      // preview
+        // preview
         statsPanel.updateStats(turn);
         visibleIndex = maximumIndex;
     }
@@ -205,7 +220,7 @@ public class FrontEndStatistics extends JPanel implements ActionListener {
      */
     public void updateView(TurnSummary turn) {
         turnPreview.writeBoard(turn.getBoardState()); // Write the new board
-                                                      // preview
+        // preview
         statsPanel.viewStats(turn);
     }
 }
