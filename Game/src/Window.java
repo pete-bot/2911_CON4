@@ -132,7 +132,7 @@ public class Window extends JFrame {
         titlePane = new JPanel();
 
         titlePane.setSize(new Dimension(420, 200));
-        ImageIcon titleIcon = assets.getAsset("sample_title.png");
+        ImageIcon titleIcon = assets.getAsset("sample_title_new.png");
         JLabel gameTitle = new JLabel();
         gameTitle.setIcon(titleIcon);
         titlePane.add(gameTitle);
