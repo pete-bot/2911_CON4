@@ -1,14 +1,32 @@
 import java.util.PriorityQueue;
-
+/**
+ * 
+ * @author WOBCON4
+ *	Class to store and control the AI
+ */
 public class AI extends Opponent {
-    private BackendBoard backendBoard;
+    /**Representation of the backend board */
+	private BackendBoard backendBoard;
+	/**The difficulty value for the AI */
     private Difficulty difficulty;
 
+    /**
+     * The class constructor
+     * @param difficulty
+     * 		the required difficulty value.
+     * @param backendBoard
+     * 		The backend board representation.
+     */
     public AI(Difficulty difficulty, BackendBoard backendBoard) {
         this.difficulty = difficulty;
         this.backendBoard = backendBoard;
     }
 
+    /**
+     * Gets the AI move and returns an action.
+     * @return
+     * 		The action that the AI has chosen to make.
+     */
     @Override
     public Action getMove() {
         switch (difficulty) {
@@ -23,6 +41,13 @@ public class AI extends Opponent {
         }
     }
 
+    /**
+     * The method that selects the best method for the current board state. 
+     * @param difficulty
+     * 		The difficulty value for the current AI
+     * @return
+     * 		The return action - selected as teh best choice for the current game state.
+     */
     private Action informedMove(Difficulty difficulty) {
         PriorityQueue<State> q = new PriorityQueue<State>();
 
@@ -38,11 +63,18 @@ public class AI extends Opponent {
         return finalState.getAction();
     }
 
+    /**
+     * Method to return if the AI is an AI.
+     */
     @Override
     public boolean isAI() {
         return true;
     }
-
+    
+    /**
+     * Method to return a random (driunk move)
+     * @return
+     */
     private Action randomMove() {
         int randomColumn = (int) (10 * Math.random() % 7);
         Action move = new Action(randomColumn);

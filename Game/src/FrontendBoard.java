@@ -116,13 +116,6 @@ MouseMotionListener, ActionListener {
             int indexToGet = winCoords.x * cols + cols - winCoords.y;
             Token t = gameTokens[42 - indexToGet];
 
-            // based off 'beats'
-            // -> we are checking the field 'animationBeat' in this class. it
-            // can either be: 0 or 1.
-            // at every iteration the 'actionPerformed' is called, animation
-            // beat is incremented 1
-            // but quickly reset to 0 if it beat == 2.
-            // so animationBeat = 0,1,0,1,0,1...
             if (animationBeat % 2 == 0) {
                 // beat = 0;
                 t.setIcon(winTokenIcon);
@@ -478,6 +471,7 @@ MouseMotionListener, ActionListener {
             gameToken.setIcon(blankTokenIcon);
             gameToken.setPlayer(0);
         }
+        mainWindow.resetStatistics();
     }
 
     /**
@@ -574,8 +568,7 @@ MouseMotionListener, ActionListener {
         // statusIndicator.setVisible(true);
     }
 
-    // Updates the board with the next _legal_ move
-    // xPos is the column, refactor later.
+
     /**
      * Method to update the visual board with the next move. Will set the token
      * colour of the lowest token slot on the game board.

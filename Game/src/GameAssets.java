@@ -19,15 +19,24 @@ import javax.swing.ImageIcon;
  *
  */
 public class GameAssets {
-    private String runningDir;
-    private Path assetsLocation;
+	/**The current directory for src. */
+	private String runningDir;
+	/**The path of the assets folder relative to the running directory */
+	private Path assetsLocation;
 
+	/**Hashmap of image icons */
     private HashMap<String, ImageIcon> assets = new HashMap<String, ImageIcon>();
 
+    /**
+     * Constrcutor for class. Initialises the hashmap.
+     */
     public GameAssets() {
         initAssets();
     }
 
+    /**
+     * Method that adds the relevant assets from the assets directory
+     */
     private void addAssets() {
         File dir = new File(assetsLocation.toString());
         File[] listOfAssets = dir.listFiles();
@@ -44,18 +53,39 @@ public class GameAssets {
         }
     }
 
+    /**
+     * Method to get the relevant asset by asset name and return an appropriate image icon.
+     * @param filename
+     * 		String that represents the file name of the asset. This is used as the key in the hashmap to retrieve the imageIcon/\.
+     * @return
+     * 		Returns the Image icon for the asset.
+     */
     public ImageIcon getAsset(String filename) {
         return assets.get(filename);
     }
-
+    
+    /**
+     * method to get the asset dir path.
+     * @return
+     * 		String that represents the asset directory path.
+     */
     public Path getAssetsDir() {
         // System.out.println(assetsLocation.toString());
         return assetsLocation;
     }
 
-    /*
-     * Method that resizes token image icons
-     */
+
+    /**
+	 * Returns the resized asset at the dimensions specified.
+	 * @param filename
+	 * 		The name of the asset to be modified.
+	 * @param width
+	 * 		The requested width.
+	 * @param height
+	 * 		The requested height.
+	 * @return
+	 * 		Returns the resized imageicon asset.
+	 */
     public ImageIcon getResizedAsset(String filename, int width, int height) {
         BufferedImage originalImage;
         BufferedImage resizedImage = new BufferedImage((width - 190) / 7,
@@ -79,6 +109,9 @@ public class GameAssets {
         return new ImageIcon(resizedImage);
     }
 
+    /**
+     * Method to initialise the assets hashMap
+     */
     private void initAssets() {
         runningDir = System.getProperty("user.dir");
         // One of two places we could be running the code, under src or from

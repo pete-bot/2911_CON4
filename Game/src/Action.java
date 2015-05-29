@@ -1,32 +1,52 @@
-/*
- * not sure if this is necessary - possibly useful to encapsulate the 'action'
- * of a player useful to check legality of move etc. This function did much more
- * than it does not. As refactoring as happened, this got reduced to purely
- * being a column. This is a pointless class now, but is wired up too thoroughly
- * at this stage to do clean and easy refactoring.
- */
 
+/**
+ * 
+ * @author WOBCON4
+ * Class that represents the user/opponent (both human and AI) move. 
+ *
+ */
 public class Action {
 
+	/**The integer value of the column where the move is made. */
     private int move; // Column to supply a movement
 
+    /**
+     * Constructor for action object.
+     * @param newColumnChoice
+     * 		An int that represents the column choice made by the user/AI
+     */
     public Action(int newColumnChoice) {
         this.move = newColumnChoice;
     }
 
-    // return the player move
+    /**
+     * 
+     * @return
+     * 		Returns the player move.
+     */
     public int getColumn() {
         return this.move;
     }
 
+    /**
+     * Sets the move for an action object.
+     * @param newCol
+     * 		The integer choice of column
+     */
     public void setColumn(int newCol) {
         move = newCol;
     }
 
+    /**
+     * Debug method to print the action to the terminal.
+     */
     public void showAction() {
         System.out.println("action_move:" + move);
     }
     
+    /**
+     * Clone method override for action object.
+     */
     @Override
     public Action clone(){
     	return new Action(move);

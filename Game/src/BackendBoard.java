@@ -394,6 +394,7 @@ public class BackendBoard {
                 board[i][j] = empty;
             }
         }
+        turnNum = 0;
         showTerminalBoard();
         setPlayer(1);
     }
