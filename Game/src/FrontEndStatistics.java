@@ -130,6 +130,9 @@ public class FrontEndStatistics extends JPanel implements ActionListener {
 
     }
 
+    /**
+     * Action event handler for next and previous turnbuttons.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         // TODO Auto-generated method stub
@@ -152,6 +155,7 @@ public class FrontEndStatistics extends JPanel implements ActionListener {
     }
 
     /**
+     * method to add a turn to the game list
      * @param turn
      *            The state of the current turn to be added to the game
      */
@@ -161,6 +165,10 @@ public class FrontEndStatistics extends JPanel implements ActionListener {
         updateAllStats(gameSummary.get(maximumIndex));
     }
 
+    /**
+     * 
+     * @param b
+     */
     private void initButton(JButton b) {
         b.setOpaque(false);
         b.setContentAreaFilled(false);

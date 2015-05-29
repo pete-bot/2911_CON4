@@ -80,7 +80,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     /** asset pathing variables */
     private String runningDir = System.getProperty("user.dir");
     private String soundFilePath = runningDir.matches("src") ? runningDir
-            + "../assets/toto-africa.mid" : "assets/toto-africa.mid";
+            + "/../assets/toto-africa.mid" : "assets/toto-africa.mid";
 
     /**
      * Constructor for class
