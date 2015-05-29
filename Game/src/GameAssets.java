@@ -92,7 +92,7 @@ public class GameAssets {
      */
     public ImageIcon getResizedAsset(String filename, int width, int height) {
         BufferedImage originalImage;
-        BufferedImage resizedImage = new BufferedImage(width / 7, height / 7,
+        BufferedImage resizedImage = new BufferedImage( (width - 190) / 7, (height - 170) / 6,
                 BufferedImage.TYPE_4BYTE_ABGR);
 
         try {
@@ -103,7 +103,7 @@ public class GameAssets {
             g.addRenderingHints(new RenderingHints(
                     RenderingHints.KEY_RENDERING,
                     RenderingHints.VALUE_RENDER_QUALITY));
-            g.drawImage(originalImage, 0, 0, width / 7, height / 7, null);
+            g.drawImage(originalImage, 0, 0, (width - 190) / 7, (height - 170) / 6 , null);
             g.dispose();
 
         } catch (IOException E) {

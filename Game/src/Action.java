@@ -49,5 +49,10 @@ public class Action {
     public void showAction() {
         System.out.println("action_move:" + move);
     }
+    
+    @Override
+    public Action clone(){
+    	return new Action(move);
+    }
 
 }
