@@ -18,8 +18,14 @@ import javax.swing.JTextField;
 import javax.swing.ListModel;
 
 
-/*
+/**
  * Class responsible for rendering the lower statistics panel to the window
+ * 
+ * @param model			Stores the contents of the List
+ * @param moveList		Initialised with contents and displays them
+ * @param turnTracker	Contains the moveList and makes it a scrollable window
+ * @param leftPanel		Contains the turnTracker
+ * @param rightPanel	Contains the label that display the information about the current turn
  */
 public class StatsPanel extends JPanel{
 	private JList moveList;
@@ -105,6 +111,10 @@ public class StatsPanel extends JPanel{
 		lastMove.setText("Last Move: " + String.valueOf(prevMove.getColumn()));
 	}
 	
+	/**
+	 * Method that initialises the left panel
+	 * @return		The panel that stores the move list for this game
+	 */
 	public JPanel initLeftPanel(){
 		
 		JPanel leftStats = new JPanel();
@@ -119,11 +129,19 @@ public class StatsPanel extends JPanel{
 		return leftStats;
 	}
 	
-	//Add turn to list of elements
+	/**
+	 * Adds the turn information to the scrolling list of turns made this game
+	 * @param action		The action (column) the player of this turn has chosen.
+	 * @param player		The integer value of which player made this choice
+	 */
 	public void addTurn(Action action, int player){
 		model.addElement(player + "[" + action.getColumn() + "]");
 	}
 	
+	//Resets the statistics panel panel
+	public void resetStatsPanel(){
+		model.clear();
+	}
 	@Override
 	public Dimension getPreferredSize(){
 		return new Dimension(150, 150);

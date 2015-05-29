@@ -1,6 +1,11 @@
 
-/*
+/**
  * Class for statistics that contains all the details of a turn
+ * 
+ * @param turnNumber			Stores which turn of the game this state refers to
+ * @param boardState			The integer representation of the current board state
+ * @param player				Stores which player was deciding this turn
+ * @param lastAction			Stores the last column a token was dropped
  */
 public class TurnSummary {
 	private int turnNumber;

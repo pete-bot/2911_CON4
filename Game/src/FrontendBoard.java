@@ -479,6 +479,7 @@ MouseMotionListener, ActionListener {
             gameToken.setIcon(blankTokenIcon);
             gameToken.setPlayer(0);
         }
+        mainWindow.resetStatistics();
     }
 
     /**

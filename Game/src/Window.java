@@ -209,6 +209,12 @@ public class Window extends JFrame {
     	frontEndStatistics.addTurn(turn);
     }
 
+    /*
+     * Method to reset statistics
+     */
+    public void resetStatistics(){
+    	frontEndStatistics.resetStatistics();
+    }
     /**
      * Method to un pause the game
      */

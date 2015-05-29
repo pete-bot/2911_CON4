@@ -10,8 +10,18 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-/*
+/**
  * Handles the generation of the Statistics Panel component
+ * 
+ * @param rows			Hardcoded max rows for con4
+ * @param cols			Hardcoded max cols for con4
+ * @param gameSummary	List of the turns throughout the current game
+ * @param turnPreview	PlayArea object 
+ * @param visibleIndex	Represents the index of the current board preview.
+ * @param maximumIndex	Represents the maximum index we can iterate up to
+ * 
+ * @
+ * 		
  */
 public class FrontEndStatistics extends JPanel implements ActionListener{
 	
@@ -29,7 +39,6 @@ public class FrontEndStatistics extends JPanel implements ActionListener{
 	private Window parentWindow;
 	private int visibleIndex;
 	private int maximumIndex;
-	private int turnNumber;
 	
 	//Buttons
 	private JButton back;
@@ -111,7 +120,6 @@ public class FrontEndStatistics extends JPanel implements ActionListener{
 		back.setVisible(true);
 		
 		//Variable inits
-		turnNumber = 0;
 		gameSummary = new ArrayList<TurnSummary>();		//Create a new list of all turns
 		
 		//Create a special turn for node 1
@@ -119,6 +127,11 @@ public class FrontEndStatistics extends JPanel implements ActionListener{
 		
 	}
 	
+	public void resetStatistics(){
+		statsPanel.resetStatsPanel();
+		gameSummary.clear();
+		addTurn(new TurnSummary(0, new int[rows][cols], -1, new Action(-1)));
+	}
 	/*
 	 * Method that initializes the buttons
 	 */
