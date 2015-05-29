@@ -96,7 +96,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         this.assets = assets;
         this.mainWindow = mainWindow;
         setLayout(new GridBagLayout());
-        System.out.println(soundFilePath);
 
         setOpaque(false);
         setBackground(defaultColor);
