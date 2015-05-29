@@ -40,8 +40,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     private JButton optionsButton = new JButton();
 
     // Buttons added for statistics
-    private JButton statisticsButton = new JButton(
-            "STATITTISTICS!!! Check it yo!");
+    private JButton statisticsButton = new JButton();
 
     @SuppressWarnings("unused")
     private JButton spacer = new JButton();
@@ -60,7 +59,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     private ImageIcon quitIcon;
     private ImageIcon resumeIcon;
     private ImageIcon restartIcon;
-
+    private ImageIcon statisticsIcon;
     private ImageIcon easyIcon;
     private ImageIcon mediumIcon;
     private ImageIcon hardIcon;
@@ -262,6 +261,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         quitIcon = assets.getAsset("quit_button.png");
         resumeIcon = assets.getAsset("resume_game_button.png");
         restartIcon = assets.getAsset("restart_button.png");
+        statisticsIcon = assets.getAsset("statistics.png");
 
         easyIcon = assets.getAsset("easy.png");
         mediumIcon = assets.getAsset("medium.png");
@@ -425,6 +425,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
         // All elements for statistics
         initButton(statisticsButton);
+        statisticsButton.setIcon(statisticsIcon);
         add(statisticsButton, gbc);
         gbc.gridy++;
 

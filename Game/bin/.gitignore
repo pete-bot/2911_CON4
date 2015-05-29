@@ -4,8 +4,9 @@
 /AI.class
 /Action.class
 /BackendBoard.class
-/BackgroundPanel.class
+/BackgroundImagePanel.class
 /Difficulty.class
+/FrontEndStatistics.class
 /FrontendBoard$1.class
 /FrontendBoard.class
 /Game.class
@@ -16,11 +17,9 @@
 /Opponent.class
 /PauseButton.class
 /PlayArea.class
-/Player.class
 /State.class
+/StatsPanel.class
 /Token.class
+/TurnSummary.class
 /Window$1.class
 /Window.class
-/FrontEndStatistics.class
-/StatsPanel.class
-/TurnSummary.class
