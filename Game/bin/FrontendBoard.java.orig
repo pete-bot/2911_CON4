@@ -20,6 +20,7 @@ import javax.swing.KeyStroke;
 import javax.swing.Timer;
 import javax.swing.border.Border;
 
+<<<<<<< HEAD
 /**
  *
  * @author WOBCON4 Class that represents the front end of the game. This class
@@ -27,11 +28,14 @@ import javax.swing.border.Border;
  *         is also used to reflect changes in the game state in that front end
  *         interface.
  */
+=======
+>>>>>>> statistics
 public class FrontendBoard extends JLayeredPane implements MouseListener,
 MouseMotionListener, ActionListener {
 
     private static final long serialVersionUID = 1L;
 
+<<<<<<< HEAD
     /** Instance of the back end of the game */
     private BackendBoard backendBoard;
     /** values for the dimensions of the game board. */
@@ -50,10 +54,20 @@ MouseMotionListener, ActionListener {
      */
     private PlayArea playArea;
     /** Pause button for in game menu - holds action listeners etc */
+=======
+    // TODO our colours, should be updated to match the palette
+    private BackendBoard backendBoard; // Should be 'backendBoard'
+    private final int rows = 6;
+    private final int cols = 7;
+    private final int tilesOnBoard = rows * cols;
+    private Token[] gameTokens = new Token[tilesOnBoard];
+    private Window mainWindow;
+    private PlayArea playArea;
+>>>>>>> statistics
     private PauseButton pauseButton;
-    /** Status indicator used to report game status to the user, win state etc. */
     private JButton statusIndicator = new JButton("");
 
+<<<<<<< HEAD
     /** An empty border asset used multiple times in UI */
     private Border emptyBorder = BorderFactory.createEmptyBorder();
     /** Assets object - used to clean up paths etc. */
@@ -69,12 +83,22 @@ MouseMotionListener, ActionListener {
     Timer clock = new Timer(600, this);
 
     /** Image icon objects used in UI on the grid of tokens */
+=======
+    private Border emptyBorder = BorderFactory.createEmptyBorder();
+    private GameAssets assets = new GameAssets();
+
+    private ArrayList<Point> winList = new ArrayList<Point>();
+    private int animationBeat = 0;
+    Timer clock = new Timer(600, this);
+
+>>>>>>> statistics
     private ImageIcon blankTokenIcon;
     private ImageIcon glowingTokenIcon;
     private ImageIcon redTokenIcon;
     private ImageIcon yellowTokenIcon;
     private ImageIcon winTokenIcon;
 
+<<<<<<< HEAD
     /**
      * The Opponent object. May be an AI if the game mode is player vs AI, human
      * otherwise.
@@ -94,6 +118,13 @@ MouseMotionListener, ActionListener {
      *            The JFrame used to contain the game UI. Also contains some
      *            helpful functions used by other classes.
      */
+=======
+    private Opponent opponent;
+
+    private boolean inWinState = false;
+    private boolean aiThinking = false;
+
+>>>>>>> statistics
     public FrontendBoard(BackendBoard backendBoard, Window mainWindow) {
         super();
         this.backendBoard = backendBoard;
@@ -101,12 +132,21 @@ MouseMotionListener, ActionListener {
 
         showMainMenu();
     }
+<<<<<<< HEAD
 
     /**
      * method that generates an animation effect upon win state. Designed to
      * highlight the winning move by the winning player.
      */
+=======
+    
+    public void setOpponentToHuman() {
+    	opponent = new HumanOpponent();
+    }
+
+>>>>>>> statistics
     @Override
+    // (replaces 'highlightWin' function)
     public void actionPerformed(ActionEvent e) {
         Iterator<Point> winIterator = winList.iterator();
         while (winIterator.hasNext()) {
@@ -144,10 +184,13 @@ MouseMotionListener, ActionListener {
         revalidate();
     }
 
+<<<<<<< HEAD
     /**
      * Method to check if the game has come to a draw state. (ie, the board is
      * full - no player can make a move legally)
      */
+=======
+>>>>>>> statistics
     private void checkDraw() {
         if (backendBoard.isFull()) {
             inWinState = true;
@@ -157,6 +200,7 @@ MouseMotionListener, ActionListener {
         }
     }
 
+<<<<<<< HEAD
     /**
      * Method to check if last move by player is a winning move (ie, 4 have been
      * connected)
@@ -167,6 +211,8 @@ MouseMotionListener, ActionListener {
      *            enough to check it and its immediate neighbors.
      *
      */
+=======
+>>>>>>> statistics
     private void checkWin(Action action) {
         winList = backendBoard.checkWinState(action);
 
@@ -182,6 +228,7 @@ MouseMotionListener, ActionListener {
         }
     }
 
+<<<<<<< HEAD
     // FIXME should throw an exception
     /**
      * A method to get the current game board grid column indicated by an x
@@ -193,6 +240,10 @@ MouseMotionListener, ActionListener {
      * @return Return a column number representing the region on the grid board
      *         over which the mouse is hovering.
      */
+=======
+    // Get a column from a given x coordinate
+    // FIXME should throw an exception
+>>>>>>> statistics
     private int getColumn(int x) {
         Dimension gridSize = playArea.getSize();
         int columnWidth = (int) gridSize.getWidth() / 7;
@@ -209,6 +260,7 @@ MouseMotionListener, ActionListener {
         return -1; // No column found.
     }
 
+<<<<<<< HEAD
     /**
      * Method to take the next move and update the game board. Checks to make
      * sure that the move action is legal.
@@ -216,6 +268,8 @@ MouseMotionListener, ActionListener {
      * @param move
      *            Action that represents the players choice of column/move.
      */
+=======
+>>>>>>> statistics
     public void getNextMove(Action move) {
         if (!inWinState) {
             updateStatusIndicator(GameState.NO_WIN);
@@ -223,12 +277,6 @@ MouseMotionListener, ActionListener {
                 backendBoard.makeMove(move);
                 backendBoard.showTerminalBoard();
                 updateVisualBoard(move.getColumn());
-                backendBoard.incremementTurn();
-                // Update statistics
-                mainWindow.updateStatistics(new TurnSummary(backendBoard
-                        .getTurnNum(), backendBoard.getBoard().clone(),
-                        backendBoard.getPlayer(), move));
-
                 checkWin(move); // Wins come before draws.
                 checkDraw();
                 if (!inWinState)
@@ -240,20 +288,21 @@ MouseMotionListener, ActionListener {
         }
     }
 
-    /**
-     * Method to hide the pause menu.
-     */
     public void hidePause() {
         pauseButton.setVisible(false);
     }
 
+<<<<<<< HEAD
     /**
      * Method to hide the pause button ("MENU" in game)
      */
+=======
+>>>>>>> statistics
     private void hidePauseButton() {
         pauseButton.setVisible(false);
     }
 
+<<<<<<< HEAD
     /**
      * Method to provide highlighting of the column that the user's mouse cursor
      * is currently hovering over. Designed to make the column choice more clear
@@ -262,6 +311,9 @@ MouseMotionListener, ActionListener {
      * @param cursor
      *            An event object - the mouse position over the game board.
      */
+=======
+    // this highlights the column
+>>>>>>> statistics
     public void highlightColumn(MouseEvent cursor) {
         // Change the icons of the tokens that are in the rows for the given
         // column
@@ -282,12 +334,15 @@ MouseMotionListener, ActionListener {
         }
     }
 
+<<<<<<< HEAD
     /**
      * Initialise button properties. Transparency, opacity etc.
      * 
      * @param b
      *            The button object to be modified.
      */
+=======
+>>>>>>> statistics
     private void initButton(JButton b) {
         b.setOpaque(false);
         b.setContentAreaFilled(false);
@@ -296,10 +351,13 @@ MouseMotionListener, ActionListener {
         b.setRolloverEnabled(false);
     }
 
+<<<<<<< HEAD
     /**
      * A method to initialise the main graphical objects on the play-board. This
      * includes the grid board, the status indicator and the pause menu button.
      */
+=======
+>>>>>>> statistics
     private void initGraphics() {
         pauseButton = new PauseButton(mainWindow);
         pauseButton.setOpaque(false);
@@ -326,7 +384,7 @@ MouseMotionListener, ActionListener {
 
         gbc.gridy++;
 
-        playArea = new PlayArea(new Dimension(750, 650), assets, mainWindow);
+        playArea = new PlayArea(blankTokenIcon, mainWindow);
         playArea.addMouseListener(this);
         playArea.addMouseMotionListener(this);
         gameTokens = playArea.getTokens();
@@ -346,10 +404,13 @@ MouseMotionListener, ActionListener {
         add(pauseButton, gbc);
     }
 
+<<<<<<< HEAD
     /**
      * Method to initialise icons with the correct visual assets. Red token with
      * red token icon etc.
      */
+=======
+>>>>>>> statistics
     private void initIcons() {
         blankTokenIcon = assets.getAsset("sample_token.png");
         glowingTokenIcon = assets.getAsset("sample_token_glow.png");
@@ -358,10 +419,13 @@ MouseMotionListener, ActionListener {
         winTokenIcon = assets.getAsset("sample_token_win.png");
     }
 
+<<<<<<< HEAD
     /**
      * Key listener to facilitate the use of the 'esc' key to enter and exit the
      * pause menu.
      */
+=======
+>>>>>>> statistics
     private void initKeyListener() {
         int InFocusWindow = JComponent.WHEN_IN_FOCUSED_WINDOW;
         KeyStroke escapeStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
@@ -369,6 +433,7 @@ MouseMotionListener, ActionListener {
         getActionMap().put("escapeSequence", mainWindow.escapeAction);
     }
 
+<<<<<<< HEAD
     /**
      * Method to take opponent move and update the game state accordingly. For
      * AI opponents, provides an AIThinking timer, to simulate the thought time
@@ -378,6 +443,8 @@ MouseMotionListener, ActionListener {
      * foster a false sense of hope and security in the human player. For human
      * opponents, allows them to click and place a token.
      */
+=======
+>>>>>>> statistics
     public void makeOpponentMove() {
         if (opponent.isAI() && !inWinState) {
             updateStatusIndicator(GameState.NO_WIN);
@@ -399,13 +466,6 @@ MouseMotionListener, ActionListener {
                     backendBoard.showTerminalBoard();
                     updateStatusIndicator(GameState.NO_WIN);
                     updateVisualBoard(opponentMove.getColumn());
-                    backendBoard.incremementTurn();
-
-                    // AI Updates statistics
-                    mainWindow.updateStatistics(new TurnSummary(backendBoard
-                            .getTurnNum(), backendBoard.getBoard().clone(),
-                            backendBoard.getPlayer(), opponentMove));
-
                     checkWin(opponentMove);
                     checkDraw();
                     if (!inWinState)
@@ -420,10 +480,14 @@ MouseMotionListener, ActionListener {
         }
     }
 
+<<<<<<< HEAD
     /**
      * The following Override functions provide input information and feedback
      * on the user mouse cursor location.
      */
+=======
+    // MOUSELISTENER AND MOUSEMOTIONLISTENER OVERRIDES
+>>>>>>> statistics
     @Override
     public void mouseClicked(MouseEvent e) {
         if (inWinState && !aiThinking)
@@ -465,10 +529,13 @@ MouseMotionListener, ActionListener {
     private void moveGraphicToken(MouseEvent e) {
     }
 
+<<<<<<< HEAD
     /**
      * Method to reset the board - including reseting the back end board. This
      * will completely restart the game.
      */
+=======
+>>>>>>> statistics
     public void resetBoard() {
         inWinState = false;
         backendBoard.resetBoard();
@@ -481,16 +548,20 @@ MouseMotionListener, ActionListener {
         }
     }
 
+<<<<<<< HEAD
     /**
      * Method that allows the user to choose and set their AI opponents
      * difficulty level.
      * 
      * @param difficulty
      */
+=======
+>>>>>>> statistics
     public void setAI(Difficulty difficulty) {
         opponent = new AI(difficulty, backendBoard);
     }
 
+<<<<<<< HEAD
     /**
      * Set the opponent variable to human - used for PvP games.
      */
@@ -502,23 +573,25 @@ MouseMotionListener, ActionListener {
      * Method to show the main menu - this initialises the necessary graphical
      * components and sets them to visible in the frontEnd JPanel.
      */
+=======
+>>>>>>> statistics
     public void showMainMenu() {
         initIcons();
         initKeyListener();
         initGraphics();
     }
 
-    /**
-     * Sets pause button ("MENU") to visible.
-     */
     private void showPauseButton() {
         pauseButton.setVisible(true);
     }
 
+<<<<<<< HEAD
     /**
      * Method to render the game board invisible (set to off and disable
      * interactivity).
      */
+=======
+>>>>>>> statistics
     public void turnOff() {
         setVisible(false);
         setEnabled(false);
@@ -529,10 +602,13 @@ MouseMotionListener, ActionListener {
         hidePauseButton();
     }
 
+<<<<<<< HEAD
     /**
      * Method to render the game board visible (set to on and enable
      * interactivity).
      */
+=======
+>>>>>>> statistics
     public void turnOn() {
         setVisible(true);
         setEnabled(true);
@@ -543,6 +619,7 @@ MouseMotionListener, ActionListener {
         showPauseButton();
     }
 
+<<<<<<< HEAD
     /**
      * Method to update the status indicator for the player - this relays to the
      * player whose turn it is as well as if the winning move has been played.
@@ -550,6 +627,8 @@ MouseMotionListener, ActionListener {
      * @param state
      *            State of game - enum: NO_WIN, WIN, DRAW
      */
+=======
+>>>>>>> statistics
     private void updateStatusIndicator(GameState state) {
         if (GameState.NO_WIN == state) {
             if (backendBoard.getPlayer() == 1) {
@@ -577,6 +656,7 @@ MouseMotionListener, ActionListener {
 
     // Updates the board with the next _legal_ move
     // xPos is the column, refactor later.
+<<<<<<< HEAD
     /**
      * Method to update the visual board with the next move. Will set the token
      * colour of the lowest token slot on the game board.
@@ -585,6 +665,8 @@ MouseMotionListener, ActionListener {
      *            X position - used to determine which column should be updated
      *            with the players token piece.
      */
+=======
+>>>>>>> statistics
     public void updateVisualBoard(int xPos) {
         for (int count = tilesOnBoard - (cols - xPos); count >= 0; count -= 7) {
             Token currentButton = gameTokens[count];

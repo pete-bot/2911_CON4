@@ -12,22 +12,12 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public class PauseButton extends JPanel implements ActionListener {
-    /** */
-	private static final long serialVersionUID = 1L;
-	/** */
-	private JButton pauseButton = new JButton("");
-	/** */
-	private GameAssets assets = new GameAssets();
-	/** */
-	private Window window;
-	/** */
-	private Color defaultColor = new Color(255, 255, 235, 100);
+    private static final long serialVersionUID = 1L;
+    private JButton pauseButton = new JButton("");
+    private GameAssets assets = new GameAssets();
+    private Window window;
+    private Color defaultColor = new Color(255, 255, 235, 100);
 
-	/**
-	 * Constructor for PauseButton
-	 * @param mainWindow
-	 * 		This is the instance of the main window (JFrame) class.
-	 */
     public PauseButton(Window mainWindow) {
 
         // init buttons w/ listeners
@@ -61,10 +51,7 @@ public class PauseButton extends JPanel implements ActionListener {
         add(pauseButton, gbc);
         window = mainWindow;
     }
-    
-    /**
-     * Action Listener for the pause button being clicked. This will display the pause menu.
-     */
+
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton buttonPressed = (JButton) e.getSource();
@@ -74,11 +61,7 @@ public class PauseButton extends JPanel implements ActionListener {
         }
     }
 
-    /**
-     * Required override to fix issues with the transparency of certain JPanels. Prior to this
-     * override, mousing over a transparent panel would re-render its transparent effect, over the top
-     * of the previous effect. It was very visually unappealing.
-     */
+    // fix tranparent panel issue
     @Override
     protected void paintComponent(Graphics g) {
         //g.setColor(getBackground());

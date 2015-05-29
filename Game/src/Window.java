@@ -16,32 +16,19 @@ public class Window extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
-    /** */
     private FrontendBoard frontEndBoard;
-    /** */
+    private FrontEndStatistics frontEndStatistics;
     private BackendBoard backendBoard;
-    
-    /** */
     private Dimension defaultSize = new Dimension(1024, 700);
-    
-    /** */
     private GridBagConstraints gbc;
-    
-    /** */
     private GameAssets assets = new GameAssets();
-    
-    /** */
     private MainMenuPanel menuPanel = new MainMenuPanel(this, this.assets);
 
-    /** */
     private JPanel titlePane;
 
-    /** */
     private BackgroundPanel background;
 
-    /**
-     * Method to provide 'esc' key support to exit to menu
-     */
+    // Provides escape behavior
     public AbstractAction escapeAction = new AbstractAction() {
         private static final long serialVersionUID = 1L;
         private boolean paused = true;
@@ -61,65 +48,43 @@ public class Window extends JFrame {
             }
         }
     };
-    
-    /**
-     * Set opponent type to human. 
-     */
+
     public void setBoardToPVP() {
     	frontEndBoard.setOpponentToHuman();
     }
-    
-    /**
-     * Class constructor - creates a new JFrame object
-     * @param newBoard
-     * 		The instance of the game representation back end. 
-     */
+
     public Window(BackendBoard newBoard) {
-        super("Brace yourself, Wobke is coming.");
+        super("Prepare yourself, Wobke is coming.");
 
         this.setMinimumSize(new Dimension(800, 820));
         this.setLocationRelativeTo(null);
-        
-        
+
+
         initFrontendBoard(newBoard);
+        initFrontendStatistics();
         initWindow(newBoard);
         pack();
     }
-    
-    /**
-     * Method to add the main menu  panel to the JFrame
-     */
+
     public void addMenu() {
         menuPanel.addMainMenuItems();
     }
 
-    /**
-     * Method to display the main menu
-     */
     public void displayMenu() {
 
         titlePane.setVisible(true);
         menuPanel.setVisible(true);
     }
 
-    /**
-     * Hide the game play area. Used when transitioning to another menu. etc
-     */
     public void hideGameBoard() {
         frontEndBoard.turnOff();
     }
 
-    /**
-     * Hide the main menu. Used when transitioning to another menu. etc
-     */
     private void hideMainMenu() {
         menuPanel.hideMainMenu();
         titlePane.setVisible(false);
     }
 
-    /**
-     * Initilaise a very attractive background
-     */
     private void initBackground() {
         ImageIcon asset = assets.getAsset("sample_bg.png");
         Image img = asset == null ? null : asset.getImage();
@@ -128,12 +93,6 @@ public class Window extends JFrame {
         setContentPane(background);
     }
 
-    
-    /**
-     * Method that creates a new instance of the front end board.
-     * @param newBoard
-     * 		The instance of the backend board that is being used to populate the new front end board.
-     */
     private void initFrontendBoard(BackendBoard newBoard) {
         backendBoard = newBoard;
         Window mainWindow = this;
@@ -141,10 +100,18 @@ public class Window extends JFrame {
         frontEndBoard.setEnabled(false);
         frontEndBoard.setVisible(false);
     }
-
-    /**
-     * Method to initialise the gridbaglayout constraints that are used in this window.
+    
+    /*
+     * Added by sketch cause statistics are gang
+     * Initialises the statistics component that I spent half a year on. legit.
      */
+    
+    private void initFrontendStatistics() {
+    	frontEndStatistics = new FrontEndStatistics(assets, this);
+    	frontEndStatistics.setEnabled(false);
+    	frontEndStatistics.setVisible(false);
+    }
+
     private void initLayout() {
         setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
@@ -159,9 +126,6 @@ public class Window extends JFrame {
         gbc.fill = GridBagConstraints.BOTH;
     }
 
-    /**
-     * Method to initilise title pane.
-     */
     private void initTitle() {
         titlePane = new JPanel();
 
@@ -174,11 +138,6 @@ public class Window extends JFrame {
         titlePane.setBackground(new Color(255, 255, 235, 200));
     }
 
-    /**
-     * Initialise The main window layout and objects.
-     * @param newBoard
-     * 		instance of backend board being used to represent the game state.
-     */
     private void initWindow(BackendBoard newBoard) {
         initBackground();
         initLayout();
@@ -196,7 +155,7 @@ public class Window extends JFrame {
 
         gbc.gridy += 10;
         add(frontEndBoard, gbc);
-
+        add(frontEndStatistics, gbc);
         // gbc.gridx = 0;
         // gbc.gridy = 0;
 
@@ -213,30 +172,41 @@ public class Window extends JFrame {
         }
     }
 
-    /**
-     * Method to load the pause game menu.
-     */
     public void pauseGame() {
         frontEndBoard.turnOff();
         menuPanel.showPauseMenu();
     }
 
-    /**
-     * Method to reset the backend board
-     */
     public void resetBackEndBoard() {
         backendBoard.resetBoard();
     }
 
-    /**
-     * Method to reset the window and the game state.
-     */
     public void resetWindow() {
         menuPanel.hideMainMenu();
         menuPanel.hidePauseMenu();
         titlePane.setVisible(false);
         frontEndBoard.turnOn();
         frontEndBoard.resetBoard();
+    }
+
+    /*
+     * Called when the statistics need to be shown (from the button)
+     */
+    public void showStatistics() {
+    	menuPanel.hidePauseMenu();
+    	frontEndStatistics.turnOn();
+    }
+    
+    public void hideStatistics(){
+    	menuPanel.showPauseMenu();
+    	frontEndStatistics.turnOff();
+    }
+    
+    /*
+     * Added by sketch in statistics menu expansion
+     */
+    public void updateStatistics(TurnSummary turn) {
+    	frontEndStatistics.addTurn(turn);
     }
 
     /**
@@ -247,25 +217,16 @@ public class Window extends JFrame {
         menuPanel.hidePauseMenu();
     }
 
-    /**
-     * Method to render the select difficulty screen.
-     */
     public void selectDifficulty() {
         hideMainMenu();
         titlePane.setVisible(false);
         menuPanel.showDifficultyPanel();
     }
 
-    /**
-     * Method to set the correct difficulty via the AI interface /abstract interface
-     */
     public void setDifficulty(Difficulty difficulty) {
         frontEndBoard.setAI(difficulty);
     }
 
-    /**
-     * Method to kick off the game
-     */
     public void startNewGame() {
         hideMainMenu();
         backendBoard.showTerminalBoard();
