@@ -28,7 +28,7 @@ import javax.swing.border.Border;
  *         interface.
  */
 public class FrontendBoard extends JLayeredPane implements MouseListener,
-MouseMotionListener, ActionListener {
+        MouseMotionListener, ActionListener {
 
     private static final long serialVersionUID = 1L;
 
@@ -84,7 +84,7 @@ MouseMotionListener, ActionListener {
     /** status flags for game state - a player has won, the AI is 'thinking' */
     private boolean inWinState = false;
     private boolean aiThinking = false;
-    
+
     /**
      *
      * @param backendBoard
@@ -153,7 +153,7 @@ MouseMotionListener, ActionListener {
     /**
      * Method to check if last move by player is a winning move (ie, 4 have been
      * connected)
-     * 
+     *
      * @param action
      *            action represents the column choice by a player - the last
      *            column choice will always determine who has won so it is
@@ -180,7 +180,7 @@ MouseMotionListener, ActionListener {
      * A method to get the current game board grid column indicated by an x
      * position. This is used to determine which column is currently highlighted
      * by the user's mouse cursor.
-     * 
+     *
      * @param x
      *            x position of user's mouse cursor
      * @return Return a column number representing the region on the grid board
@@ -205,13 +205,12 @@ MouseMotionListener, ActionListener {
     /**
      * Method to take the next move and update the game board. Checks to make
      * sure that the move action is legal.
-     * 
+     *
      * @param move
      *            Action that represents the players choice of column/move.
      */
     public void getNextMove(Action move) {
         if (!inWinState) {
-            updateStatusIndicator(GameState.NO_WIN);
             if (backendBoard.isLegal(move)) {
                 backendBoard.makeMove(move);
                 backendBoard.showTerminalBoard();
@@ -224,8 +223,10 @@ MouseMotionListener, ActionListener {
 
                 checkWin(move); // Wins come before draws.
                 checkDraw();
-                if (!inWinState)
+                if (!inWinState) {
                     backendBoard.switchPlayer();
+                    updateStatusIndicator(GameState.NO_WIN);
+                }
                 makeOpponentMove();
             } else {
                 System.out.println("Invalid move.");
@@ -251,7 +252,7 @@ MouseMotionListener, ActionListener {
      * Method to provide highlighting of the column that the user's mouse cursor
      * is currently hovering over. Designed to make the column choice more clear
      * to the user.
-     * 
+     *
      * @param cursor
      *            An event object - the mouse position over the game board.
      */
@@ -277,7 +278,7 @@ MouseMotionListener, ActionListener {
 
     /**
      * Initialise button properties. Transparency, opacity etc.
-     * 
+     *
      * @param b
      *            The button object to be modified.
      */
@@ -389,7 +390,6 @@ MouseMotionListener, ActionListener {
                     }
                     backendBoard.makeMove(opponentMove);
                     backendBoard.showTerminalBoard();
-                    updateStatusIndicator(GameState.NO_WIN);
                     updateVisualBoard(opponentMove.getColumn());
                     backendBoard.incremementTurn();
 
@@ -400,8 +400,10 @@ MouseMotionListener, ActionListener {
 
                     checkWin(opponentMove);
                     checkDraw();
-                    if (!inWinState)
+                    if (!inWinState) {
                         backendBoard.switchPlayer();
+                        updateStatusIndicator(GameState.NO_WIN);
+                    }
                     aiThinking = false;
                 }
             };
@@ -477,7 +479,7 @@ MouseMotionListener, ActionListener {
     /**
      * Method that allows the user to choose and set their AI opponents
      * difficulty level.
-     * 
+     *
      * @param difficulty
      */
     public void setAI(Difficulty difficulty) {
@@ -539,7 +541,7 @@ MouseMotionListener, ActionListener {
     /**
      * Method to update the status indicator for the player - this relays to the
      * player whose turn it is as well as if the winning move has been played.
-     * 
+     *
      * @param state
      *            State of game - enum: NO_WIN, WIN, DRAW
      */
@@ -568,11 +570,10 @@ MouseMotionListener, ActionListener {
         // statusIndicator.setVisible(true);
     }
 
-
     /**
      * Method to update the visual board with the next move. Will set the token
      * colour of the lowest token slot on the game board.
-     * 
+     *
      * @param xPos
      *            X position - used to determine which column should be updated
      *            with the players token piece.
