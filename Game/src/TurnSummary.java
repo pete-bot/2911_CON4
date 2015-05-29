@@ -1,10 +1,19 @@
 
-
+/**
+ * 
+ * @author WOBCON4
+ * 	Class to contain the turn summary for each turn
+ *
+ */
  
 public class TurnSummary {
+	/**Turn number of current turn */
 	private int turnNumber;
+	/**Board state */
 	private int[][] boardState;
+	/** Player number of current turn (who made this turn?)*/
 	private int player;
+	/** Last action made*/
 	private Action lastAction;
 	
 	/**
@@ -21,6 +30,7 @@ public class TurnSummary {
 		player = currPlayer;
 		lastAction = lastMove;
 	}
+	
 	
 	public int getTurnNumber(){
 		return turnNumber;

@@ -1,16 +1,38 @@
+/**
+ * 
+ * @author WOBCON4
+ *	The State class used by the AI to make the best decision about which move to make next.
+ */
 public class State implements Comparable<State> {
 
+	/**Rank for the state - make it easier to select the best state */
     private int stateRank;
+    /**The Action associated with this stae. */
     private Action thisAction;
+    /**The backend board representation associated with this state. */
     private BackendBoard boardRep;
+    /**AI difficulty associated with this state. */
     private Difficulty difficulty;
 
-    // starting state constructor
+    
+    /**
+     * Starting state constructor
+     * @param backendBoard
+     * 		Representation of the current backend board,
+     */
     public State(BackendBoard backendBoard) {
         boardRep = backendBoard;
     }
 
-    // choice constructor
+    /**
+     * Choice state constructor.
+     * @param column
+     * 		The column associated with this state.
+     * @param prevState
+     * 		The parent/predecessor state.
+     * @param difficulty
+     * 		The difficulty of the AI.
+     */
     public State(int column, State prevState, Difficulty difficulty) {
         boardRep = prevState.getBoard();
         this.difficulty = difficulty;
@@ -19,6 +41,17 @@ public class State implements Comparable<State> {
 
     }
 
+    /**
+     * Method to check the AI score in the ascending Diag direction
+     * @param lastPlayer
+     * 		The last player to make a move.
+     * @param lastColumn
+     * 		The last column to take a token.
+     * @param board
+     * 		The backend board representation
+     * @return
+     * 		Return a score for the ascending diagonal move for the AI
+     */
     private int checkAscDiagonal(int lastPlayer, int lastColumn, int[][] board) {
 
         // check if slots are full (illegal move)
@@ -71,6 +104,18 @@ public class State implements Comparable<State> {
      * Check descending diagonal wins Added by Sketch in
      * "Updated win condition patch"
      */
+    
+    /**
+     * Method to check the AI score in the descending Diag direction
+     * @param lastPlayer
+     * 		The last player to make a move.
+     * @param lastColumn
+     * 		The last column to take a token.
+     * @param board
+     * 		The backend board representation
+     * @return
+     * 		Return a score for the descending diagonal move for the AI
+     */
     private int checkDescDiagonal(int lastPlayer, int lastColumn, int[][] board) {
         // check if slots are full (illegal move)
 
@@ -117,7 +162,18 @@ public class State implements Comparable<State> {
         }
         return adjacentTiles;
     }
-
+    
+    /**
+     * Method to check the AI score in the horizontal direction
+     * @param lastPlayer
+     * 		The last player to make a move.
+     * @param lastColumn
+     * 		The last column to take a token.
+     * @param board
+     * 		The backend board representation
+     * @return
+     * 		Return a score for the horizontal move for the AI
+     */
     private int checkHorizontal(int[][] board, int column, int lastPlayer) {
 
         int leftadjacentTiles = 1;
@@ -169,6 +225,17 @@ public class State implements Comparable<State> {
                 : rightadjacentTiles;
     }
 
+    /**
+     * Method to check the AI score in the vertical direction
+     * @param lastPlayer
+     * 		The last player to make a move.
+     * @param lastColumn
+     * 		The last column to take a token.
+     * @param board
+     * 		The backend board representation
+     * @return
+     * 		Return a score for the vertical move for the AI
+     */
     private int checkVertical(int[][] board, int column) {
         int x = 0;
         int row = 5;
@@ -198,16 +265,33 @@ public class State implements Comparable<State> {
         return x;
     }
 
+    /**
+     * Override of compare to method. THis will compare the H value of each state
+     */
     @Override
     public int compareTo(State o) {
         return o.getHValue() - getHValue();
     }
 
+    /**
+     * Method to generate an action for the next state.
+     * @param column
+     * 		Column choice for next action.
+     * @return
+     * 		Returns an action for the next state.
+     */
     private Action generateAction(int column) {
         Action a = new Action(column);
         return a;
     }
 
+    /**
+     * Method that considers the diagonal and vertical, horizontal scores to generate a total H score.
+     * @param column
+     * 		The column that is currently being considered.
+     * @return
+     * 		Returns a total H score.
+     */
     public int generateScore(int column) {
         int[][] board = boardRep.getBoard();
 
@@ -232,14 +316,26 @@ public class State implements Comparable<State> {
         }
     }
 
+    /**
+     * Return the action for the current state
+     */
     public Action getAction() {
         return thisAction;
     }
 
+    /**
+     * Get the board rep of the current state.
+     * @return
+     * 		The board rep of the current state
+     */
     private BackendBoard getBoard() {
         return boardRep;
     }
-
+    /**
+     * Get the current state H value.
+     * @return
+     * 		Return the current states H value.
+     */
     private int getHValue() {
         return stateRank;
     }
