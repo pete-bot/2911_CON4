@@ -37,7 +37,7 @@ public class PauseButton extends JPanel implements ActionListener {
 
         // init buttons w/ listeners
         pauseButton.addActionListener(this);
-
+        
         // board transparency settings - may need to change depending on colour
         // prefs
         setOpaque(false);

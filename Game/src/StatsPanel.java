@@ -184,6 +184,6 @@ public class StatsPanel extends JPanel {
         updateRightPanel(turn.getTurnNumber(), turn.getCurrPlayer(),
                 turn.getLastMove());
     }
-    
+
 
 }
