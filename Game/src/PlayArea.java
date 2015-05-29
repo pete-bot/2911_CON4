@@ -6,24 +6,45 @@ import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
+/**
+ * 
+ * @author WOBCON4
+ * Class that contains the game play grid and action listeners to facilitate the use thereof. 
+ */
 public class PlayArea extends JLabel {
 
+	/**Standard Serialisation */
     private static final long serialVersionUID = 1L;
+    /**Min size  for the gridboard */
     private Dimension minSize;
+    
+    /** Dimensions for the play area*/
     private Dimension size = new Dimension(750, 650);
+    /** board dimensions*/
     private final int rows = 6;
     private final int cols = 7;
+    /** token array*/
     private final Token[] gameTokens = new Token[42];
+    
+    /**Default colour */
     private Color defaultColor = new Color(255, 255, 235, 100);
 
+    /**Assests variable */
     private GameAssets assets;
 
-    // how PROPORTIONATE the playArea will be
-    // according to the height of the main window.
-    // change to adjust proportionality.
+    /**Variables to control the proportionality of the game grid */
     private double propPercentage = 0.80;
     private Window mainWindow;
 
+    /**
+     * Constructor for the play area
+     * @param boardSize
+     * 		The board size preferred
+     * @param assets
+     * 		Assets list, used to populate token icons etc.
+     * @param mainWindow
+     * 		The main window instance.
+     */
     public PlayArea(Dimension boardSize, GameAssets assets, Window mainWindow) {
 
         // board transparency settings - may need to change depending on colour
@@ -39,11 +60,19 @@ public class PlayArea extends JLabel {
         populateWithTokens();
     }
 
+    /**
+     * @returns 
+     * 		Dimension for the minimum size
+     */
     @Override
     public Dimension getMinimumSize() {
         return minSize;
     }
 
+    /**
+     * @returns 
+     * 		Dimension for the preferred size
+     */
     @Override
     public Dimension getPreferredSize() {
 
@@ -56,16 +85,29 @@ public class PlayArea extends JLabel {
         return size;
     }
 
+    /**
+     * @return 
+     * 		The current size of the board.
+     */
     @Override
     public Dimension getSize() {
         return size;
     }
 
+    
+    /** 
+     * get the token array
+     * @return
+     * 		The token array in the grid board.
+     */
     public Token[] getTokens() {
         return gameTokens;
     }
 
-    // fix tranparent panel issue
+    
+    /**
+     * This is a fix for an issue to do with the transparency of the panels.
+     */
     @Override
     protected void paintComponent(Graphics g) {
         g.setColor(getBackground());
@@ -73,6 +115,9 @@ public class PlayArea extends JLabel {
         super.paintComponent(g);
     }
 
+    /**
+     * Populate the gridboard with tokens.
+     */
     private void populateWithTokens() {
         int i = 0, currY = 0, currX = 0;
         for (currY = 0; currY < rows; currY++) {
@@ -90,8 +135,10 @@ public class PlayArea extends JLabel {
         }
     }
 
-    // render the current board in terminal
-    // Maybe 'showTerminalBoard' is better...
+	/**
+	 * Debug methodt o write the current board state out to the terminal
+	 * @param newBoard
+	 */
     public void writeBoard(int[][] newBoard) {
         int i = 0;
         for (int row = rows - 1; row >= 0; row--) {

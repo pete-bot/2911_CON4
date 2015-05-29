@@ -11,13 +11,28 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+/**
+ * Class that contains the pause button and its action listeners
+ * @author pedro
+ *
+ */
 public class PauseButton extends JPanel implements ActionListener {
-    private static final long serialVersionUID = 1L;
-    private JButton pauseButton = new JButton("");
-    private GameAssets assets = new GameAssets();
-    private Window window;
+    /**Variable for serialisation */
+	private static final long serialVersionUID = 1L;
+	/**The pause button Jbutton */
+	private JButton pauseButton = new JButton("");
+	/**Game Assets instance */
+	private GameAssets assets = new GameAssets();
+    /**The current game window. */
+	private Window window;
+	/** default colour scheme*/
     private Color defaultColor = new Color(255, 255, 235, 100);
 
+    /**
+     * Constructor for pause button.
+     * @param mainWindow
+     * 		The main window JFrame.
+     */
     public PauseButton(Window mainWindow) {
 
         // init buttons w/ listeners
@@ -52,6 +67,9 @@ public class PauseButton extends JPanel implements ActionListener {
         window = mainWindow;
     }
 
+    /**
+     * Action for the pause button. This will create an instance of the pasue menu and display it.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton buttonPressed = (JButton) e.getSource();
@@ -61,7 +79,9 @@ public class PauseButton extends JPanel implements ActionListener {
         }
     }
 
-    // fix tranparent panel issue
+    /**
+     * Fix for issue with drawing transparent windows.
+     */
     @Override
     protected void paintComponent(Graphics g) {
         //g.setColor(getBackground());

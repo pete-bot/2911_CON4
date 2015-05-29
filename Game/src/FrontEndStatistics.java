@@ -166,8 +166,9 @@ public class FrontEndStatistics extends JPanel implements ActionListener {
     }
 
     /**
-     * 
+     * Method to set the various parameters of each button - transparency etc.
      * @param b
+     * 		The button to be updated
      */
     private void initButton(JButton b) {
         b.setOpaque(false);
@@ -177,8 +178,9 @@ public class FrontEndStatistics extends JPanel implements ActionListener {
         b.setRolloverEnabled(false);
     }
 
-    /*
-     * Method that initializes the buttons
+    
+    /**
+     * Method to initialise the buttons
      */
     public void initButtons() {
         back = new JButton();
@@ -189,6 +191,9 @@ public class FrontEndStatistics extends JPanel implements ActionListener {
         prev.setIcon(assets.getAsset("left_arrow.png"));
     }
 
+    /**
+     * Method to reset the game statisitics. Used when restarting game.
+     */
     public void resetStatistics() {
         statsPanel.resetStatsPanel();
         gameSummary.clear();
@@ -197,7 +202,9 @@ public class FrontEndStatistics extends JPanel implements ActionListener {
         addTurn(new TurnSummary(0, new int[rows][cols], -1, new Action(-1)));
     }
 
-    // Make the Statistics inactive
+    /**
+     * Hide the statistics panel.
+     */
     public void turnOff() {
         back.setEnabled(false);
         back.setVisible(false);
@@ -205,7 +212,10 @@ public class FrontEndStatistics extends JPanel implements ActionListener {
         setVisible(false);
     }
 
-    // Make the Statistics active
+    
+    /**
+     * Show the statistics panel
+     */
     public void turnOn() {
         back.setEnabled(true);
         back.setVisible(true);
@@ -213,8 +223,10 @@ public class FrontEndStatistics extends JPanel implements ActionListener {
         setVisible(true);
     }
 
-    /*
-     * Method that updates the entire statistics component
+    /**
+     * Method to update the entire statistics panel
+     * @param turn
+     * 		The current turn
      */
     public void updateAllStats(TurnSummary turn) {
         turnPreview.writeBoard(turn.getBoardState()); // Write the new board
@@ -223,8 +235,10 @@ public class FrontEndStatistics extends JPanel implements ActionListener {
         visibleIndex = maximumIndex;
     }
 
-    /*
-     * For updating the statistics panel without adding a turn
+    /**
+     * Method to update the statistics panel without adding a turn
+     * @param turn
+     * 		The current turn
      */
     public void updateView(TurnSummary turn) {
         turnPreview.writeBoard(turn.getBoardState()); // Write the new board

@@ -275,22 +275,33 @@ public class Window extends JFrame {
         frontEndStatistics.turnOff();
     }
 
+    /**
+     * Method to allow player to choose the difficulty level of the AI
+     */
     public void selectDifficulty() {
         hideMainMenu();
         titlePane.setVisible(false);
         menuPanel.showDifficultyPanel();
     }
 
+    /** 
+     * Set the game to Player vs Player mode. This sets the opponent to human type.
+     */
     public void setBoardToPVP() {
         frontEndBoard.setOpponentToHuman();
     }
 
+    /**
+     * Set the opponent difficulty.
+     * @param difficulty
+     * 		The opponent difficulty.
+     */
     public void setDifficulty(Difficulty difficulty) {
         frontEndBoard.setAI(difficulty);
     }
 
-    /*
-     * Called when the statistics need to be shown (from the button)
+    /**
+     *Called when the statistics need to be shown (from the button) 
      */
     public void showStatistics() {
         inStats = true;
@@ -298,14 +309,19 @@ public class Window extends JFrame {
         frontEndStatistics.turnOn();
     }
 
+   
+    /**
+     * method to start a new game
+     */
     public void startNewGame() {
         hideMainMenu();
         backendBoard.showTerminalBoard();
         frontEndBoard.turnOn();
     }
 
-    /*
-     * Added by sketch in statistics menu expansion
+    
+    /**
+     * Method to update the statistics panel  
      */
     public void updateStatistics(TurnSummary turn) {
         frontEndStatistics.addTurn(turn);

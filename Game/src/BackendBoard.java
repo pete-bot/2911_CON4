@@ -3,30 +3,46 @@ import java.util.ArrayList;
 
 public class BackendBoard {
 
-    // this is the board representation - very simple and light
-    // we store the position of player_1 as 1, player_2 as 2
+    /** information for board representation*/
     private int[][] board;
     private int currentPlayer = 1;
     private int turnNum = 0;
 
-    // need to make these ENUMS
+    /**Dimensions of the game board. */
     private int ROWMAX = 6;
     private int COLMAX = 7;
 
+    /**Instance of the game state and backend board */
     public BackendBoard() {
         board = new int[ROWMAX][COLMAX];
     }
 
+    /**
+     * Method to increment the game turn
+     */
     public void incremementTurn(){
     	turnNum++;
     }
     
+    /**
+     * Method to return the game turn
+     * @return
+     * 		The game turn
+     */
     public int getTurnNum(){
     	return turnNum;
     }
-    /*
-     * Check ascending diagonal wins Added by Sketch in
-     * "Updated win condition patch"
+    
+    /**
+     * Method to check the win state in the ascending Diag direction
+     * @param lastPlayer
+     * 		The last player to make a move.
+     * @param lastColumn
+     * 		The last column to take a token.
+     * @param board
+     * 		The backend board representation
+     * @return
+     * 		Return a win state for the ascending diagonal move for the AI
      */
     private boolean checkAscDiagonal(int lastPlayer, int lastColumn, int lastRow) {
         boolean win = false;
@@ -64,9 +80,16 @@ public class BackendBoard {
         return win;
     }
 
-    /*
-     * Check descending diagonal wins Added by Sketch in
-     * "Updated win condition patch"
+    /**
+     * Method to check the win state in the descending Diag direction
+     * @param lastPlayer
+     * 		The last player to make a move.
+     * @param lastColumn
+     * 		The last column to take a token.
+     * @param board
+     * 		The backend board representation
+     * @return
+     * 		Return a win state for the descending diagonal move for the AI
      */
     private boolean checkDescDiagonal(int lastPlayer, int lastColumn,
             int lastRow) {
@@ -104,8 +127,16 @@ public class BackendBoard {
         return win;
     }
 
-    /*
-     * Check horizontal wins Added by Sketch in "Updated win condition patch"
+    /**
+     * Method to check the win state in the horizontal direction
+     * @param lastPlayer
+     * 		The last player to make a move.
+     * @param lastColumn
+     * 		The last column to take a token.
+     * @param board
+     * 		The backend board representation
+     * @return
+     * 		Return a win state for the horizontal diagonal move for the AI
      */
     private boolean checkHorizontal(int lastPlayer, int lastColumn, int lastRow) {
         boolean win = false;
@@ -142,8 +173,16 @@ public class BackendBoard {
         return win;
     }
 
-    /*
-     * Check vertical wins Added by Sketch in "Updated Win Row Addition"
+    /**
+     * Method to check the win state in the vertical direction
+     * @param lastPlayer
+     * 		The last player to make a move.
+     * @param lastColumn
+     * 		The last column to take a token.
+     * @param board
+     * 		The backend board representation
+     * @return
+     * 		Return a win state for the vertical move for the AI
      */
     private boolean checkVertical(int lastPlayer, int lastColumn, int lastRow) {
         boolean win = false;
@@ -166,11 +205,8 @@ public class BackendBoard {
         return win;
     }
 
-    /*
-     * Added by Sketch in "Updated Win Row Addition" Returns the win state using
-     * sweet Al Gore rhythms.
-     * 
-     * Assumes it will be called after a succesful legal move has been issued.
+    /**
+     * Assumes it will be called after a successful legal move has been issued.
      * 
      * @return Game win condition
      * 
@@ -217,11 +253,10 @@ public class BackendBoard {
         return winList;
     }
 
-    /*
-     * If you get the to read this... please read how ridiculous this is.
-     * getBoard.clone() returns a shallow copy. The for loop creates a deep copy.
-     * 
-     * ~Sketch
+    /**
+     * Method to get an instance of the back end board
+     * @return
+     * 		an instance of the  backend board
      */
     public int[][] getBoard() {
         int[][] clonedBoard = board.clone();
@@ -232,6 +267,11 @@ public class BackendBoard {
         return clonedBoard;
     }
 
+    /**
+     * Method to check for a diagonal win
+     * @return
+     * 		arraylist of the diagonal win positions
+     */
     private ArrayList<Point> getDiagonalLeftWin() {
         ArrayList<Point> winList = new ArrayList<Point>();
 
@@ -255,6 +295,11 @@ public class BackendBoard {
         return winList;
     }
 
+    /**
+     * Method to check for a diagonal win
+     * @return
+     * 		arraylist of the diagonal win positions
+     */
     private ArrayList<Point> getDiagonalRightWin() {
         ArrayList<Point> winList = new ArrayList<Point>();
 
@@ -279,6 +324,11 @@ public class BackendBoard {
         return winList;
     }
 
+    /**
+     * Method to check for a horizontal win
+     * @return
+     * 		arraylist of the horizontal win positions
+     */
     private ArrayList<Point> getHorizontalWin() {
         ArrayList<Point> winList = new ArrayList<Point>();
 
@@ -302,14 +352,12 @@ public class BackendBoard {
         return winList;
     }
 
-    /*
-     * Added by Sketch in "Updated win condition patch" Change to public if
-     * required outside the scope, however I would advise creating another an
-     * interface function unique to the caller to preserve abstraction.
-     * 
-     * @return Row of the top token of any column within the bounds of the game
-     * 
-     * @precondition 0 <= column <= 6
+    /**
+     * Method to get the last row - used to determine how many rows in a column have been used
+     * @param column
+     * 		The column to check the row count in
+     * @return
+     * 		Integer - number of rows used in the current column
      */
     private int getLastRow(int column) {
         int i;
@@ -319,14 +367,33 @@ public class BackendBoard {
         return i;
     }
 
+    /**
+     * Method to get the current player
+     * @return
+     * 		The player value (1, 2)
+     */
     public int getPlayer() {
         return currentPlayer;
     }
-
+    /** 
+     * Method to get the position of a token
+     * @param row
+     * 		The row number of the token
+     * @param col
+     * 		The column number fo the token
+     * @return
+     * 		integer representing the current player who 'owns' that token
+     */
     public int getPosition(int row, int col) {
         return board[row][col];
     }
 
+    
+    /**
+     * Method to check for a vertical win
+     * @return
+     * 		arraylist of the vertical win positions
+     */
     private ArrayList<Point> getVerticalWin() {
         ArrayList<Point> winList = new ArrayList<Point>();
 
@@ -350,6 +417,11 @@ public class BackendBoard {
         return winList;
     }
 
+    /**
+     * method to check if the game board is full yet.
+     * @return
+     * 		Boolean: is the game board full
+     */
     public boolean isFull() {
         for (int row = 0; row < ROWMAX; row++) {
             for (int col = 0; col < COLMAX; col++) {
@@ -360,6 +432,13 @@ public class BackendBoard {
         return true;
     }
 
+    /**
+     * Method to check the legality of a move
+     * @param newAction
+     * 		The move to be made and checked
+     * @return
+     * 		Boolean: whether a move is legal or not
+     */
     public boolean isLegal(Action newAction) {
         if (newAction != null) {
             // check if tile is out of bounds (pos < 0, pos > 6)
@@ -375,7 +454,13 @@ public class BackendBoard {
         return false;
     }
 
-    // this method assumes that the isLegal method has been called and has been
+    /**
+     * Method to make the move.
+     * @precondition
+     * 		The action has been checked for legality by isLegal()
+     * @param newAction
+     * 		The action that is to modify the game state
+     */
     public void makeMove(Action newAction) {
         System.out.println("Player " + currentPlayer + " makes a move!");
         int col;
@@ -387,6 +472,9 @@ public class BackendBoard {
         board[col][newAction.getColumn()] = currentPlayer;
     }
 
+    /**
+     * Method to reset the current board.
+     */
     public void resetBoard() {
         int empty = 0;
         for (int i = 0; i < ROWMAX; i++) {
@@ -399,13 +487,19 @@ public class BackendBoard {
         setPlayer(1);
     }
 
-    // To be called from the menu
+    /**
+     * Method to set the current player
+     * @param player
+     * 		The player value to set the current player value with.
+     */
     public void setPlayer(int player) {
         currentPlayer = player;
     }
 
-    // render the current board in terminal
-    // Maybe 'showTerminalBoard' is better...
+    /**
+     * Method to show the current game state in terminal.
+     * used primarily for debugging purposes
+     */
     public void showTerminalBoard() {
         for (int row = ROWMAX - 1; row >= 0; row--) {
             for (int col = 0; col < COLMAX; col++) {
@@ -415,6 +509,9 @@ public class BackendBoard {
         }
     }
 
+    /**
+     * Method to switch the current player
+     */
     public void switchPlayer() {
         currentPlayer = currentPlayer == 1 ? 2 : 1;
     }

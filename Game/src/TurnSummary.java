@@ -31,19 +31,38 @@ public class TurnSummary {
 		lastAction = lastMove;
 	}
 	
-	
+	/**
+	 * Method to get the current turn number.
+	 * @return
+	 * 		The current turn number
+	 */
 	public int getTurnNumber(){
 		return turnNumber;
 	}
-	
+
+	/**
+	 * Method to get the current board state
+	 * @return
+	 * 		The current board state.
+	 */
 	public int[][] getBoardState(){
 		return boardState;
 	}
 	
+	/**
+	 * Method to return the current player.
+	 * @return
+	 * 		The current player
+	 */
 	public int getCurrPlayer(){
 		return player;
 	}
 	
+	/** 
+	 * method to return the last move made
+	 * @return
+	 * 		The last move made.
+	 */
 	public Action getLastMove(){
 		return lastAction;
 	}
