@@ -33,19 +33,19 @@ public class Window extends JFrame {
     // Provides escape behavior
     public AbstractAction escapeAction = new AbstractAction() {
         private static final long serialVersionUID = 1L;
-        //private boolean paused = true;
+
+        // private boolean paused = true;
 
         @Override
         public void actionPerformed(ActionEvent event) {
-            //paused = !paused;
 
             System.out.println("window-esc" + "pause state: " + paused);
 
             if (!paused && !inStats) {
-            	paused = true;
+                paused = true;
                 // System.out.println("Pausing.");
                 pauseGame();
-            } else if (paused || inStats){
+            } else if (paused || inStats) {
                 // System.out.println("un-Pausing.");
                 resumeGame();
             }
@@ -84,8 +84,6 @@ public class Window extends JFrame {
     }
 
     public void hideStatistics() {
-    	paused = true;
-    	inStats = false;
         menuPanel.showPauseMenu();
         frontEndStatistics.turnOff();
     }
@@ -186,6 +184,13 @@ public class Window extends JFrame {
         backendBoard.resetBoard();
     }
 
+    /*
+     * Method to reset statistics
+     */
+    public void resetStatistics() {
+        frontEndStatistics.resetStatistics();
+    }
+
     public void resetWindow() {
         menuPanel.hideMainMenu();
         menuPanel.hidePauseMenu();
@@ -198,8 +203,8 @@ public class Window extends JFrame {
      * Method to un pause the game
      */
     public void resumeGame() {
-    	paused = false;
-    	inStats = false;
+        paused = false;
+        inStats = false;
         frontEndBoard.turnOn();
         menuPanel.hidePauseMenu();
         frontEndStatistics.turnOff();
@@ -223,7 +228,7 @@ public class Window extends JFrame {
      * Called when the statistics need to be shown (from the button)
      */
     public void showStatistics() {
-    	inStats = true;
+        inStats = true;
         menuPanel.hidePauseMenu();
         frontEndStatistics.turnOn();
     }
