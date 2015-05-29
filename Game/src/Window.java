@@ -26,7 +26,7 @@ public class Window extends JFrame {
 
     private JPanel titlePane;
 
-    private BackgroundPanel background;
+    private BackgroundImagePanel background;
 
     // Provides escape behavior
     public AbstractAction escapeAction = new AbstractAction() {
@@ -88,7 +88,7 @@ public class Window extends JFrame {
     private void initBackground() {
         ImageIcon asset = assets.getAsset("sample_bg.png");
         Image img = asset == null ? null : asset.getImage();
-        background = new BackgroundPanel(img, BackgroundPanel.SCALED, 0.50f,
+        background = new BackgroundImagePanel(img, BackgroundImagePanel.SCALED, 0.50f,
                 0.5f);
         setContentPane(background);
     }
