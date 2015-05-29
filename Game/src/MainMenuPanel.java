@@ -35,6 +35,10 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     private JButton pvpButton = new JButton();
     private JButton resumeButton = new JButton();
     private JButton optionsButton = new JButton();
+    
+    //Buttons added for statistics
+    private JButton statisticsButton = new JButton("STATITTISTICS!!! Check it yo!");
+    
     @SuppressWarnings("unused")
     private JButton spacer = new JButton();
     private JButton easyButton = new JButton();
@@ -120,7 +124,9 @@ public class MainMenuPanel extends JPanel implements ActionListener {
             } catch (Exception e1) {
                 System.out.println("Music not loading, check your paths.");
             }
-        }
+        } else if (buttonPressed.equals(statisticsButton)){	//Method for the statistics
+        	mainWindow.showStatistics();
+        } 
 
         if (buttonPressed.equals(easyButton)) {
             System.out.println("Setting Easy AI");
@@ -318,6 +324,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         remove(restartButton);
         remove(backButton);
         remove(exitButton);
+        remove(statisticsButton);
     }
 
     /**
@@ -387,6 +394,9 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         resumeButton.addActionListener(this);
         restartButton.addActionListener(this);
         exitButton.addActionListener(this);
+        
+        //Additions for statistics
+        statisticsButton.addActionListener(this);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -396,6 +406,11 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         initButton(resumeButton);
         resumeButton.setIcon(resumeIcon);
         add(resumeButton, gbc);
+        gbc.gridy++;
+        
+        //All elements for statistics
+        initButton(statisticsButton);
+        add(statisticsButton, gbc);
         gbc.gridy++;
 
         add(optionsButton, gbc);
