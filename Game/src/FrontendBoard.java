@@ -84,7 +84,7 @@ MouseMotionListener, ActionListener {
     /** status flags for game state - a player has won, the AI is 'thinking' */
     private boolean inWinState = false;
     private boolean aiThinking = false;
-
+    
     /**
      *
      * @param backendBoard

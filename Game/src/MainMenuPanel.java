@@ -254,13 +254,13 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     private void initIcons() {
         // spacerIcon = assets.getAsset("spacer.png"); //Thought: why do we need
         // a transparent image?
-        pvCPUIcon = assets.getAsset("new_game_button.png");
-        pvpIcon = assets.getAsset("passnplay_button.png");
-        optionsIcon = assets.getAsset("music_on.png");
+        pvCPUIcon = assets.getAsset("vs_computer.png");
+        pvpIcon = assets.getAsset("vs_player.png");
+        optionsIcon = assets.getAsset("music_on_new.png");
         quitIcon = assets.getAsset("quit_button.png");
         resumeIcon = assets.getAsset("resume_game_button.png");
         restartIcon = assets.getAsset("restart_button.png");
-        statisticsIcon = assets.getAsset("statistics.png");
+        statisticsIcon = assets.getAsset("game_history.png");
 
         easyIcon = assets.getAsset("easy.png");
         mediumIcon = assets.getAsset("medium.png");
@@ -285,11 +285,11 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         if (music == false) {
             System.out.println("playin' tunes!");
             AudioPlayer.player.start(audioStream);
-            optionsButton.setIcon(assets.getAsset("music_off.png"));
+            optionsButton.setIcon(assets.getAsset("music_on_new.png"));
             music = true;
         } else {
             System.out.println("stoppin' tunes :(");
-            optionsButton.setIcon(assets.getAsset("music_on.png"));
+            optionsButton.setIcon(assets.getAsset("music_off_new.png"));
             AudioPlayer.player.stop(audioStream);
             music = false;
         }
@@ -454,7 +454,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
                 KeyEvent.VK_ESCAPE, 0);
         getInputMap(InFocusWindow).put(escapeStroke, "escapeSequence");
         getActionMap().put("escapeSequence", mainWindow.escapeAction);
-
+        backButton.addActionListener(this);
         setVisible(true);
     }
 
