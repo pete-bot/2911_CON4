@@ -130,6 +130,8 @@ public class FrontEndStatistics extends JPanel implements ActionListener{
 	public void resetStatistics(){
 		statsPanel.resetStatsPanel();
 		gameSummary.clear();
+		visibleIndex = 0;
+		maximumIndex = -1;
 		addTurn(new TurnSummary(0, new int[rows][cols], -1, new Action(-1)));
 	}
 	/*
