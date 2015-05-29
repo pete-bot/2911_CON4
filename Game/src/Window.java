@@ -88,8 +88,7 @@ public class Window extends JFrame {
     private void initBackground() {
         ImageIcon asset = assets.getAsset("sample_bg.png");
         Image img = asset == null ? null : asset.getImage();
-        background = new BackgroundImagePanel(img, BackgroundImagePanel.SCALED, 0.50f,
-                0.5f);
+        background = new BackgroundImagePanel(img);
         setContentPane(background);
     }
 
