@@ -80,7 +80,8 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     /** asset pathing variables */
     private String runningDir = System.getProperty("user.dir");
     private String soundFilePath = runningDir.matches("src") ? runningDir
-            + "/../assets/toto-africa.mid" : "assets/toto-africa.mid";
+            + "/../assets/toto-africa.mid" : runningDir.replaceFirst("src", "")
+            + "/assets/toto-africa.mid";
 
     /**
      * Constructor for class
@@ -95,6 +96,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         this.assets = assets;
         this.mainWindow = mainWindow;
         setLayout(new GridBagLayout());
+        System.out.println(soundFilePath);
 
         setOpaque(false);
         setBackground(defaultColor);

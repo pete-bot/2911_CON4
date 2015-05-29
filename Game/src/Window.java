@@ -13,41 +13,41 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
- * 
+ *
  * @author WOBCON4
  *
- *	Window class for the game. This creates and contains all the neccessary components and information for the main window frame. 
+ *         Window class for the game. This creates and contains all the
+ *         neccessary components and information for the main window frame.
  */
 public class Window extends JFrame {
 
-	/**Serialisation for threading */
+    /** Serialisation for threading */
     private static final long serialVersionUID = 1L;
-    
-    /**Main front end board object-contains all of the frontend board info */
+
+    /** Main front end board object-contains all of the frontend board info */
     private FrontendBoard frontEndBoard;
-    /**Front end statistics panel container */
+    /** Front end statistics panel container */
     private FrontEndStatistics frontEndStatistics;
-    /**Back end board representation */
+    /** Back end board representation */
     private BackendBoard backendBoard;
-    /**Default dimension */
+    /** Default dimension */
     private Dimension defaultSize = new Dimension(900, 730);
-    /**Constraints for layout */
+    /** Constraints for layout */
     private GridBagConstraints gbc;
-    /**Assets populator */
+    /** Assets populator */
     private GameAssets assets = new GameAssets();
-    /**Menu panel container */
+    /** Menu panel container */
     private MainMenuPanel menuPanel = new MainMenuPanel(this, this.assets);
 
-    /**Container for Title image */
+    /** Container for Title image */
     private JPanel titlePane;
-    /**BackGround image panel - used to store the background image */
+    /** BackGround image panel - used to store the background image */
     private BackgroundImagePanel background;
-    
-    /**Game state flags */
+
+    /** Game state flags */
     private boolean paused = false;
     private boolean inStats = false;
 
-    
     /**
      * Esc key action handler - allows the esc key to pause the game.
      */
@@ -73,9 +73,10 @@ public class Window extends JFrame {
     };
 
     /**
-     * Class constructor 
+     * Class constructor
+     * 
      * @param newBoard
-     * 		The backend board representation
+     *            The backend board representation
      */
     public Window(BackendBoard newBoard) {
         super("Prepare yourself, Wobke is coming.");
@@ -104,6 +105,7 @@ public class Window extends JFrame {
         titlePane.setVisible(true);
         menuPanel.setVisible(true);
     }
+
     /**
      * Method to hide the game board. Used to display the pause menu etc.
      */
@@ -128,7 +130,8 @@ public class Window extends JFrame {
     }
 
     /**
-     * Method to initialise the background image panel. This is persistent for the duration of the Window object.
+     * Method to initialise the background image panel. This is persistent for
+     * the duration of the Window object.
      */
     private void initBackground() {
         ImageIcon asset = assets.getAsset("sample_bg.png");
@@ -138,9 +141,11 @@ public class Window extends JFrame {
     }
 
     /**
-     * Method to initialise the front end board. This is where the game board is displayed and updated.
+     * Method to initialise the front end board. This is where the game board is
+     * displayed and updated.
+     * 
      * @param newBoard
-     * 		The backend board representation of the current game.
+     *            The backend board representation of the current game.
      */
     private void initFrontendBoard(BackendBoard newBoard) {
         backendBoard = newBoard;
@@ -182,7 +187,7 @@ public class Window extends JFrame {
     }
 
     /**
-     * Method to initialise the Title tile. 
+     * Method to initialise the Title tile.
      */
     private void initTitle() {
         titlePane = new JPanel();
@@ -195,11 +200,13 @@ public class Window extends JFrame {
 
         titlePane.setBackground(new Color(255, 255, 235, 200));
     }
-    
+
     /**
-     * Method to initialise the window container and place all the needed components inside. 
+     * Method to initialise the window container and place all the needed
+     * components inside.
+     * 
      * @param newBoard
-     * 		instance of the backend game state.
+     *            instance of the backend game state.
      */
     private void initWindow(BackendBoard newBoard) {
         initBackground();
@@ -244,7 +251,6 @@ public class Window extends JFrame {
         frontEndStatistics.turnOff();
     }
 
-    
     public void resetBackEndBoard() {
         backendBoard.resetBoard();
     }
@@ -284,8 +290,9 @@ public class Window extends JFrame {
         menuPanel.showDifficultyPanel();
     }
 
-    /** 
-     * Set the game to Player vs Player mode. This sets the opponent to human type.
+    /**
+     * Set the game to Player vs Player mode. This sets the opponent to human
+     * type.
      */
     public void setBoardToPVP() {
         frontEndBoard.setOpponentToHuman();
@@ -293,15 +300,16 @@ public class Window extends JFrame {
 
     /**
      * Set the opponent difficulty.
+     * 
      * @param difficulty
-     * 		The opponent difficulty.
+     *            The opponent difficulty.
      */
     public void setDifficulty(Difficulty difficulty) {
         frontEndBoard.setAI(difficulty);
     }
 
     /**
-     *Called when the statistics need to be shown (from the button) 
+     * Called when the statistics need to be shown (from the button)
      */
     public void showStatistics() {
         inStats = true;
@@ -309,7 +317,6 @@ public class Window extends JFrame {
         frontEndStatistics.turnOn();
     }
 
-   
     /**
      * method to start a new game
      */
@@ -319,9 +326,8 @@ public class Window extends JFrame {
         frontEndBoard.turnOn();
     }
 
-    
     /**
-     * Method to update the statistics panel  
+     * Method to update the statistics panel
      */
     public void updateStatistics(TurnSummary turn) {
         frontEndStatistics.addTurn(turn);
