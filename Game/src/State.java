@@ -5,12 +5,24 @@ public class State implements Comparable<State> {
     private BackendBoard boardRep;
     private Difficulty difficulty;
 
-    // starting state constructor
+    /**
+     * Constructor for starting state
+     * @param backendBoard
+     * 		Instance of backend board - represents game state.
+     */
     public State(BackendBoard backendBoard) {
         boardRep = backendBoard;
     }
 
-    // choice constructor
+    /**
+     * Method to create a choice state
+     * @param column
+     * 		Column under scrutiny
+     * @param prevState
+     * 		Previous state (predecessor)
+     * @param difficulty
+     * 		Difficulty level - determines the thoroughness of search 
+     */
     public State(int column, State prevState, Difficulty difficulty) {
         boardRep = prevState.getBoard();
         this.difficulty = difficulty;
@@ -19,6 +31,17 @@ public class State implements Comparable<State> {
 
     }
 
+    /**
+     * Method to check AI criteria for determining the best course of action
+     * @param lastPlayer
+     * 		Player who last took turn
+     * @param lastColumn
+     * 		the last col tobe modified
+     * @param board
+     * 		The game board
+     * @return
+     * 		return the 'score' of this position
+     */
     private int checkAscDiagonal(int lastPlayer, int lastColumn, int[][] board) {
 
         // check if slots are full (illegal move)
@@ -67,9 +90,17 @@ public class State implements Comparable<State> {
         return adjacentTiles;
     }
 
-    /*
-     * Check descending diagonal wins Added by Sketch in
-     * "Updated win condition patch"
+
+    /**
+     * Method to check AI criteria for determining the best course of action
+     * @param lastPlayer
+     * 		Player who last took turn
+     * @param lastColumn
+     * 		the last col tobe modified
+     * @param board
+     * 		The game board
+     * @return
+     * 		return the 'score' of this position
      */
     private int checkDescDiagonal(int lastPlayer, int lastColumn, int[][] board) {
         // check if slots are full (illegal move)
@@ -117,7 +148,18 @@ public class State implements Comparable<State> {
         }
         return adjacentTiles;
     }
-
+    
+    /**
+     * Method to check AI criteria for determining the best course of action
+     * @param lastPlayer
+     * 		Player who last took turn
+     * @param lastColumn
+     * 		the last col tobe modified
+     * @param board
+     * 		The game board
+     * @return
+     * 		return the 'score' of this position
+     */
     private int checkHorizontal(int[][] board, int column, int lastPlayer) {
 
         int leftadjacentTiles = 1;
@@ -169,6 +211,17 @@ public class State implements Comparable<State> {
                 : rightadjacentTiles;
     }
 
+    /**
+     * Method to check AI criteria for determining the best course of action
+     * @param lastPlayer
+     * 		Player who last took turn
+     * @param lastColumn
+     * 		the last col tobe modified
+     * @param board
+     * 		The game board
+     * @return
+     * 		return the 'score' of this position
+     */
     private int checkVertical(int[][] board, int column) {
         int x = 0;
         int row = 5;
@@ -197,17 +250,34 @@ public class State implements Comparable<State> {
 
         return x;
     }
-
+    
+    /**
+     * Method to provide a comparison for AI calcs.
+     */
     @Override
     public int compareTo(State o) {
         return o.getHValue() - getHValue();
     }
 
+    /**
+     * Method to create an action based on input
+     * @param column
+     * 		Action column.
+     * @return
+     * 		Action object
+     */
     private Action generateAction(int column) {
         Action a = new Action(column);
         return a;
     }
-
+    
+    /**
+     * Method to generate score - this allows AI to determine the best move
+     * @param column
+     * 		Column to be scrutinised.
+     * @return
+     * 		The score calculation
+     */
     public int generateScore(int column) {
         int[][] board = boardRep.getBoard();
 
@@ -231,15 +301,30 @@ public class State implements Comparable<State> {
             return maxDiag > verHorScore ? maxDiag : verHorScore;
         }
     }
-
+    
+    /**
+     * Method t return action of this state
+     * @return
+     * 		The action of this state
+     */
     public Action getAction() {
         return thisAction;
     }
 
+    /**
+     * Method to return the backend board
+     * @return
+     * 		The backend board. Gah, stop asking!
+     */
     private BackendBoard getBoard() {
         return boardRep;
     }
 
+    /**
+     * Get heuristic value
+     * @return
+     * 		The heuristic value fo the AI calculation.
+     */
     private int getHValue() {
         return stateRank;
     }
