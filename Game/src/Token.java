@@ -1,4 +1,3 @@
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 public class Token extends JLabel {
@@ -15,20 +14,8 @@ public class Token extends JLabel {
         setVerticalAlignment(JLabel.CENTER);
     }
 
-    public int getXPos() {
-        return xPos;
-    }
-
-    public int getYPos() {
-        return yPos;
-    }
-
     public int getPlayer() {
         return player;
-    }
-
-    public void setPlayer(int newPlayer) {
-        player = newPlayer;
     }
 
     // this is for the listener
@@ -38,6 +25,18 @@ public class Token extends JLabel {
         System.out.println("Xpos: " + this.getXPos());
         System.out.println("Ypos: " + this.getYPos());
         System.out.println("Player: " + this.getPlayer());
+    }
+
+    public int getXPos() {
+        return xPos;
+    }
+
+    public int getYPos() {
+        return yPos;
+    }
+
+    public void setPlayer(int newPlayer) {
+        player = newPlayer;
     }
 
 }

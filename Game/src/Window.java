@@ -19,7 +19,7 @@ public class Window extends JFrame {
     private FrontendBoard frontEndBoard;
     private FrontEndStatistics frontEndStatistics;
     private BackendBoard backendBoard;
-    private Dimension defaultSize = new Dimension(1024, 700);
+    private Dimension defaultSize = new Dimension(900, 730);
     private GridBagConstraints gbc;
     private GameAssets assets = new GameAssets();
     private MainMenuPanel menuPanel = new MainMenuPanel(this, this.assets);
@@ -49,16 +49,11 @@ public class Window extends JFrame {
         }
     };
 
-    public void setBoardToPVP() {
-    	frontEndBoard.setOpponentToHuman();
-    }
-
     public Window(BackendBoard newBoard) {
         super("Prepare yourself, Wobke is coming.");
 
-        this.setMinimumSize(new Dimension(800, 820));
+        this.setMinimumSize(new Dimension(900, 730));
         this.setLocationRelativeTo(null);
-
 
         initFrontendBoard(newBoard);
         initFrontendStatistics();
@@ -85,6 +80,11 @@ public class Window extends JFrame {
         titlePane.setVisible(false);
     }
 
+    public void hideStatistics() {
+        menuPanel.showPauseMenu();
+        frontEndStatistics.turnOff();
+    }
+
     private void initBackground() {
         ImageIcon asset = assets.getAsset("sample_bg.png");
         Image img = asset == null ? null : asset.getImage();
@@ -100,16 +100,16 @@ public class Window extends JFrame {
         frontEndBoard.setEnabled(false);
         frontEndBoard.setVisible(false);
     }
-    
+
     /*
-     * Added by sketch cause statistics are gang
-     * Initialises the statistics component that I spent half a year on. legit.
+     * Added by sketch cause statistics are gang Initialises the statistics
+     * component that I spent half a year on. legit.
      */
-    
+
     private void initFrontendStatistics() {
-    	frontEndStatistics = new FrontEndStatistics(assets, this);
-    	frontEndStatistics.setEnabled(false);
-    	frontEndStatistics.setVisible(false);
+        frontEndStatistics = new FrontEndStatistics(assets, this);
+        frontEndStatistics.setEnabled(false);
+        frontEndStatistics.setVisible(false);
     }
 
     private void initLayout() {
@@ -189,26 +189,6 @@ public class Window extends JFrame {
         frontEndBoard.resetBoard();
     }
 
-    /*
-     * Called when the statistics need to be shown (from the button)
-     */
-    public void showStatistics() {
-    	menuPanel.hidePauseMenu();
-    	frontEndStatistics.turnOn();
-    }
-    
-    public void hideStatistics(){
-    	menuPanel.showPauseMenu();
-    	frontEndStatistics.turnOff();
-    }
-    
-    /*
-     * Added by sketch in statistics menu expansion
-     */
-    public void updateStatistics(TurnSummary turn) {
-    	frontEndStatistics.addTurn(turn);
-    }
-
     /**
      * Method to un pause the game
      */
@@ -223,14 +203,33 @@ public class Window extends JFrame {
         menuPanel.showDifficultyPanel();
     }
 
+    public void setBoardToPVP() {
+        frontEndBoard.setOpponentToHuman();
+    }
+
     public void setDifficulty(Difficulty difficulty) {
         frontEndBoard.setAI(difficulty);
+    }
+
+    /*
+     * Called when the statistics need to be shown (from the button)
+     */
+    public void showStatistics() {
+        menuPanel.hidePauseMenu();
+        frontEndStatistics.turnOn();
     }
 
     public void startNewGame() {
         hideMainMenu();
         backendBoard.showTerminalBoard();
         frontEndBoard.turnOn();
+    }
+
+    /*
+     * Added by sketch in statistics menu expansion
+     */
+    public void updateStatistics(TurnSummary turn) {
+        frontEndStatistics.addTurn(turn);
     }
 
 }
