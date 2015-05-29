@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 
 /**
  * Class that stores and displays the game window background image.
- * @author pedro
+ * @author Ryan S, Ryan C, Oliver, Sanjay, Bruce, Peter
  *
  */
 public class BackgroundImagePanel extends JPanel {

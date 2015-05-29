@@ -1,6 +1,11 @@
 import java.awt.Point;
 import java.util.ArrayList;
 
+/**
+ * 
+ * @author Ryan S, Ryan C, Oliver, Sanjay, Bruce, Peter
+ *	Class that represents the game state and also maintains the game engine - checks for win state etc.
+ */
 public class BackendBoard {
 
     /** information for board representation*/

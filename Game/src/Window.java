@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author WOBCON4
+ * @author Ryan S, Ryan C, Oliver, Sanjay, Bruce, Peter
  *
  *         Window class for the game. This creates and contains all the
  *         neccessary components and information for the main window frame.
@@ -79,7 +79,7 @@ public class Window extends JFrame {
      *            The backend board representation
      */
     public Window(BackendBoard newBoard) {
-        super("Prepare yourself, Wobke is coming.");
+        super("FOUR IN A ROW!");
 
         this.setMinimumSize(new Dimension(900, 730));
         this.setLocationRelativeTo(null);

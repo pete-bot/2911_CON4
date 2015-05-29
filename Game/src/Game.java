@@ -1,6 +1,6 @@
 /**
  * 
- * @author WOBCON4
+ * @author Ryan S, Ryan C, Oliver, Sanjay, Bruce, Peter
  *	Main function container. 
  *
  */
@@ -24,7 +24,7 @@ public class Game {
      */
     public void playGame() {
         System.out
-                .println("Initializing WOBCON4. Standby for de-Wobbification.");
+                .println("Initializing FOUR IN A ROW.");
         gameWindow.displayMenu();
     }
 }

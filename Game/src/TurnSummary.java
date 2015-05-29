@@ -1,7 +1,7 @@
 
 /**
  * 
- * @author WOBCON4
+ * @author Ryan S, Ryan C, Oliver, Sanjay, Bruce, Peter
  * 	Class to contain the turn summary for each turn
  *
  */

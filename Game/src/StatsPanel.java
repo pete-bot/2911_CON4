@@ -13,8 +13,7 @@ import javax.swing.JScrollPane;
 /**
  * Class responsible for rendering the lower statistics panel to the window
  *
- * @param parent
- *            Reference to the parent panel so as to control StatsPanel
+ * @author Ryan S, Ryan C, Oliver, Sanjay, Bruce, Peter
  */
 public class StatsPanel extends JPanel {
     

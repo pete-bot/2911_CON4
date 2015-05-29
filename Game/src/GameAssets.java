@@ -15,7 +15,7 @@ import javax.swing.ImageIcon;
  * Items are indexed by hash, so calls should be relatively quick. Keys set by
  * filename This is a repository of all items under the assets directory.
  *
- * @author rjs
+ * @author Ryan S, Ryan C, Oliver, Sanjay, Bruce, Peter
  *
  */
 public class GameAssets {

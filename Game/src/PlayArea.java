@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 
 /**
  * 
- * @author WOBCON4
+ * @author Ryan S, Ryan C, Oliver, Sanjay, Bruce, Peter
  * Class that contains the game play grid and action listeners to facilitate the use thereof. 
  */
 public class PlayArea extends JLabel {

@@ -1,6 +1,6 @@
 /**
  * 
- * @author WOBCON4
+ * @author Ryan S, Ryan C, Oliver, Sanjay, Bruce, Peter
  * Opponent abstract interface.
  *
  */

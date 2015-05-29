@@ -2,7 +2,7 @@ import javax.swing.JLabel;
 
 /**
  * 
- * @author WOBCON4
+ * @author Ryan S, Ryan C, Oliver, Sanjay, Bruce, Peter
  * Token class - stores information about the tokens, inc position and icon etc.
  *
  */
