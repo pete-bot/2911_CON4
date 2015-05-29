@@ -34,6 +34,8 @@ public class FrontEndStatistics extends JPanel implements ActionListener {
     private JButton back;
     private JButton prev;
     private JButton next;
+    
+    GameAssets assets;
 
     /*
      * Constructor for Statistics Panel of game Window
@@ -46,6 +48,8 @@ public class FrontEndStatistics extends JPanel implements ActionListener {
 
         // Assign parent window
         parentWindow = mainWindow;
+        
+        this.assets = assets; 
 
         // Button Inits
         initButtons();
@@ -96,8 +100,10 @@ public class FrontEndStatistics extends JPanel implements ActionListener {
         add(statsPanel, gbc);
 
         // Add the back button;
+        //gbc.gridx = 0;
+        //gbc.gridy = 3;
+        gbc.gridy = 5;
         gbc.gridx = 0;
-        gbc.gridy = 3;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.anchor = GridBagConstraints.CENTER;
         add(back, gbc);
@@ -125,13 +131,11 @@ public class FrontEndStatistics extends JPanel implements ActionListener {
 
         if (buttonPressed.equals(prev)) {
             if (visibleIndex > 0) {
-                System.out.println("yee prev");
                 visibleIndex--;
                 updateView(gameSummary.get(visibleIndex));
             }
         } else if (buttonPressed.equals(next)) {
             if (visibleIndex < maximumIndex) {
-                System.out.println("yee next");
                 visibleIndex++;
                 updateView(gameSummary.get(visibleIndex));
             }
@@ -162,7 +166,8 @@ public class FrontEndStatistics extends JPanel implements ActionListener {
      * Method that initializes the buttons
      */
     public void initButtons() {
-        back = new JButton("Back");
+        back = new JButton();
+        back.setIcon(assets.getAsset("back_stats.png"));
         prev = new JButton("<");
         next = new JButton(">");
     }

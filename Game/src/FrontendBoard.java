@@ -390,7 +390,6 @@ MouseMotionListener, ActionListener {
             ActionListener listener = new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent event) {
-                    System.out.println("Dun thinkin!");
                     Action opponentMove = opponent.getMove();
                     while (!backendBoard.isLegal(opponentMove)) {
                         opponentMove = opponent.getMove();
