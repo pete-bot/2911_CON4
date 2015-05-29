@@ -20,68 +20,40 @@ import javax.swing.KeyStroke;
 import javax.swing.Timer;
 import javax.swing.border.Border;
 
-/**
- * 
- * @author WOBCON4
- *		Class that represents the front end of the game. This class primarily allows for the creation of 
- *		the user interface, however, it is also used to reflect changes in the game state in that front end interface.
- */
 public class FrontendBoard extends JLayeredPane implements MouseListener,
         MouseMotionListener, ActionListener {
 	
     private static final long serialVersionUID = 1L;
 
-    /**Instance of the back end of the game  */
-    private BackendBoard backendBoard;
-    /** values for the dimensions of the game board. */
+    // TODO our colours, should be updated to match the palette
+    private BackendBoard backendBoard; // Should be 'backendBoard'
     private final int rows = 6;
     private final int cols = 7;
     private final int tilesOnBoard = rows * cols;
-    
-    /**Create the token board */
     private Token[] gameTokens = new Token[tilesOnBoard];
-    
-    /**Instance of the JFrame used to contain the front end board */
     private Window mainWindow;
-    /**Instance of play area- this is where the game tokens are kept in a grid layout */
     private PlayArea playArea;
-    /**Pause button for in game menu - holds action listeners etc */
     private PauseButton pauseButton;
-    /** Status indicator used to report game status to the user, win state etc. */
     private JButton statusIndicator = new JButton("");
-    
-    /**An empty border asset used multiple times in UI */
+
     private Border emptyBorder = BorderFactory.createEmptyBorder();
-    /**Assets object - used to clean up paths etc.  */
     private GameAssets assets = new GameAssets();
 
-    /**Winning moves stored in list - used to represent the winning play with animated tokens. */
     private ArrayList<Point> winList = new ArrayList<Point>();
-    /**Used in the win state animation */
     private int animationBeat = 0;
     Timer clock = new Timer(600, this);
 
-    /**Image icon objects used in UI on the grid of tokens */
     private ImageIcon blankTokenIcon;
     private ImageIcon glowingTokenIcon;
     private ImageIcon redTokenIcon;
     private ImageIcon yellowTokenIcon;
     private ImageIcon winTokenIcon;
 
-    /**The Opponent object. May be an AI if the game mode is player vs AI, human otherwise. */
     private Opponent opponent;
 
-    /**status flags for game state - a player has won, the AI is 'thinking' */
     private boolean inWinState = false;
     private boolean aiThinking = false;
 
-    /**
-     * 
-     * @param backendBoard
-     * 		Representation of the game state/back-end. used to determine current game situation. 
-     * @param mainWindow
-     * 		The JFrame used to contain the game UI. Also contains some helpful functions used by other classes.
-     */
     public FrontendBoard(BackendBoard backendBoard, Window mainWindow) {
         super();
         this.backendBoard = backendBoard;
@@ -90,18 +62,12 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         showMainMenu();
     }
     
-    /**
-     * Set the opponent variable to human - used for PvP games.
-     */
     public void setOpponentToHuman() {
     	opponent = new HumanOpponent();
     }
 
-    /**
-     * method that generates an animation effect upon win state. Designed to highlight 
-     * the winning move by the winning player.
-     */
     @Override
+    // (replaces 'highlightWin' function)
     public void actionPerformed(ActionEvent e) {
         Iterator<Point> winIterator = winList.iterator();
         while (winIterator.hasNext()) {
@@ -139,10 +105,6 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         revalidate();
     }
 
-    /**
-     * Method to check if the game has come to a draw state. 
-     * (ie, the board is full - no player can make a move legally)
-     */
     private void checkDraw() {
         if (backendBoard.isFull()) {
             inWinState = true;
@@ -152,13 +114,6 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         }
     }
 
-    /**
-     * Method to check if last move by player is a winning move (ie, 4 have been connected)
-     * @param action
-     * 		action represents the column choice by a player - the last column choice will always determine who has won
-     * 		so it is enough to check it and its immediate neighbors.
-     * 		
-     */
     private void checkWin(Action action) {
         winList = backendBoard.checkWinState(action);
 
@@ -174,16 +129,8 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         }
     }
 
-    
+    // Get a column from a given x coordinate
     // FIXME should throw an exception
-    /**
-     * A method to get the current game board grid column indicated by an x position. This is used to determine which column
-     * is currently highlighted by the user's mouse cursor.
-     * @param x
-     * 		x position of user's mouse cursor
-     * @return
-     * 		Return a column number representing the region on the grid board over which the mouse is hovering.
-     */
     private int getColumn(int x) {
         Dimension gridSize = playArea.getSize();
         int columnWidth = (int) gridSize.getWidth() / 7;
@@ -200,11 +147,6 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         return -1; // No column found.
     }
 
-    /**
-     * Method to take the next move and update the game board. Checks to make sure that the move action is legal.
-     * @param move
-     * 		Action that represents the players choice of column/move.
-     */
     public void getNextMove(Action move) {
         if (!inWinState) {
             updateStatusIndicator(GameState.NO_WIN);
@@ -228,27 +170,15 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         }
     }
 
-    /**
-     * Method to hide the pause menu.
-     */
     public void hidePause() {
         pauseButton.setVisible(false);
     }
-    
-    /**
-     * Method to hide the pause button ("MENU" in game)
-     */
+
     private void hidePauseButton() {
         pauseButton.setVisible(false);
     }
 
-    
-    /**
-     * Method to provide highlighting of the column that the user's mouse cursor is currently hovering over.
-     * Designed to make the column choice more clear to the user. 
-     * @param cursor
-     * 		An event object - the mouse position over the game board.
-     */
+    // this highlights the column
     public void highlightColumn(MouseEvent cursor) {
         // Change the icons of the tokens that are in the rows for the given
         // column
@@ -269,11 +199,6 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         }
     }
 
-    /**
-     * Initialise button properties. Transparency, opacity etc. 
-     * @param b
-     * 		The button object to be modified.
-     */
     private void initButton(JButton b) {
         b.setOpaque(false);
         b.setContentAreaFilled(false);
@@ -282,10 +207,6 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         b.setRolloverEnabled(false);
     }
 
-    /**
-     * A method to initialise the main graphical objects on the play-board. This includes the grid board,
-     * the status indicator and the pause menu button.  
-     */
     private void initGraphics() {
         pauseButton = new PauseButton(mainWindow);
         pauseButton.setOpaque(false);
@@ -332,10 +253,6 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         add(pauseButton, gbc);
     }
 
-    /**
-     * Method to initialise icons with the correct visual assets. 
-     * Red token with red token icon etc.
-     */
     private void initIcons() {
         blankTokenIcon = assets.getAsset("sample_token.png");
         glowingTokenIcon = assets.getAsset("sample_token_glow.png");
@@ -344,9 +261,6 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         winTokenIcon = assets.getAsset("sample_token_win.png");
     }
 
-    /**
-     * Key listener to facilitate the use of the 'esc' key to enter and exit the pause menu.
-     */
     private void initKeyListener() {
         int InFocusWindow = JComponent.WHEN_IN_FOCUSED_WINDOW;
         KeyStroke escapeStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
@@ -354,14 +268,6 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         getActionMap().put("escapeSequence", mainWindow.escapeAction);
     }
 
-    /**
-     * Method to take opponent move and update the game state accordingly.
-     * For AI opponents, provides an AIThinking timer, to simulate the thought time
-     * of an AI. In reality, the AI has already calculated exactly how to kill everyone in the immediate
-     * proximity well before this timer expires, but it gives the player some feedback about the AI 
-     * involvement in the game to foster a false sense of hope and security in the human player.
-     * For human opponents, allows them to click and place a token.
-     */
     public void makeOpponentMove() {
         if (opponent.isAI() && !inWinState) {
             updateStatusIndicator(GameState.NO_WIN);
@@ -403,10 +309,7 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         }
     }
 
-	/**
-	 *	The following Override functions provide input information and feedback on the 
-	 * user mouse cursor location. 
-	 */
+    // MOUSELISTENER AND MOUSEMOTIONLISTENER OVERRIDES
     @Override
     public void mouseClicked(MouseEvent e) {
         if (inWinState && !aiThinking)
@@ -448,10 +351,6 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
     private void moveGraphicToken(MouseEvent e) {
     }
 
-    /**
-     * Method to reset the board - including reseting the back end board. This will completely 
-     * restart the game.
-     */
     public void resetBoard() {
         inWinState = false;
         backendBoard.resetBoard();
@@ -464,34 +363,20 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         }
     }
 
-    /**
-     * Method that allows the user to choose and set their AI opponents difficulty level.
-     * @param difficulty
-     */
     public void setAI(Difficulty difficulty) {
         opponent = new AI(difficulty, backendBoard);
     }
 
-    /**
-     * Method to show the main menu - this initialises the necessary graphical components and sets them to 
-     * visible in the frontEnd JPanel.
-     */
     public void showMainMenu() {
         initIcons();
         initKeyListener();
         initGraphics();
     }
 
-    /**
-     * Sets pause button ("MENU") to visible.
-     */
     private void showPauseButton() {
         pauseButton.setVisible(true);
     }
 
-    /**
-     * Method to render the game board invisible (set to off and disable interactivity).
-     */
     public void turnOff() {
         setVisible(false);
         setEnabled(false);
@@ -501,10 +386,7 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         }
         hidePauseButton();
     }
-    
-    /**
-     * Method to render the game board visible (set to on and enable interactivity).
-     */
+
     public void turnOn() {
         setVisible(true);
         setEnabled(true);
@@ -515,12 +397,6 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
         showPauseButton();
     }
 
-    /**
-     * Method to update the status indicator for the player - this relays to the player whose turn it is
-     * as well as if the winning move has been played. 
-     * @param state
-     * 		State of game - enum: NO_WIN, WIN, DRAW
-     */
     private void updateStatusIndicator(GameState state) {
         if (GameState.NO_WIN == state) {
             if (backendBoard.getPlayer() == 1) {
@@ -548,12 +424,6 @@ public class FrontendBoard extends JLayeredPane implements MouseListener,
 
     // Updates the board with the next _legal_ move
     // xPos is the column, refactor later.
-    /**
-     * Method to update the visual board with the next move. Will set the token colour of the lowest token 
-     * slot on the game board.
-     * @param xPos
-     * 		X position - used to determine which column should be updated with the players token piece. 
-     */
     public void updateVisualBoard(int xPos) {
         for (int count = tilesOnBoard - (cols - xPos); count >= 0; count -= 7) {
             Token currentButton = gameTokens[count];

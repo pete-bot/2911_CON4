@@ -10,36 +10,23 @@ import javax.swing.JLabel;
 public class PlayArea extends JLabel {
 
     private static final long serialVersionUID = 1L;
-    
-    /**Dimensions for game panel. Minimum stops resizing to un-supported sizes.*/
-    private Dimension minSize = new Dimension(750, 650);
+    private Dimension minSize;
     private Dimension size = new Dimension(750, 650);
-    
-    /**Grid board dimensions (rows, cols) */
     private final int rows = 6;
     private final int cols = 7;
     private final Token[] gameTokens = new Token[42];
-    
-    /**Image icon for blank token */
     private ImageIcon blankTokenIcon;
-    
-    /**Default grid colour. */
     private Color defaultColor = new Color(255, 255, 235, 100);
 
+    private GameAssets assets;
+    
     // how PROPORTIONATE the playArea will be
     // according to the height of the main window.
     // change to adjust proportionality.
     private double propPercentage = 0.80;
     private Window mainWindow;
 
-    /**
-     * Constructor for the playArea - the area where the game drid and tokens are displayed.
-     * @param blankTokenIcon
-     * 		The default token - representing an un-played slot.
-     * @param mainWindow
-     * 		The main window instance.
-     */
-    public PlayArea(ImageIcon blankTokenIcon, Window mainWindow) {
+    public PlayArea(Dimension boardSize, GameAssets assets, Window mainWindow) {
 
         // board transparency settings - may need to change depending on colour
         // prefs
@@ -48,22 +35,17 @@ public class PlayArea extends JLabel {
 
         setBorder(BorderFactory.createLineBorder(Color.black));
         setLayout(new GridLayout(rows, cols));
-        this.blankTokenIcon = blankTokenIcon;
+        minSize = boardSize;
+        this.assets = assets;
         this.mainWindow = mainWindow;
         populateWithTokens();
     }
 
-    /**
-     * Return the minimum dimension for the board.
-     */
     @Override
     public Dimension getMinimumSize() {
         return minSize;
     }
 
-    /**
-     * Return the preferred dimension for the board.
-    */
     @Override
     public Dimension getPreferredSize() {
 
@@ -76,28 +58,16 @@ public class PlayArea extends JLabel {
         return size;
     }
 
-    /**
-     * Return the current size dimension.
-     */
     @Override
     public Dimension getSize() {
         return size;
     }
-    
-    /**
-     * Method to get the grid token array.
-     * @return
-     * 		return the token array.
-     */
+
     public Token[] getTokens() {
         return gameTokens;
     }
 
-    /**
-     * Required override to fix issues with the transparency of certain JPanels. Prior to this
-     * override, mousing over a transparent panel would re-render its transparent effect, over the top
-     * of the previous effect. It was very visually unappealing.
-     */
+    // fix tranparent panel issue
     @Override
     protected void paintComponent(Graphics g) {
         g.setColor(getBackground());
@@ -105,14 +75,12 @@ public class PlayArea extends JLabel {
         super.paintComponent(g);
     }
 
-    /**
-     * A method to populate the grid board with tokens, their spacing and their icon representation.
-     */
     private void populateWithTokens() {
         int i = 0, currY = 0, currX = 0;
         for (currY = 0; currY < rows; currY++) {
             for (currX = 0; currX < cols; currX++) {
-                Token token = new Token(currX, currY, blankTokenIcon);
+                Token token = new Token(currX, currY);
+                token.setIcon(assets.getResizedAsset("sample_token.png", minSize.width, minSize.height));
                 token.setOpaque(false);
                 Dimension iconSize = new Dimension(100, 100);
                 token.setPreferredSize(iconSize);
@@ -120,6 +88,54 @@ public class PlayArea extends JLabel {
                 gameTokens[i] = token;
                 i++;
             }
+        }
+    }
+    
+    /*
+     * Method that updates the Token icons based on a new board
+     * Beware, this method is currently broken, in the sense that it colors the tokens in
+     * a flipped geometry board. 
+     * 
+     * @precondition		newBoard is a int[rows][cols] array
+     */
+//    public void writeBoard( int[][] newBoard ){
+//    	int i = 0;
+//		int currY = 0;
+//		int currX = 0;
+//		for(currY = 0; currY < rows; currY++){
+//			for(currX = 0; currX < cols; currX++){
+//				//Logic for determining the token icon
+//				if(newBoard[currY][currX] == 0){			//For Empty Tokens
+//					gameTokens[i].setIcon(assets.getResizedAsset("sample_token.png", minSize.width, minSize.height));
+//				} else if(newBoard[currY][currX] == 1){		//For Player 1 Tokens
+//					gameTokens[i].setIcon(assets.getResizedAsset("sample_token_red.png", minSize.width, minSize.height));
+//				} else {									//For Player 2 Tokens
+//					gameTokens[i].setIcon(assets.getResizedAsset("sample_token_yellow.png", minSize.width, minSize.height));
+//				}
+//				
+//				i++;
+//			}
+//		}
+//    }
+    
+    // render the current board in terminal
+    // Maybe 'showTerminalBoard' is better...
+    public void writeBoard(int[][] newBoard) {
+    	int i = 0;
+        for (int row = rows - 1; row >= 0; row--) {
+            for (int col = 0; col < cols; col++) {
+				//Logic for determining the token icon
+				if(newBoard[row][col] == 0){			//For Empty Tokens
+					gameTokens[i].setIcon(assets.getResizedAsset("sample_token.png", minSize.width, minSize.height));
+				} else if(newBoard[row][col] == 1){		//For Player 1 Tokens
+					gameTokens[i].setIcon(assets.getResizedAsset("sample_token_red.png", minSize.width, minSize.height));
+				} else {									//For Player 2 Tokens
+					gameTokens[i].setIcon(assets.getResizedAsset("sample_token_yellow.png", minSize.width, minSize.height));
+				}
+				
+				i++;
+            }
+            
         }
     }
 }

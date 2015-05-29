@@ -16,7 +16,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
-import javax.swing.border.Border;
 
 
 /*
@@ -28,9 +27,6 @@ public class StatsPanel extends JPanel{
 	private JScrollPane turnTracker;
 	private JPanel leftPanel;
 	private JPanel rightPanel;
-	
-    private Border emptyBorder = BorderFactory.createEmptyBorder();
-    private Color defaultColor = new Color(255, 255, 235, 100);
 	
 	private FrontEndStatistics parentWindow;
 	
@@ -47,19 +43,12 @@ public class StatsPanel extends JPanel{
 	 *  Constructor for the lower stats Panel
 	 */
 	public StatsPanel(FrontEndStatistics parent){
-
-		setPreferredSize(new Dimension(100,100));
-		setBackground(defaultColor);
 		parentWindow = parent;
-		setOpaque(false);
-		setBorder(emptyBorder);
+		setBorder(BorderFactory.createLineBorder(Color.red));
 		setLayout(new GridLayout());
 		leftPanel = initLeftPanel();
 		rightPanel = initRightPanel();
 
-		
-		
-		
 		add(leftPanel);
 		add(rightPanel);
 			
@@ -116,7 +105,6 @@ public class StatsPanel extends JPanel{
 		lastMove.setText("Last Move: " + String.valueOf(prevMove.getColumn()));
 	}
 	
-
 	public JPanel initLeftPanel(){
 		
 		JPanel leftStats = new JPanel();

@@ -25,10 +25,8 @@ import sun.audio.AudioStream;
 public class MainMenuPanel extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
 
-    /**Difficulty panel - used to render difficulty options for player */
     JPanel difficultyPanel = new JPanel();
 
-    /**Various buttons for the front end representation, names should be self explanatory. */
     private JButton pvCPUButton = new JButton();
     private JButton restartButton = new JButton();
     private JButton exitButton = new JButton();
@@ -46,10 +44,8 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     private JButton hardButton = new JButton();
     private JButton backButton = new JButton();
 
-    /** oft used bporder type*/
     private Border emptyBorder = BorderFactory.createEmptyBorder();
-    
-    /**Image icons used in Main menu */
+
     private ImageIcon pvCPUIcon;
     private ImageIcon pvpIcon;
     private ImageIcon optionsIcon;
@@ -65,29 +61,17 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     private ImageIcon backIcon;
     private GameAssets assets;
 
-    /**Main Window instance */
     private Window mainWindow;
 
-    /**Default colour */ 
     private Color defaultColor = new Color(255, 255, 235, 200);
-    
-    /** tunes flag*/
     private boolean music = false;
-    private InputStream in;
-    private AudioStream audioStream;
-
-    /** asset pathing variables*/
     private String runningDir = System.getProperty("user.dir");
     private String soundFilePath = runningDir.matches("src") ? runningDir
             + "../assets/toto-africa.mid" : "assets/toto-africa.mid";
 
-    /**
-     * Constructor for class
-     * @param mainWindow
-     * 		The Window instance for class
-     * @param assets
-     * 		Assets object - used to populate the buttons/panels with their assets.
-     */
+    private InputStream in;
+    private AudioStream audioStream;
+
     public MainMenuPanel(Window mainWindow, GameAssets assets) {
         this.assets = assets;
         this.mainWindow = mainWindow;
@@ -102,9 +86,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
     }
 
-    /**
-     * Provides an action for each button press. ex: click on quit will exit game.
-     */
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton buttonPressed = (JButton) e.getSource();
@@ -156,9 +137,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         }
     }
 
-    /**
-     * Method to add Items to main menu with appropriate layout constraints.
-     */
     public void addMainMenuItems() {
         GridBagConstraints gbc = new GridBagConstraints();
         // init GridBagConstraints and inset (default spacing on buttons)
@@ -204,33 +182,20 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         gbc.fill = GridBagConstraints.VERTICAL;
         gbc.gridwidth = 1;
     }
-    
-    /**
-     * Method to hide difficulty panel - note, these objects are destroyed and must be recreated.
-     */
+
     public void hideDifficultypanel() {
         removeDifficultyItems();
         remove(difficultyPanel);
     }
 
-    /**
-     * Method to hide main menu - note objects are destroyed and must be recreated
-     */
     public void hideMainMenu() {
         removeMainMenuItems();
     }
-    
-    /**
-     * Method to hide pause menu - note objects are destroyed and must be recreated
-     */
+
     public void hidePauseMenu() {
         removePauseMenuItems();
     }
 
-    /**
-     * Method to initialise the buttons with the appropriate configuration. (ex: opacity, transparency etc)
-     * @param b
-     */
     private void initButton(JButton b) {
         b.setOpaque(false);
         b.setContentAreaFilled(false);
@@ -239,9 +204,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         b.setRolloverEnabled(false);
     }
 
-    /**
-     * Method to initialise Icon assets
-     */
+    // This must be called before buttons can add icons
     private void initIcons() {
         // spacerIcon = assets.getAsset("spacer.png"); //Thought: why do we need
         // a transparent image?
@@ -259,11 +222,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
     }
 
-    /**
-     * Function to toggle music on or off.
-     * @throws Exception
-     * 		Exception relates to music not being found, not in correct format or corupted etc.
-     */
     public void musicToggle() throws Exception {
         if (in == null && audioStream == null) {
             in = new FileInputStream(soundFilePath);
@@ -283,11 +241,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         }
     }
 
-    /**
-     * Required override to fix issues with the transparency of certain JPanels. Prior to this
-     * override, mousing over a transparent panel would re-render its transparent effect, over the top
-     * of the previous effect. It was very visually unappealing.
-     */
+    // fix tranparent panel issue
     @Override
     protected void paintComponent(Graphics g) {
         g.setColor(getBackground());
@@ -295,9 +249,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         super.paintComponent(g);
     }
 
-    /**
-     * Method to hide difficulty panel.
-     */
     private void removeDifficultyItems() {
         remove(easyButton);
         remove(mediumButton);
@@ -305,9 +256,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         remove(backButton);
     }
 
-    /**
-     * Method to hide main menu items
-     */
     private void removeMainMenuItems() {
         remove(pvCPUButton);
         remove(pvpButton);
@@ -315,9 +263,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         remove(exitButton);
     }
 
-    /**
-     * Method to hide pause menu items
-     */
     private void removePauseMenuItems() {
         remove(resumeButton);
         remove(optionsButton);
@@ -327,9 +272,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         remove(statisticsButton);
     }
 
-    /**
-     * Method to show difficulty panel so the user can choose difficulty level or return to main menu.
-     */
     public void showDifficultyPanel() {
 
         difficultyPanel.setBorder(emptyBorder);
@@ -384,9 +326,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
     }
 
-    /**
-     * Method to show pause menu items
-     */
     public void showPauseMenu() {
         // Clear the panel of older items
         removeMainMenuItems();

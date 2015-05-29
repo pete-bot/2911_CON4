@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
 
 /*
  * Handles the generation of the Statistics Panel component
@@ -26,18 +25,16 @@ public class FrontEndStatistics extends JPanel implements ActionListener{
 	
 	private PlayArea turnPreview;
 	private StatsPanel statsPanel = new StatsPanel(this);
-    private Border emptyBorder = BorderFactory.createEmptyBorder();
-    private Color defaultColor = new Color(255, 255, 235, 100);
+	
 	private Window parentWindow;
 	private int visibleIndex;
 	private int maximumIndex;
 	private int turnNumber;
 	
 	//Buttons
-	private JButton back = new JButton("Back");
-	private JButton prev = new JButton("Previous Turn");
-	private JButton next = new JButton("Next Turn");
-	private PauseButton pause = new PauseButton(parentWindow); 
+	private JButton back;
+	private JButton prev;
+	private JButton next;
 	
 	/*
 	 * Constructor for Statistics Panel of game Window
@@ -48,20 +45,14 @@ public class FrontEndStatistics extends JPanel implements ActionListener{
 		visibleIndex = 0;
 		maximumIndex = -1;
 		
-		setBackground(defaultColor);
-		
 		//Assign parent window
 		parentWindow = mainWindow;
 		
 		//Button Inits
+		initButtons();
 		initButton(back);
 		initButton(prev);
 		initButton(next);
-		
-		prev.setBackground(defaultColor);
-		next.setBackground(defaultColor);
-		setBackground(defaultColor);
-		
 		
 		back.addActionListener(this);
 		prev.addActionListener(this);
@@ -70,10 +61,7 @@ public class FrontEndStatistics extends JPanel implements ActionListener{
 		
 		turnPreview = new PlayArea(new Dimension(500, 400), assets, parentWindow);	//Creates the preview board
 		turnPreview.writeBoard(new int[rows][cols]);
-		turnPreview.setBorder(BorderFactory.createLineBorder(Color.black));
-		turnPreview.setBackground(defaultColor);
-		
-		
+		setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
 		//Set grid bag layout
 		setLayout(new GridBagLayout());
@@ -84,20 +72,12 @@ public class FrontEndStatistics extends JPanel implements ActionListener{
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.anchor = GridBagConstraints.CENTER;
 		
-		//add(turnPreview, gbc);	//Add the board preview to the layout
-		
-		turnPreview.setVisible(true);
-		
-		add(turnPreview, gbc);
-		
-		
+		add(turnPreview, gbc);	//Add the board preview to the layout
 		
 		//Layout for Prev button
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		gbc.weightx = 0.5;
-		gbc.weighty = 0.5;
-		
 		gbc.fill = GridBagConstraints.NONE;
 		gbc.anchor = GridBagConstraints.WEST;
 		add(prev, gbc);
@@ -118,31 +98,17 @@ public class FrontEndStatistics extends JPanel implements ActionListener{
 		
 		//Add the back button;
 		gbc.gridx = 0;
-		gbc.gridy++;
+		gbc.gridy = 3;
 		gbc.fill = GridBagConstraints.BOTH;
-		//gbc.anchor = GridBagConstraints.CENTER;
-		//add(back, gbc);
+		gbc.anchor = GridBagConstraints.CENTER;
+		add(back, gbc);
 		
 		//Visibilities
+		turnPreview.setVisible(true);
 		prev.setVisible(true);
 		next.setVisible(true);
 		statsPanel.setVisible(true);
 		back.setVisible(true);
-		
-			
-		
-        gbc.fill = GridBagConstraints.REMAINDER;
-
-        setOpaque(false);
-
-        // adjust position of menu button
-        gbc.gridx = 0; // Any non-zero value doesn't seem to affect this much
-        gbc.weightx = 1.0;
-        
-        gbc.gridy++;
-        add(pause, gbc);
-		
-		
 		
 		//Variable inits
 		turnNumber = 0;
@@ -153,7 +119,14 @@ public class FrontEndStatistics extends JPanel implements ActionListener{
 		
 	}
 	
-	
+	/*
+	 * Method that initializes the buttons
+	 */
+	public void initButtons(){
+		back = new JButton("Back");
+		prev = new JButton("<");
+		next = new JButton(">");
+	}
 	/*
 	 * Method that creates a new turn and adds it to the list of all turns
 	 */
@@ -184,7 +157,7 @@ public class FrontEndStatistics extends JPanel implements ActionListener{
         b.setOpaque(false);
         b.setContentAreaFilled(false);
         b.setBorderPainted(false);
-        b.setBorder(emptyBorder);
+        b.setBorder(BorderFactory.createEmptyBorder());
         b.setRolloverEnabled(false);
     }
     
