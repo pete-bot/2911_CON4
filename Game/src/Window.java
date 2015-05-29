@@ -27,22 +27,25 @@ public class Window extends JFrame {
     private JPanel titlePane;
 
     private BackgroundImagePanel background;
+    private boolean paused = false;
+    private boolean inStats = false;
 
     // Provides escape behavior
     public AbstractAction escapeAction = new AbstractAction() {
         private static final long serialVersionUID = 1L;
-        private boolean paused = true;
+        //private boolean paused = true;
 
         @Override
         public void actionPerformed(ActionEvent event) {
-            paused = !paused;
+            //paused = !paused;
 
             System.out.println("window-esc" + "pause state: " + paused);
 
-            if (!paused) {
+            if (!paused && !inStats) {
+            	paused = true;
                 // System.out.println("Pausing.");
                 pauseGame();
-            } else {
+            } else if (paused || inStats){
                 // System.out.println("un-Pausing.");
                 resumeGame();
             }
@@ -81,6 +84,8 @@ public class Window extends JFrame {
     }
 
     public void hideStatistics() {
+    	paused = true;
+    	inStats = false;
         menuPanel.showPauseMenu();
         frontEndStatistics.turnOff();
     }
@@ -174,6 +179,7 @@ public class Window extends JFrame {
     public void pauseGame() {
         frontEndBoard.turnOff();
         menuPanel.showPauseMenu();
+        frontEndStatistics.turnOff();
     }
 
     public void resetBackEndBoard() {
@@ -192,8 +198,11 @@ public class Window extends JFrame {
      * Method to un pause the game
      */
     public void resumeGame() {
+    	paused = false;
+    	inStats = false;
         frontEndBoard.turnOn();
         menuPanel.hidePauseMenu();
+        frontEndStatistics.turnOff();
     }
 
     public void selectDifficulty() {
@@ -214,6 +223,7 @@ public class Window extends JFrame {
      * Called when the statistics need to be shown (from the button)
      */
     public void showStatistics() {
+    	inStats = true;
         menuPanel.hidePauseMenu();
         frontEndStatistics.turnOn();
     }

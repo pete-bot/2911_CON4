@@ -128,8 +128,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
             } catch (Exception e1) {
                 System.out.println("Music not loading, check your paths.");
             }
-        } else if (buttonPressed.equals(statisticsButton)) { // Method for the
-            // statistics
+        } else if (buttonPressed.equals(statisticsButton)) { 
             mainWindow.showStatistics();
         }
 
