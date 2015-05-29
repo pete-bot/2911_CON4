@@ -1,18 +1,20 @@
 
-/**
- * Class for statistics that contains all the details of a turn
- * 
- * @param turnNumber			Stores which turn of the game this state refers to
- * @param boardState			The integer representation of the current board state
- * @param player				Stores which player was deciding this turn
- * @param lastAction			Stores the last column a token was dropped
- */
+
+ 
 public class TurnSummary {
 	private int turnNumber;
 	private int[][] boardState;
 	private int player;
 	private Action lastAction;
 	
+	/**
+	 * Class for statistics that contains all the details of a turn
+	 * 
+	 * @param turnNum 		Stores which turn of the game this state refers to
+	 * @param currBoard 	The integer representation of the current board state
+	 * @param currPlayer	Stores which player was deciding this turn
+	 * @param lastMove		Stores the last column a token was dropped
+	 * */
 	public TurnSummary(int turnNum, int[][] currBoard, int currPlayer, Action lastMove){
 		turnNumber = turnNum;
 		boardState = currBoard.clone();

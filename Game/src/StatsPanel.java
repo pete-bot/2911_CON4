@@ -17,16 +17,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
 
-
-/**
- * Class responsible for rendering the lower statistics panel to the window
- * 
- * @param model			Stores the contents of the List
- * @param moveList		Initialised with contents and displays them
- * @param turnTracker	Contains the moveList and makes it a scrollable window
- * @param leftPanel		Contains the turnTracker
- * @param rightPanel	Contains the label that display the information about the current turn
- */
 public class StatsPanel extends JPanel{
 	private JList moveList;
 	private DefaultListModel model;	//Contents of the list
@@ -45,8 +35,10 @@ public class StatsPanel extends JPanel{
 	GridBagConstraints gbc;
 
 	
-	/*
-	 *  Constructor for the lower stats Panel
+	/**
+	 * Class responsible for rendering the lower statistics panel to the window
+	 * 
+	 * @param parent		Reference to the parent panel so as to control StatsPanel
 	 */
 	public StatsPanel(FrontEndStatistics parent){
 		parentWindow = parent;
@@ -81,8 +73,9 @@ public class StatsPanel extends JPanel{
 		return rightStats;
 	}
 	
-	/*
-	 * Method that updates both the left and the right panel
+	/**
+	 * Updates the lower stats panel
+	 * @param turn		Representation of the turn with its panel values to update the lower gui for statistics
 	 */
 	public void updateStats(TurnSummary turn){
 		updateLeftPanel(turn.getTurnNumber(), turn.getCurrPlayer(), turn.getLastMove());

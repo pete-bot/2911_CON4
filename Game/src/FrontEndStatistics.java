@@ -10,19 +10,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-/**
- * Handles the generation of the Statistics Panel component
- * 
- * @param rows			Hardcoded max rows for con4
- * @param cols			Hardcoded max cols for con4
- * @param gameSummary	List of the turns throughout the current game
- * @param turnPreview	PlayArea object 
- * @param visibleIndex	Represents the index of the current board preview.
- * @param maximumIndex	Represents the maximum index we can iterate up to
- * 
- * @
- * 		
- */
 public class FrontEndStatistics extends JPanel implements ActionListener{
 	
 	private static final long serialVersionUID = 1L;
@@ -45,8 +32,12 @@ public class FrontEndStatistics extends JPanel implements ActionListener{
 	private JButton prev;
 	private JButton next;
 	
-	/*
-	 * Constructor for Statistics Panel of game Window
+	/**
+	 * Handles the generation of the Statistics Panel component
+	 * 
+	 * @param assets		Passed in reference main assets
+	 * @param mainWindow	Passed in reference to mainWindow
+	 * 		
 	 */
 	public FrontEndStatistics(GameAssets assets, Window mainWindow){
 		super();
@@ -142,8 +133,8 @@ public class FrontEndStatistics extends JPanel implements ActionListener{
 		prev = new JButton("<");
 		next = new JButton(">");
 	}
-	/*
-	 * Method that creates a new turn and adds it to the list of all turns
+	/**
+	 * @param turn		The state of the current turn to be added to the game
 	 */
 	public void addTurn(TurnSummary turn){
 		gameSummary.add(turn);
