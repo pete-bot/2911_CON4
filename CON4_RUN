@@ -1,5 +1,0 @@
-#! /bin/sh
-
-cd Game/src/
-rm *.class
-javac -Xlint -XDignore.symbol.file *.java && java Game
