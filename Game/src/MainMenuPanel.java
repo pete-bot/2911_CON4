@@ -128,7 +128,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
             } catch (Exception e1) {
                 System.out.println("Music not loading, check your paths.");
             }
-        } else if (buttonPressed.equals(statisticsButton)) { 
+        } else if (buttonPressed.equals(statisticsButton)) {
             mainWindow.showStatistics();
         }
 
@@ -408,6 +408,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         resumeButton.addActionListener(this);
         restartButton.addActionListener(this);
         exitButton.addActionListener(this);
+        backButton.addActionListener(this);
 
         // Additions for statistics
         statisticsButton.addActionListener(this);
@@ -454,7 +455,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
                 KeyEvent.VK_ESCAPE, 0);
         getInputMap(InFocusWindow).put(escapeStroke, "escapeSequence");
         getActionMap().put("escapeSequence", mainWindow.escapeAction);
-        backButton.addActionListener(this);
         setVisible(true);
     }
 
