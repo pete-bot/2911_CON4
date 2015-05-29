@@ -1,7 +1,7 @@
 
 /**
  * 
- * @author WOBCON4
+ * @author Ryan S, Ryan C, Oliver, Sanjay, Bruce, Peter
  * Class that represents the user/opponent (both human and AI) move. 
  *
  */

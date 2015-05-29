@@ -22,7 +22,8 @@ import javax.swing.border.Border;
 
 /**
  *
- * @author WOBCON4 Class that represents the front end of the game. This class
+ * @author Ryan S, Ryan C, Oliver, Sanjay, Bruce, Peter
+ * Class that represents the front end of the game. This class
  *         primarily allows for the creation of the user interface, however, it
  *         is also used to reflect changes in the game state in that front end
  *         interface.

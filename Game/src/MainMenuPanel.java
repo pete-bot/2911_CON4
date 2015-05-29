@@ -21,6 +21,12 @@ import javax.swing.border.Border;
 
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
+/**
+ * 
+ * @author Ryan S, Ryan C, Oliver, Sanjay, Bruce, Peter
+ *
+ *	Class that creates and maintains the main menu panel. 
+ */
 
 public class MainMenuPanel extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;

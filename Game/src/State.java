@@ -1,6 +1,6 @@
 /**
  * 
- * @author WOBCON4
+ * @author Ryan S, Ryan C, Oliver, Sanjay, Bruce, Peter
  *	The State class used by the AI to make the best decision about which move to make next.
  */
 public class State implements Comparable<State> {

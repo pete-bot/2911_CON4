@@ -10,8 +10,11 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-/*
- * Handles the generation of the Statistics Panel component
+/**
+ * 
+ * @author Ryan S, Ryan C, Oliver, Sanjay, Bruce, Peter
+ *
+ *	Class that creates and maintains the Front end of the statistics panel. 
  */
 public class FrontEndStatistics extends JPanel implements ActionListener {
 

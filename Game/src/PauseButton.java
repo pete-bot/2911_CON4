@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 
 /**
  * Class that contains the pause button and its action listeners
- * @author pedro
+ * @author Ryan S, Ryan C, Oliver, Sanjay, Bruce, Peter
  *
  */
 public class PauseButton extends JPanel implements ActionListener {

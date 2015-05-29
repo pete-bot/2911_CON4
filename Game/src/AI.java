@@ -1,7 +1,7 @@
 import java.util.PriorityQueue;
 /**
  * 
- * @author WOBCON4
+ * @author Ryan S, Ryan C, Oliver, Sanjay, Bruce, Peter
  *	Class to store and control the AI
  */
 public class AI extends Opponent {
@@ -46,7 +46,7 @@ public class AI extends Opponent {
      * @param difficulty
      * 		The difficulty value for the current AI
      * @return
-     * 		The return action - selected as teh best choice for the current game state.
+     * 		The return action - selected as the best choice for the current game state.
      */
     private Action informedMove(Difficulty difficulty) {
         PriorityQueue<State> q = new PriorityQueue<State>();
@@ -72,7 +72,7 @@ public class AI extends Opponent {
     }
     
     /**
-     * Method to return a random (driunk move)
+     * Method to return a random (drunk move)
      * @return
      */
     private Action randomMove() {
