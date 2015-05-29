@@ -18,7 +18,11 @@ public class Window extends JFrame {
 
     /** */
     private FrontendBoard frontEndBoard;
+<<<<<<< HEAD
     private FrontEndStatistics frontEndStatistics;
+=======
+    /** */
+>>>>>>> origin/layout-change
     private BackendBoard backendBoard;
     
     /** */
@@ -251,6 +255,7 @@ public class Window extends JFrame {
         frontEndBoard.resetBoard();
     }
 
+<<<<<<< HEAD
     /*
      * Called when the statistics need to be shown (from the button)
      */
@@ -271,6 +276,11 @@ public class Window extends JFrame {
     	frontEndStatistics.addTurn(turn);
     }
     
+=======
+    /**
+     * Method to un pause the game
+     */
+>>>>>>> origin/layout-change
     public void resumeGame() {
         frontEndBoard.turnOn();
         menuPanel.hidePauseMenu();

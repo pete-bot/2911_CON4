@@ -22,6 +22,8 @@ import javax.swing.JViewport;
  *  Also, any component added directly to this panel will be made
  *  non-opaque so that the custom painting can show through.
  */
+
+//XXX IS THIS AN OFFICIAL SWING CLASS?
 public class BackgroundPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
@@ -53,7 +55,7 @@ public class BackgroundPanel extends JPanel {
     }
 
     /*
-     * Set image as the backround with the specified style and alignment
+     * Set image as the background with the specified style and alignment
      */
     public BackgroundPanel(Image image, int style, float alignmentX,
             float alignmentY) {

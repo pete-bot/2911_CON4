@@ -19,15 +19,25 @@ import javax.swing.ImageIcon;
  *
  */
 public class GameAssets {
-    private String runningDir;
+    /**String representing current running directory. ex: ~/home/<user>/workspace/2911_Project/src */
+	private String runningDir;
+	/**Relative path to assets */
     private Path assetsLocation;
 
+    /**Array list of assets for use as image icons */
     private HashMap<String, ImageIcon> assets = new HashMap<String, ImageIcon>();
 
+    /**
+     * Construcor to initialise assets class. 
+     * Sets the running directory and asset path for each asset in the ../assets folder.
+     */
     public GameAssets() {
         initAssets();
     }
 
+    /**
+     * Method to add each imageIcon for each asset.
+     */
     private void addAssets() {
         File dir = new File(assetsLocation.toString());
         File[] listOfAssets = dir.listFiles();
@@ -43,11 +53,23 @@ public class GameAssets {
             }
         }
     }
-
+    
+    /**
+     * Method to return the appropriate imageIcon for each asset. 
+     * @param filename
+     * 		The asset filename. ex: "red_token_win.png"
+     * @return
+     * 		Return the appropriate image icon for use.
+     */
     public ImageIcon getAsset(String filename) {
         return assets.get(filename);
     }
 
+    /**
+     * Method to return the asset path.
+     * @return
+     * 		Return a string of the asset path.
+     */
     public Path getAssetsDir() {
         // System.out.println(assetsLocation.toString());
         return assetsLocation;
@@ -55,6 +77,18 @@ public class GameAssets {
 
     /*
      * Method that resizes token image icons
+     */
+    
+    /**
+     * Method to resize token image.
+     * @param filename
+     * 		File to be resized
+     * @param width
+     * 		New width 
+     * @param height
+     * 		New height
+     * @return
+     * 		Return the newly resized imageIcon
      */
     public ImageIcon getResizedAsset(String filename, int width, int height) {
         BufferedImage originalImage;
@@ -78,6 +112,9 @@ public class GameAssets {
         return new ImageIcon(resizedImage);
     }
 
+    /**
+     * Method to initialise the imageIcon assets.
+     */
     private void initAssets() {
         runningDir = System.getProperty("user.dir");
         // One of two places we could be running the code, under src or from
