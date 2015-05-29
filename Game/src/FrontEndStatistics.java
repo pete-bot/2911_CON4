@@ -167,9 +167,11 @@ public class FrontEndStatistics extends JPanel implements ActionListener {
      */
     public void initButtons() {
         back = new JButton();
+        next = new JButton();
+        prev = new JButton();
         back.setIcon(assets.getAsset("back_stats.png"));
-        prev = new JButton("<");
-        next = new JButton(">");
+        next.setIcon(assets.getAsset("right_arrow.png"));
+        prev.setIcon(assets.getAsset("left_arrow.png"));
     }
 
     // Make the Statistics inactive

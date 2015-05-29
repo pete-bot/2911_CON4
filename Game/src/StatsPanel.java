@@ -103,9 +103,13 @@ public class StatsPanel extends JPanel {
      * Method that updates the values of the right panel
      */
     private void updateRightPanel(int turn, int player, Action prevMove) {
+    	// Cap turn and player to avoid going to -1
+    	turn = (turn < 0) ? 0 : turn;
+    	player = (player < 0) ? 0 : player;
+    	int previousMove = (prevMove.getColumn() < 0) ? 0 : prevMove.getColumn();
         turnNum.setText("Turn: " + String.valueOf(turn));
         currPlayer.setText("Player: " + String.valueOf(player));
-        lastMove.setText("Last Move: " + String.valueOf(prevMove.getColumn()));
+        lastMove.setText("Last Move: " + String.valueOf(previousMove));
     }
 
     /*
